@@ -11,8 +11,9 @@
         <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/custom.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
+        <link href="{{asset('plugins/libs/select2/dist/css/select2.min.css')}}" rel="stylesheet">
         <link rel="icon" type="image/png" sizes="16x16" href="{{asset('plugins/images/favicon.png')}}">
-         @livewireStyles
+        @livewireStyles
         <!-- Scripts -->
         <script src="{{asset('js/app.js') }}" defer></script>
         <script src="{{asset('plugins/libs/jquery/dist/jquery.min.js')}}"></script>
@@ -32,6 +33,8 @@
         <script src="{{asset('plugins/libs/flot.tooltip/js/jquery.flot.tooltip.min.js')}}"></script>
         <script src="{{asset('js/pages/chart/chart-page-init.js')}}"></script>
         <script src="{{asset('plugins/extra-libs/DataTables/datatables.min.js')}}"></script>
+        <script src="{{asset('plugins/libs/select2/dist/js/select2.full.min.js')}}"></script>
+        <script src="{{asset('plugins/libs/select2/dist/js/select2.min.js')}}"></script>
         @livewireScripts       
     </head>
     <body>
@@ -58,8 +61,9 @@
         @stack('modals')        
 
         <script>
-            $('[data-toggle="tooltip"]').tooltip();
-            $(".preloader").fadeOut();
+$('[data-toggle="tooltip"]').tooltip();
+$(".preloader").fadeOut();
+$(".select2").select2();
         </script>
     </body>
 </html>

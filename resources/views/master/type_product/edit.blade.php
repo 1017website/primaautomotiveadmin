@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('type-product.index') }}">{{ __('Type Product') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('type-product.index') }}">{{ __('Type Item') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
                         </ol>
                     </nav>
@@ -24,7 +24,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Edit Type Product') }}</h5>
+                <h5 class="card-title">{{ __('Edit Type Item') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -42,19 +42,15 @@
                     @method('PUT')
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">Name</label>
+                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                         <div class="col-sm-10">
-                            <input value="{{ $typeProduct->name }}" type="text" class="form-control" id="name" name="name" placeholder="Name Type Product" required="true">
+                            <input value="{{ $typeProduct->name }}" type="text" class="form-control" id="name" name="name" placeholder="Name Type Item" required="true">
                         </div>
                     </div>
 
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
-
-
-
-
 
             </div>
         </div>

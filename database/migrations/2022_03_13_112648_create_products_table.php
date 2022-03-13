@@ -12,9 +12,11 @@ return new class extends Migration {
      * @return void
      */
     public function up() {
-        Schema::create('type_products', function (Blueprint $table) {
+        Schema::create('products', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('type_product_id');
             $table->string('name');
+            $table->string('image', 2048)->nullable();      
             $table->foreignId('created_by');
             $table->unsignedBigInteger('updated_by')->nullable();
             $table->unsignedBigInteger('deleted_by')->nullable();
@@ -29,6 +31,6 @@ return new class extends Migration {
      * @return void
      */
     public function down() {
-        Schema::dropIfExists('type_products');
+        Schema::dropIfExists('products');
     }
 };
