@@ -17,4 +17,12 @@ class TypeProduct extends Model {
         'name',
     ];
 
+    public function userCreated() {
+        return $this->hasOne(user::class, 'id', 'created_by');
+    }
+
+    public function userUpdated() {
+        return $this->hasOne(user::class, 'id', 'updated_by');
+    }
+
 }

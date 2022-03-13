@@ -39,18 +39,22 @@
                         <thead>
                             <tr>
                                 <th>Name</th>
+                                <th>Created By</th>
+                                <th>Updated By</th>
                                 <th>Created At</th>
                                 <th>Updated At</th>
-                                <th style="max-width: 100px">Action</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($typeProduct as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
+                                <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
+                                <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
-                                <td>
+                                <td class="action-button">
                                     <form action="{{ route('type-product.destroy',$row->id) }}" method="POST">
                                         <a class="btn btn-default" href="{{ route('type-product.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
                                         @csrf
