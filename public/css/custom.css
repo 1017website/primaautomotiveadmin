@@ -218,3 +218,15 @@ table th {
     max-height: 150px;
     width: auto;
 }
+
+textarea{
+    height: 90px!important;
+}
+
+.w-20{
+    width: 10rem!important;
+}
+
+.h-20{
+    height: 10rem!important;
+}

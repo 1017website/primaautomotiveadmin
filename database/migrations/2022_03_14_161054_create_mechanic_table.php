@@ -16,9 +16,9 @@ return new class extends Migration {
             $table->id();
             $table->string('name');
             $table->string('id_card')->nullable();
-            $table->timestamp('birth_date')->nullable();
+            $table->date('birth_date')->nullable();
             $table->string('phone')->nullable();
-            $table->string('address')->nullable();
+            $table->string('address', 500)->nullable();
             $table->string('image', 2048)->nullable();
             $table->string('status', 1)->nullable();
             $table->foreignId('created_by');

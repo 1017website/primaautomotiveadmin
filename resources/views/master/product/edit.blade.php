@@ -63,7 +63,9 @@
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
                         <div class="col-sm-10">
-                            <img src="{{ asset('storage/'.$product->image) }}" class="mb-2 img-fluid img-view">
+                            @if(!empty($product->image))
+                                <img src="{{ asset('storage/'.$product->image) }}" class="mb-2 img-fluid img-view">
+                            @endif
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="image" name="image">
                                 <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>

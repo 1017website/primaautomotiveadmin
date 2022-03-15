@@ -13,6 +13,7 @@ class Mechanic extends Model {
         SoftDeletes,
         Userstamps;
 
+    protected $table = 'mechanic';
     protected $fillable = [
         'name', 'id_card', 'birth_date', 'phone', 'address', 'image', 'status'
     ];

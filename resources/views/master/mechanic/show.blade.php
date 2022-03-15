@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Item') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Mechanic') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +19,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('product.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('mechanic.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Detail Item') }}</h5>
+                <h5 class="card-title">{{ __('Detail Mechanic') }}</h5>
                 <div class="border-top"></div>
 
                 <div class="row p-3">
@@ -32,8 +32,8 @@
                         <strong>{{ __('Image') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        @if(!empty($product->image))
-                        <img src="{{ asset('storage/'.$product->image) }}" class="img-fluid img-view">
+                        @if(!empty($mechanic->image))
+                        <img src="{{ asset('storage/'.$mechanic->image) }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>
@@ -41,10 +41,10 @@
                 <div class="border-top"></div>
                 <div class="row p-3">
                     <div class="col-sm-2">
-                        <strong>{{ __('Type Item') }}</strong>
+                        <strong>{{ __('Id Card') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->typeProduct) ? $product->typeProduct->name : '-' }}
+                        {{ $mechanic->id_card }}
                     </div>
                 </div>
 
@@ -54,7 +54,37 @@
                         <strong>{{ __('Name') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->name }}
+                        {{ $mechanic->name }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Birth Date') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ date('d-m-Y', strtotime($mechanic->birth_date)) }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Phone') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $mechanic->phone }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Phone') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $mechanic->address }}
                     </div>
                 </div>
 
@@ -64,7 +94,7 @@
                         <strong>{{ __('Created By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->userCreated) ? $product->userCreated->name : '-' }}
+                        {{ isset($mechanic->userCreated) ? $mechanic->userCreated->name : '-' }}
                     </div>
                 </div>
 
@@ -74,7 +104,7 @@
                         <strong>{{ __('Updated By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->userUpdated) ? $product->userUpdated->name : '-' }}
+                        {{ isset($mechanic->userUpdated) ? $mechanic->userUpdated->name : '-' }}
                     </div>
                 </div>
 
@@ -84,7 +114,7 @@
                         <strong>{{ __('Created At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->created_at }}
+                        {{ $mechanic->created_at }}
                     </div>
                 </div>
 
@@ -94,7 +124,7 @@
                         <strong>{{ __('Updated At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->updated_at }}
+                        {{ $mechanic->updated_at }}
                     </div>
                 </div>
 
