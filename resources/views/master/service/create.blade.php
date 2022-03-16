@@ -47,6 +47,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="estimated_costs" class="col-sm-2 text-left control-label col-form-label">{{ __('Estimated Costs') }}</label>
+                        <div class="col-sm-10">
+                            <input value="{{ old('estimated_costs') }}" type="text" class="form-control" id="estimated_costs" name="estimated_costs" placeholder="Estimated Costs" required="true">
+                        </div>
+                    </div>
+
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -55,5 +62,36 @@
         </div>
 
     </div>
+
+    <script>
+        var harga = document.getElementById('estimated_costs');
+
+        $(document).ready(function () {
+            console.log(harga.value);
+            var formated = formatRupiah($('#estimated_costs').val(), 'Rp. ');
+            harga.value = formated;
+        });
+
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+    </script>
 
 </x-app-layout>

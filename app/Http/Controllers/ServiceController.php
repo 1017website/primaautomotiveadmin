@@ -17,11 +17,13 @@ class ServiceController extends Controller {
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validateData = $request->validate([
             'name' => 'required|max:255|unique:services,name,NULL,id,deleted_at,NULL',
         ]);
 
-        Service::create($request->all());
+        $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);
+
+        Service::create($validateData);
 
         return redirect()->route('service.index')
                         ->with('success', 'Service created successfully.');
@@ -36,11 +38,13 @@ class ServiceController extends Controller {
     }
 
     public function update(Request $request, Service $service) {
-        $request->validate([
+        $validateData = $request->validate([
             'name' => 'required|max:255|unique:services,name,' . $service->id . ',id,deleted_at,NULL',
         ]);
 
-        $service->update($request->all());
+        $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);
+
+        $service->update($validateData);
 
         return redirect()->route('service.index')
                         ->with('success', 'Service updated successfully');

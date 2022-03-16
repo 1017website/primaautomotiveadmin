@@ -14,7 +14,7 @@ class Service extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name'
+        'name', 'estimated_costs'
     ];
 
     public function userCreated() {

@@ -39,6 +39,7 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Name') }}</th>
+                                <th>{{ __('Estimated Costs') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -50,6 +51,7 @@
                             @foreach ($service as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
+                                <td align="right">{{ __('Rp. ') }}@price($row->estimated_costs)</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
