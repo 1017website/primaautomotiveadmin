@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\TypeProduct;
+use App\Models\InventoryProduct;
 use Illuminate\Http\Request;
 
-class TypeProductController extends Controller {
+class InventoryProductController extends Controller {
 
     public function index() {
-        $typeProduct = TypeProduct::all();
-        return view('master.type_product.index', compact('typeProduct'));
+        $inventoryProduct = InventoryProduct::all();
+        return view('master.inventory_product.index', compact('inventoryProduct'));
     }
 
     public function create() {
-        return view('master.type_product.create');
+        return view('master.inventory_product.create');
     }
 
     public function store(Request $request) {
