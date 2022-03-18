@@ -10,7 +10,6 @@ class TypeProductController extends Controller {
     public function index() {
         $typeProduct = TypeProduct::all();
         return view('master.type_product.index', compact('typeProduct'));
-        
     }
 
     public function create() {
