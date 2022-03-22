@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
-class StockIn extends Model {
+class InventoryStockDetailTemp extends Model {
 
     use HasFactory,
         Userstamps;
 
-    protected $table = 'stock_in';
+    protected $table = 'inventory_stock_detail_temp';
     protected $fillable = [
-        'date', 'description'
+        'user_id', 'product_id', 'type_product_id', 'qty', 'price', 'type'
     ];
 
     public function userCreated() {
@@ -22,6 +22,14 @@ class StockIn extends Model {
 
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
+    }
+
+    public function product() {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
+
+    public function typeProduct() {
+        return $this->hasOne(TypeProduct::class, 'id', 'type_product_id');
     }
 
 }

@@ -47,10 +47,9 @@
                         <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-clipboard-account"></i><span class="hide-menu">{{ __('Mechanic') }}</span></a></li>
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-dropbox"></i><span class="hide-menu">{{ __('Stock') }}</span></a>
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-dropbox"></i><span class="hide-menu">{{ __('Inventory') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-clipboard-arrow-down"></i><span class="hide-menu">{{ __('Stock In') }}</span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-scale-balance"></i><span class="hide-menu">{{ __('Adjustment Stock') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/stock" class="sidebar-link"><i class="mdi mdi-scale-balance"></i><span class="hide-menu">{{ __('Stock') }}</span></a></li>
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#" aria-expanded="false"><i class="mdi mdi-cart"></i><span class="hide-menu">{{ __('Booking') }}</span></a></li>
