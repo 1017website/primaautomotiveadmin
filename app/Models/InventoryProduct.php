@@ -13,7 +13,7 @@ class InventoryProduct extends Model {
 
     protected $table = 'inventory_product';
     protected $fillable = [
-        'product_id', 'type_product_id', 'price', 'qty', 'date', 'status'
+        'product_id', 'type_product_id', 'price', 'qty', 'status'
     ];
 
     public function userCreated() {
@@ -23,12 +23,12 @@ class InventoryProduct extends Model {
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
-    
-    public function product(){
+
+    public function product() {
         return $this->hasOne(Product::class, 'id', 'product_id');
     }
-    
-    public function typeProduct(){
+
+    public function typeProduct() {
         return $this->hasOne(Typeproduct::class, 'id', 'type_product_id');
     }
 

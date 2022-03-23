@@ -23,12 +23,12 @@ Route::resource('service', ServiceController::class)->middleware(['auth']);
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 
-Route::get('stock/detailItem', 'App\Http\Controllers\StockController@detailItem')->name('detailItem');
-Route::post('stock/addItem', 'App\Http\Controllers\StockController@addItem')->name('addItem');
-Route::post('stock/deleteItem', 'App\Http\Controllers\StockController@deleteItem')->name('deleteItem');
+Route::controller(StockController::class)->group(function () {    
+    Route::get('stock/detailItem', 'detailItem')->name('detailItem')->middleware(['auth']);
+    Route::post('stock/addItem', 'addItem')->name('addItem')->middleware(['auth']);
+    Route::post('stock/deleteItem', 'deleteItem')->name('deleteItem')->middleware(['auth']);
+    Route::get('stock/{id}', 'show')->name('stock.show')->middleware(['auth']);
+});
+
 Route::resource('stock', StockController::class)->middleware(['auth']);
-
-
-
-
 

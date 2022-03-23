@@ -24,4 +24,8 @@ class InventoryStock extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
+    public function detail() {
+        return $this->hasMany(InventoryStockDetail::class, 'inventory_stock_id', 'id');
+    }
+
 }

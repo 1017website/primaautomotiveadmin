@@ -39,7 +39,6 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Date') }}</th>
-                                <th>{{ __('Type') }}</th>
                                 <th>{{ __('Description') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -49,8 +48,7 @@
                         <tbody>
                             @foreach ($inventoryStock as $row)
                             <tr>
-                                <td>{{ $row->date }}</td>
-                                <td>{{ $row->type }}</td>
+                                <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ $row->description }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>

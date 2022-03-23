@@ -32,4 +32,8 @@ class InventoryStockDetailTemp extends Model {
         return $this->hasOne(TypeProduct::class, 'id', 'type_product_id');
     }
 
+    public function currentStock() {
+        return $this->hasOne(InventoryProduct::class, 'product_id', 'product_id', 'price', 'price');
+    }
+
 }
