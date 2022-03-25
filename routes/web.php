@@ -6,6 +6,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\StockController;
+use App\Http\Controllers\OrderController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -29,6 +30,12 @@ Route::controller(StockController::class)->group(function () {
     Route::post('stock/deleteItem', 'deleteItem')->name('deleteItem')->middleware(['auth']);
     Route::get('stock/{id}', 'show')->name('stock.show')->middleware(['auth']);
 });
-
 Route::resource('stock', StockController::class)->middleware(['auth']);
+
+Route::controller(OrderController::class)->group(function () {    
+    Route::get('order/detailOrder', 'detailOrder')->name('detailOrder')->middleware(['auth']);
+    Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
+    Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
+});
+Route::resource('order', OrderController::class)->middleware(['auth']);
 
