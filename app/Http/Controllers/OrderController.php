@@ -28,8 +28,9 @@ class OrderController extends Controller {
         $message = "";
 
         $validateData = $request->validate([
-            'date' => 'required',
-            'description' => 'required',
+            'date' => 'required|date_format:d-m-Y',
+            'description' => 'max:500',
+            'vehicle_document' => 'file|mimes:zip|size:5120'
         ]);
 
         $temp = OrderDetailTemp::where('user_id', Auth::id())->get();
@@ -86,10 +87,10 @@ class OrderController extends Controller {
         try {
             $temp = OrderDetailTemp::where([
                         'user_id' => Auth::id(),
-                        'service' => $request['service_id'],
+                        'service_id' => $request['service_id'],
                     ])->first();
             if (!isset($temp)) {
-                $temp = new InventoryStockDetailTemp();
+                $temp = new OrderDetailTemp();
                 $temp->user_id = Auth::id();
                 $temp->service_id = $request['service_id'];
                 $service = Service::findOrFail($request['service_id']);
