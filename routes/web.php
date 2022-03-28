@@ -24,7 +24,7 @@ Route::resource('service', ServiceController::class)->middleware(['auth']);
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 
-Route::controller(StockController::class)->group(function () {    
+Route::controller(StockController::class)->group(function () {
     Route::get('stock/detailItem', 'detailItem')->name('detailItem')->middleware(['auth']);
     Route::post('stock/addItem', 'addItem')->name('addItem')->middleware(['auth']);
     Route::post('stock/deleteItem', 'deleteItem')->name('deleteItem')->middleware(['auth']);
@@ -32,10 +32,14 @@ Route::controller(StockController::class)->group(function () {
 });
 Route::resource('stock', StockController::class)->middleware(['auth']);
 
-Route::controller(OrderController::class)->group(function () {    
+Route::controller(OrderController::class)->group(function () {
     Route::get('order/detailOrder', 'detailOrder')->name('detailOrder')->middleware(['auth']);
     Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
     Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
 });
 Route::resource('order', OrderController::class)->middleware(['auth']);
 
+Route::get('generate', function () {
+    \Illuminate\Support\Facades\Artisan::call('storage:link');
+    echo 'ok';
+});

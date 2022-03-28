@@ -29,8 +29,11 @@ class OrderController extends Controller {
 
         $validateData = $request->validate([
             'date' => 'required|date_format:d-m-Y',
-            'description' => 'max:500',
-            'vehicle_document' => 'file|mimes:zip|size:5120'
+            'description' => 'max:500', 'cust_address' => 'max:500',
+            'cust_name' => 'required|max:255', 'cust_id_card' => 'max:255', 'vehicle_name' => 'required|max:255', 'vehicle_type' => 'required|max:255',
+            'vehicle_brand' => 'required|max:255', 'vehicle_year' => 'max:255', 'vehicle_color' => 'max:255', 'vehicle_plate' => 'required|max:255',
+            'cust_phone' => 'required|max:50',
+            'vehicle_document' => 'file|mimes:zip,rar,jpg,png,jpeg,pdf,doc,docx|max:5120'
         ]);
 
         $temp = OrderDetailTemp::where('user_id', Auth::id())->get();
@@ -43,8 +46,26 @@ class OrderController extends Controller {
             DB::beginTransaction();
             try {
                 //save header
+                if ($request->file('vehicle_document')) {
+                    $validateData['vehicle_document'] = $request->file('vehicle_document')->storeAs('order', date('YmdHis') . '.' . $request->file('vehicle_document')->getClientOriginalExtension());
+                }
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
+                $validateData['code'] = $this->generateCode(date('Ymd'));
                 $order = Order::create($validateData);
+
+                foreach ($temp as $row) {
+                    //detail
+                    $orderDetail = new OrderDetail();
+                    $orderDetail->order_id = $order->id;
+                    $orderDetail->service_id = $row->service_id;
+                    $orderDetail->service_name = $row->service_name;
+                    $orderDetail->service_price = $row->service_price;
+                    $saved = $orderDetail->save();
+                    if (!$saved) {
+                        $success = false;
+                        $message = 'Failed save order detail';
+                    }
+                }
 
                 $deleted = OrderDetailTemp::where('user_id', Auth::id())->delete();
                 if (!$deleted) {
@@ -63,7 +84,7 @@ class OrderController extends Controller {
         }
 
         if (!$success) {
-            return Redirect::back()->withErrors(['msg' => $message]);
+            return Redirect::back()->withErrors(['msg' => $message])->withInput();
         }
 
         return redirect()->route('order.index')->with('success', 'Order added successfully.');
@@ -72,6 +93,14 @@ class OrderController extends Controller {
     public function show($id) {
         $order = Order::findorfail($id);
         return view('order.show', compact('order'));
+    }
+
+    public function destroy(Order $order) {
+        $order->status = '0';
+        $order->save();
+        
+        return redirect()->route('order.index')
+                        ->with('success', 'Order <b>' . $order->code . '</b> deleted successfully');
     }
 
     public function detailOrder() {
@@ -123,6 +152,16 @@ class OrderController extends Controller {
         }
 
         return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public static function generateCode($date) {
+        $count = Order::where('code', 'LIKE', '%ORD' . $date . '%')->count();
+        $n = 0;
+        if ($count > 0) {
+            $order = Order::where('code', 'LIKE', '%ORD' . $date . '%')->orderBy('code', 'DESC')->first();
+            $n = (int) substr($order->code, -4);
+        }
+        return (string) 'ORD' . $date . sprintf('%04s', ($n + 1));
     }
 
 }

@@ -44,6 +44,7 @@
                                 <th>{{ __('Car') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Created At') }}</th>
+                                <th>{{ __('Status') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
@@ -57,6 +58,7 @@
                                 <td>{{ $row->car }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
+                                <td>{{ $row->getStatus() }}</td>
                                 <td class="action-button">
                                     <a class="btn btn-info" href="{{ route('order.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                 </td>
