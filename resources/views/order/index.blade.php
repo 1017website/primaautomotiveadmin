@@ -55,7 +55,7 @@
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>          
                                 <td>{{ $row->cust_name }}</td>
                                 <td>{{ $row->cust_phone }}</td>
-                                <td>{{ $row->car }}</td>
+                                <td>{{ $row->vehicle_brand }} - {{ $row->vehicle_name }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->getStatus() }}</td>
