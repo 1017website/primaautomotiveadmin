@@ -7,17 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Order extends Model {
+class Invoice extends Model {
 
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
-    protected $table = 'order';
+    protected $table = 'invoice';
     protected $fillable = [
-        'code', 'date', 'description', 'cust_name', 'cust_id_card', 'cust_address', 'cust_phone',
-        'vehicle_type', 'vehicle_brand', 'vehicle_name', 'vehicle_year', 'vehicle_color',
-        'vehicle_plate', 'vehicle_document', 'status'
+        'code', 'date', 'order_id', 'total', 'dp', 'status', 'status_payment'
     ];
 
     public function userCreated() {
@@ -28,8 +26,8 @@ class Order extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
-    public function detail() {
-        return $this->hasMany(OrderDetail::class, 'order_id', 'id');
+    public function order() {
+        return $this->hasOne(Order::class, 'id', 'order_id');
     }
 
     public function getStatus() {
@@ -38,11 +36,19 @@ class Order extends Model {
         } elseif ($this->status == '1') {
             return 'Active';
         } elseif ($this->status == '2') {
-            return 'Invoice';
-        } elseif ($this->status == '3') {
             return 'Work Order';
-        } elseif ($this->status == '4') {
+        } elseif ($this->status == '3') {
             return 'Done';
+        }
+    }
+
+    public function getStatusPayment() {
+        if ($this->status == '1') {
+            return 'Unpaid';
+        } elseif ($this->status == '2') {
+            return 'Dp';
+        } elseif ($this->status == '3') {
+            return 'Paid';
         }
     }
 

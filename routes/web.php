@@ -7,6 +7,7 @@ use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MechanicController;
 use App\Http\Controllers\StockController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\InvoiceController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -38,6 +39,8 @@ Route::controller(OrderController::class)->group(function () {
     Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
 });
 Route::resource('order', OrderController::class)->middleware(['auth']);
+
+Route::resource('invoice', InvoiceController::class)->middleware(['auth']);
 
 Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
