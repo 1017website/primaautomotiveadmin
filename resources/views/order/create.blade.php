@@ -172,7 +172,7 @@
 
                             <fieldset class="border p-2">
                                 <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Service') }}</legend>
-                                <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2">Add Service</button>
+                                <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2">{{ __('Add Service') }}</button>
                                 <div class="detail">
 
                                 </div>

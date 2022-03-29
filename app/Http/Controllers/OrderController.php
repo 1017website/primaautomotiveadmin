@@ -6,6 +6,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\OrderDetailTemp;
 use App\Models\Service;
+use App\Models\Invoice;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -92,13 +93,14 @@ class OrderController extends Controller {
 
     public function show($id) {
         $order = Order::findorfail($id);
-        return view('order.show', compact('order'));
+        $total = OrderDetail::where('order_id', $id)->sum('service_price');
+        return view('order.show', compact('order', 'total'));
     }
 
     public function destroy(Order $order) {
         $order->status = '0';
         $order->save();
-        
+
         return redirect()->route('order.index')
                         ->with('success', 'Order <b>' . $order->code . '</b> deleted successfully');
     }
@@ -154,6 +156,37 @@ class OrderController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
+    public function addInvoice() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        try {
+            $order = Order::findorfail($request['order_id']);
+            $order->status = '2';
+            $order->save();
+
+            $invoice = new Invoice();
+            $invoice->code = $this->generateCodeInv(date('Ymd'));
+            $invoice->date = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
+            $invoice->order_id = $request['order_id'];
+            $invoice->total = substr(str_replace('.', '', $request['total']), 3);
+            $invoice->dp = 0;
+            $invoice->status = '1';
+            $invoice->status_payment = '0';
+            $invoice->save();
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if ($success) {
+            $message = $invoice->id;
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
     public static function generateCode($date) {
         $count = Order::where('code', 'LIKE', '%ORD' . $date . '%')->count();
         $n = 0;
@@ -162,6 +195,16 @@ class OrderController extends Controller {
             $n = (int) substr($order->code, -4);
         }
         return (string) 'ORD' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    public static function generateCodeInv($date) {
+        $count = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->count();
+        $n = 0;
+        if ($count > 0) {
+            $inv = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->orderBy('code', 'DESC')->first();
+            $n = (int) substr($inv->code, -4);
+        }
+        return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
     }
 
 }

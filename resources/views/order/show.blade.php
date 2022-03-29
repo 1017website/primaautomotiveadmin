@@ -244,12 +244,115 @@
                     </div>
                 </div>
 
-
-
+                <div class="border-top"></div>
+                @if($order->status == '1')
+                <div class="div-top">
+                    <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2"><i class="mdi mdi-receipt"></i>{{ __('Invoice') }}</button>
+                </div>
+                @endif
 
             </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Invoice</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="total" class="col-sm-2 text-left control-label col-form-label">{{ __('Total') }}</label>
+                                <div class="col-sm-10">
+                                    <input value="{{ $total }}" type="text" class="form-control" id="total" name="total" required="true" readonly="">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="addInvoice">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+
         </div>
 
     </div>
+
+    <script>
+        var harga = document.getElementById('total');
+
+        $(document).ready(function () {
+            console.log(harga.value);
+            var formated = formatRupiah($('#total').val(), 'Rp. ');
+            harga.value = formated;
+        });
+
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#addInvoice").click(function () {
+            if ($('#date').val() != '' && $('#date').val() != null) {
+                $.ajax({
+                    url: "{{ route('addInvoice') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'order_id': <?= $order->id ?>,
+                        'date': $('#date').val(),
+                        'total': $('#total').val()
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = "/invoice/" + res.message;
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                });
+            }
+        });
+    </script>
 
 </x-app-layout>
