@@ -55,8 +55,8 @@
                                 <td>{{ $row->order->code }}</td>          
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ __('Rp. ') }}@price($row->total)</td>
-                                <td>{{ $row->status }}</td>
-                                <td>{{ $row->status_payment }}</td>
+                                <td>{{ $row->getStatus() }}</td>
+                                <td>{{ $row->getStatusPayment() }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
