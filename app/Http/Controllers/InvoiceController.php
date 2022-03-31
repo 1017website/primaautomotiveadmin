@@ -39,6 +39,50 @@ class InvoiceController extends Controller {
                         ->with('success', 'Order <b>' . $invoice->code . '</b> deleted successfully');
     }
 
+    public function payInvoice() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        try {
+            $invoice = Invoice::findorfail($request['invoice_id']);
+            $dp = substr(str_replace('.', '', $request['dp']), 3);
+            if ($dp > $invoice->total) {
+                $success = false;
+                $message = "Payment does not match";
+            } elseif ($dp == $invoice->total) {
+                $invoice->status_payment = '2';
+                $invoice->dp = $dp;
+            } else {
+                $invoice->status_payment = '1';
+                $invoice->dp = $dp;
+            }
+
+            if ($success) {
+                $invoice->date_dp = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
+                $invoice->status = '2';
+                $invoice->save();
+            }
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public function print($id) {
+        $invoice = Invoice::findorfail($id);
+        return view('invoice.print', compact('invoice'));
+
+        $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
+        $pdf->setPaper('A5', 'landscape');
+        $pdf->render();
+        return $pdf->stream();
+
+        //return $pdf->download('Print-'.$invoice->code.'.pdf');
+    }
+
     public function detailInvoice() {
         $request = array_merge($_GET, $_POST);
         $order = Order::findorfail($request['id']);
@@ -53,18 +97,6 @@ class InvoiceController extends Controller {
             $n = (int) substr($invoice->code, -4);
         }
         return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
-    }
-
-    public function print($id) {
-        $invoice = Invoice::findorfail($id);
-        return view('invoice.print', compact('invoice'));
-        
-        $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
-        $pdf->setPaper('A5', 'landscape');
-        $pdf->render();
-        return $pdf->stream();
-        
-        //return $pdf->download('Print-'.$invoice->code.'.pdf');
     }
 
 }

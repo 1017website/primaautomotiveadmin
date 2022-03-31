@@ -127,7 +127,9 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-success" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
+            @if($invoice->status_payment == 0 || $invoice->status_payment == 1)
+            <a class="btn btn-success" data-toggle="modal" data-target="#Modal2"><i class="fas fa-dollar-sign"></i>{{ __('Pay') }}</a>
+            @endif
             <a class="btn btn-default" href="{{ route('invoice.index') }}">{{ __('Back') }}</a>
         </div>
 
@@ -210,12 +212,16 @@
                                 <div class="row">
                                     <div class="col-sm-6 margintop">
                                         <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                                        <a class="btn btn-primary" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
                                     </div>
                                     <div class="col-sm-6 text-right pull-right invoice-total">
+
                                         <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
-                                        <p>{{ __('Down Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>
-                                        <p>{{ __('Tax') }} : {{ __('Rp. ') }}0 </p>
-                                        <p>{{ __('Total') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+
+                                        <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
+
+                                        <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+
                                     </div>
                                 </div>
 
@@ -227,13 +233,106 @@
 
             </div>
 
+            <!-- Modal -->
+            <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Pay</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="total" class="col-sm-2 text-left control-label col-form-label">{{ __('Payment') }}</label>
+                                <div class="col-sm-10">
+                                    <input value="" type="text" class="form-control" id="dp" name="dp" required="true">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="payInvoice">Pay</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
 
         </div>
 
     </div>
 
     <script type="text/javascript">
+        var harga = document.getElementById('dp');
 
+        $(document).ready(function () {
+            console.log(harga.value);
+            var formated = formatRupiah($('#dp').val(), 'Rp. ');
+            harga.value = formated;
+        });
+
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $("#payInvoice").click(function () {
+            if ($('#dp').val() != '' && $('#dp').val() != null) {
+                $.ajax({
+                    url: "{{ route('payInvoice') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'invoice_id': <?= $invoice->id ?>,
+                        'date': $('#date').val(),
+                        'dp': $('#dp').val()
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            location.reload();
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                });
+            }
+        });
     </script>
 
 </x-app-layout>
