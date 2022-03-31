@@ -57,8 +57,14 @@ class InvoiceController extends Controller {
 
     public function print($id) {
         $invoice = Invoice::findorfail($id);
+        return view('invoice.print', compact('invoice'));
+        
         $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
-        return $pdf->download('Print-'.$invoice->code.'.pdf')->setOptions(['defaultFont' => 'sans-serif']);;
+        $pdf->setPaper('A5', 'landscape');
+        $pdf->render();
+        return $pdf->stream();
+        
+        //return $pdf->download('Print-'.$invoice->code.'.pdf');
     }
 
 }

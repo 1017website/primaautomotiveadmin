@@ -127,7 +127,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-success" href="{{ route('invoice.print', $invoice->id) }}"><i class="fa fa-print"></i>{{ __('Print') }}</a>
+            <a class="btn btn-success" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
             <a class="btn btn-default" href="{{ route('invoice.index') }}">{{ __('Back') }}</a>
         </div>
 
