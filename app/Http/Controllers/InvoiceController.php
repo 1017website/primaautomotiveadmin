@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use PDF;
 
 class InvoiceController extends Controller {
 
@@ -52,6 +53,12 @@ class InvoiceController extends Controller {
             $n = (int) substr($invoice->code, -4);
         }
         return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    public function print($id) {
+        $invoice = Invoice::findorfail($id);
+        $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
+        return $pdf->download('Print-'.$invoice->code.'.pdf')->setOptions(['defaultFont' => 'sans-serif']);;
     }
 
 }

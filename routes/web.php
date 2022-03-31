@@ -41,6 +41,9 @@ Route::controller(OrderController::class)->group(function () {
 });
 Route::resource('order', OrderController::class)->middleware(['auth']);
 
+Route::controller(InvoiceController::class)->group(function () {
+    Route::get('invoice/print/{id}', 'print')->name('invoice.print')->middleware(['auth']);
+});
 Route::resource('invoice', InvoiceController::class)->middleware(['auth']);
 
 Route::get('generate', function () {

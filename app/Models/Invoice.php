@@ -43,12 +43,22 @@ class Invoice extends Model {
     }
 
     public function getStatusPayment() {
-        if ($this->status == '1') {
+        if ($this->status_payment == '0') {
             return 'Unpaid';
-        } elseif ($this->status == '2') {
+        } elseif ($this->status_payment == '1') {
             return 'Dp';
-        } elseif ($this->status == '3') {
+        } elseif ($this->status_payment == '2') {
             return 'Paid';
+        }
+    }
+
+    public function getColorPayment() {
+        if ($this->status_payment == '0') {
+            return 'btn-danger';
+        } elseif ($this->status_payment == '1') {
+            return 'btn-warning';
+        } elseif ($this->status_payment == '2') {
+            return 'btn-success';
         }
     }
 
