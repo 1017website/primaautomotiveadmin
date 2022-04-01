@@ -199,12 +199,16 @@
                     <div class="row">
                         <div class="col-sm-6 margintop">
                             <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                            
                         </div>
                         <div class="col-sm-6 text-right pull-right invoice-total">
+
                             <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
-                            <p>{{ __('Down Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>
-                            <p>{{ __('Tax') }} : {{ __('Rp. ') }}0 </p>
-                            <p>{{ __('Total') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+
+                            <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
+
+                            <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+
                         </div>
                     </div>
 

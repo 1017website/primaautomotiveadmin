@@ -248,7 +248,7 @@
                             <div class="form-group row">
                                 <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                 <div class="col-sm-10 input-group">
-                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
+                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ $date }}" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
                                     <div class="input-group-append">
                                         <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -258,7 +258,7 @@
                             <div class="form-group row">
                                 <label for="total" class="col-sm-2 text-left control-label col-form-label">{{ __('Payment') }}</label>
                                 <div class="col-sm-10">
-                                    <input value="" type="text" class="form-control" id="dp" name="dp" required="true">
+                                    <input value="{{ $sisa }}" type="text" class="form-control" id="dp" name="dp" required="true">
                                 </div>
                             </div>
 

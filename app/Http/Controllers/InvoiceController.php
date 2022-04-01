@@ -28,7 +28,14 @@ class InvoiceController extends Controller {
 
     public function show($id) {
         $invoice = Invoice::findorfail($id);
-        return view('invoice.show', compact('invoice'));
+        $sisa = 0;
+        $date = date('d-m-Y');
+        if ($invoice->status_payment == 0) {
+            $sisa = $invoice->total * (30 / 100);
+        }elseif($invoice->status_payment == 1){
+            $sisa = $invoice->total - $invoice->dp;
+        }
+        return view('invoice.show', compact('invoice', 'sisa', 'date'));
     }
 
     public function destroy(Invoice $invoice) {
@@ -42,8 +49,8 @@ class InvoiceController extends Controller {
     public function payInvoice() {
         $success = true;
         $message = '';
-        $request = array_merge($_POST, $_GET);
 
+        $request = array_merge($_POST, $_GET);
         try {
             $invoice = Invoice::findorfail($request['invoice_id']);
             $dp = substr(str_replace('.', '', $request['dp']), 3);
