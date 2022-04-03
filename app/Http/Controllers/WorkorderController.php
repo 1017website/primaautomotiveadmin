@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Mechanic;
 use App\Models\Workorder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -17,5 +18,11 @@ class WorkorderController extends Controller {
         return view('workorder.index', compact('workorder'));
     }
 
+    public function create() {
+        $service = Invoice::all();
+        $mechanic = Mechanic::all();
+        
+        return view('workorder.create', compact('service', 'mechanic'));
+    }
 
 }
