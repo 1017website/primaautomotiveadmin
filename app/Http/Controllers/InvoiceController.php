@@ -96,6 +96,7 @@ class InvoiceController extends Controller {
             $workOrder->order_id = $invoice->order_id;
             $workOrder->mechanic_id = $request['mechanic_id'];
             $workOrder->date = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
+            $workOrder->status = '1';
             $workOrder->save();
         } catch (\Exception $e) {
             $success = false;
