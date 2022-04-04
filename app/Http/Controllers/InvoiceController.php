@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\Mechanic;
+use App\Models\Workorder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -27,15 +29,16 @@ class InvoiceController extends Controller {
     }
 
     public function show($id) {
+        $mechanic = Mechanic::all();
         $invoice = Invoice::findorfail($id);
         $sisa = 0;
         $date = date('d-m-Y');
         if ($invoice->status_payment == 0) {
             $sisa = $invoice->total * (30 / 100);
-        }elseif($invoice->status_payment == 1){
+        } elseif ($invoice->status_payment == 1) {
             $sisa = $invoice->total - $invoice->dp;
         }
-        return view('invoice.show', compact('invoice', 'sisa', 'date'));
+        return view('invoice.show', compact('invoice', 'sisa', 'date', 'mechanic'));
     }
 
     public function destroy(Invoice $invoice) {
@@ -67,12 +70,40 @@ class InvoiceController extends Controller {
 
             if ($success) {
                 $invoice->date_dp = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
-                $invoice->status = '2';
                 $invoice->save();
             }
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public function workOrder() {
+        $success = true;
+        $message = '';
+
+        $request = array_merge($_POST, $_GET);
+        try {
+            $invoice = Invoice::findorfail($request['invoice_id']);
+            $invoice->status = '2';
+            $invoice->save();
+
+            $workOrder = new Workorder();
+            $workOrder->code = $this->generateCodeWo(date('Ymd'));
+            $workOrder->invoice_id = $invoice->id;
+            $workOrder->order_id = $invoice->order_id;
+            $workOrder->mechanic_id = $request['mechanic_id'];
+            $workOrder->date = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
+            $workOrder->save();
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if ($success) {
+            $message = $workOrder->id;
         }
 
         return json_encode(['success' => $success, 'message' => $message]);
@@ -104,6 +135,16 @@ class InvoiceController extends Controller {
             $n = (int) substr($invoice->code, -4);
         }
         return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    public static function generateCodeWo($date) {
+        $count = Workorder::where('code', 'LIKE', '%WRK' . $date . '%')->count();
+        $n = 0;
+        if ($count > 0) {
+            $wo = Workorder::where('code', 'LIKE', '%WRK' . $date . '%')->orderBy('code', 'DESC')->first();
+            $n = (int) substr($wo->code, -4);
+        }
+        return (string) 'WRK' . $date . sprintf('%04s', ($n + 1));
     }
 
 }

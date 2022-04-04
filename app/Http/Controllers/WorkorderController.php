@@ -21,8 +21,13 @@ class WorkorderController extends Controller {
     public function create() {
         $service = Invoice::all();
         $mechanic = Mechanic::all();
-        
+
         return view('workorder.create', compact('service', 'mechanic'));
+    }
+
+    public function show($id) {
+        $workorder = Workorder::findorfail($id);
+        return view('workorder.show', compact('workorder'));
     }
 
 }

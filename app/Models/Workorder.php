@@ -38,6 +38,10 @@ class Workorder extends Model {
         return $this->hasOne(Mechanic::class, 'id', 'mechanic_id');
     }
 
+    public function detail() {
+        return $this->hasMany(WorkorderDetail::class, 'id', 'workorder_id');
+    }
+
     public function getStatus() {
         if ($this->status == '0') {
             return 'Deleted';

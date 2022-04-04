@@ -127,6 +127,9 @@
     <div class="container-fluid">
 
         <div class="div-top">
+            @if($invoice->status == 1)
+            <a class="btn btn-primary" data-toggle="modal" data-target="#Modal3"><i class="fas fa-wrench"></i>{{ __('Work On') }}</a>
+            @endif
             @if($invoice->status_payment == 0 || $invoice->status_payment == 1)
             <a class="btn btn-success" data-toggle="modal" data-target="#Modal2"><i class="fas fa-dollar-sign"></i>{{ __('Pay') }}</a>
             @endif
@@ -272,6 +275,49 @@
             </div>
             <!-- Modal -->
 
+            <!-- Modal -->
+            <div class="modal fade" id="Modal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Work Order</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="text" class="form-control mydatepicker" id="date_work" name="date_work" value="{{ $date }}" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="mechanic_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Mechanic') }}</label>
+                                <div class="col-sm-10">
+                                    <select class="select2 form-control custom-select" id="mechanic_id" name="mechanic_id" style="width: 100%;">                              
+                                        @foreach($mechanic as $row)                                
+                                        <option value="{{$row->id}}">{{$row->name}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="addWork">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+
         </div>
 
     </div>
@@ -326,6 +372,28 @@
                     success: function (res) {
                         if (res.success) {
                             location.reload();
+                        } else {
+                            alert(res.message);
+                        }
+                    }
+                });
+            }
+        });
+
+        $("#addWork").click(function () {
+            if ($('#dp').val() != '' && $('#dp').val() != null) {
+                $.ajax({
+                    url: "{{ route('workOrder') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'invoice_id': <?= $invoice->id ?>,
+                        'date': $('#date_work').val(),
+                        'mechanic_id': $('#mechanic_id').val()
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = "/workorder/" + res.message;
                         } else {
                             alert(res.message);
                         }
