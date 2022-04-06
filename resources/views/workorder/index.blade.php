@@ -16,10 +16,6 @@
 
     <div class="container-fluid">
 
-        <div class="div-top">
-            <a class="btn btn-default" href="{{ route('workorder.create') }}">{{ __('Add') }}</a>
-        </div>
-
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
                 <h5 class="card-title">{{ __('Work Order') }}</h5>

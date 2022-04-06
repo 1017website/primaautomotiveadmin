@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
-class WorkorderDetail extends Model {
+class WorkorderDetailTemp extends Model {
 
     use HasFactory,
         Userstamps;
 
-    protected $table = 'workorder_detail';
+    protected $table = 'workorder_detail_temp';
     protected $fillable = [
-        'workorder_id', 'product_id', 'product_name', 'product_price', 'qty'
+        'user_id', 'product_id', 'product_name', 'product_price', 'qty'
     ];
 
     public function userCreated() {
@@ -22,10 +22,6 @@ class WorkorderDetail extends Model {
 
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
-    }
-
-    public function workorder() {
-        return $this->hasOne(Workorder::class, 'id', 'workorder_id');
     }
 
     public function product() {

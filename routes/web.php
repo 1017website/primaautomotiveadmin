@@ -49,6 +49,11 @@ Route::controller(InvoiceController::class)->group(function () {
 });
 Route::resource('invoice', InvoiceController::class)->middleware(['auth']);
 
+Route::controller(WorkorderController::class)->group(function () {
+    Route::get('workorder/detailWork', 'detailWork')->name('detailWork')->middleware(['auth']);
+    Route::post('workorder/deleteWork', 'deleteWork')->name('deleteWork')->middleware(['auth']);
+    Route::get('workorder/getStock', 'getStock')->name('getStock')->middleware(['auth']);
+});
 Route::resource('workorder', WorkorderController::class)->middleware(['auth']);
 
 Route::get('generate', function () {
