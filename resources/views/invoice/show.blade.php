@@ -373,7 +373,7 @@
                         if (res.success) {
                             location.reload();
                         } else {
-                            alert(res.message);
+                            popup(res.message, 'error');
                         }
                     }
                 });
@@ -395,7 +395,7 @@
                         if (res.success) {
                             window.location.href = "/workorder/" + res.message;
                         } else {
-                            alert(res.message);
+                            popup(res.message, 'error');
                         }
                     }
                 });

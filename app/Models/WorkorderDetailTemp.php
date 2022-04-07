@@ -13,7 +13,7 @@ class WorkorderDetailTemp extends Model {
 
     protected $table = 'workorder_detail_temp';
     protected $fillable = [
-        'user_id', 'product_id', 'product_name', 'product_price', 'qty'
+        'user_id', 'stock_id', 'type_product_id', 'product_id', 'product_name', 'product_price', 'qty'
     ];
 
     public function userCreated() {

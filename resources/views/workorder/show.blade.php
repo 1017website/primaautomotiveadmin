@@ -17,7 +17,9 @@
 
     <div class="container-fluid">
         <div class="div-top">
+            @if($workorder->status == 1)
             <a class="btn btn-success" href="{{ route('workorder.edit',$workorder->id) }}">{{ __('Done') }}</a>
+            @endif
             <a class="btn btn-default" href="{{ route('workorder.index') }}">{{ __('Back') }}</a>
         </div>
 
@@ -58,7 +60,7 @@
                                         <strong>{{ __('Order') }}</strong>
                                     </div>
                                     <div class="col-sm-10">
-                                        {{ $workorder->order->code }}
+                                        <a target="_blank" href="{{ route('order.show',$workorder->order_id) }}">{{ $workorder->order->code }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +70,7 @@
                                         <strong>{{ __('Invoice') }}</strong>
                                     </div>
                                     <div class="col-sm-10">
-                                        {{ $workorder->invoice->code }}
+                                        <a target="_blank" href="{{ route('invoice.show',$workorder->invoice_id) }}">{{ $workorder->invoice->code }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -136,18 +138,20 @@
                                                 <tr>
                                                     <th scope="col">Item</th>
                                                     <th scope="col">Qty</th>
+                                                    <th scope="col">Price</th>
                                                 </tr>
                                             </thead>
                                             <tbody class="customtable">
                                                 @if (count($workorder->detail) > 0)
                                                 @foreach ($workorder->detail as $row)
                                                 <tr>
-                                                    <td align='center'></td>
-                                                    <td align='center'></td>
+                                                    <td align='center'>{{ $row->product_name }}</td>
+                                                    <td align='center'>{{ number_format($row->qty, 2, ',', '.') }}</td>
+                                                    <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td>
                                                 </tr>
                                                 @endforeach
                                                 @else
-                                            <td colspan="2" class="text-muted text-center">List empty</td>
+                                            <td colspan="3" class="text-muted text-center">List empty</td>
                                             @endif
                                             </tbody>
                                         </table>

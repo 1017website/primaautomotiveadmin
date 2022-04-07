@@ -259,7 +259,7 @@
                             $('#Modal2').modal('toggle');
                             get_detail();
                         } else {
-                            alert(res.message);
+                            popup(res.message, 'error');
                         }
                     }
                 });

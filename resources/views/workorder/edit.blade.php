@@ -36,8 +36,9 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('workorder.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('workorder.update', $workorder->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
+                    @method('PUT')
 
                     <div class="row">
 
@@ -49,7 +50,7 @@
                                     <div class="form-group row">
                                         <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                         <div class="col-sm-5 input-group">
-                                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ old('date') }}" placeholder="dd/mm/yyyy" autocomplete="off">
+                                            <input type="text" class="form-control mydatepicker" id="date_done" name="date_done" value="{{ old('date_done') }}" placeholder="dd/mm/yyyy" autocomplete="off">
                                             <div class="input-group-append">
                                                 <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                             </div>
@@ -173,9 +174,44 @@
                 let message = "";
                 let currentStock = $('#current_qty').val();
                 let stock = $('#qty').val().replace(",", ".");
-                
-                
-                
+
+                if ($('#stock_id').val() == '') {
+                    success = false;
+                    message = 'Item required';
+                }
+
+                if (stock == '') {
+                    success = false;
+                    message = 'Qty required';
+                }
+
+                if ((parseFloat(stock) > parseFloat(currentStock)) && success) {
+                    success = false;
+                    message = 'Insufficient Stock';
+                }
+
+                if (success) {
+                    $.ajax({
+                        url: "{{ route('addWork') }}",
+                        type: 'POST',
+                        dataType: 'json',
+                        data: {
+                            'stock_id': $('#stock_id').val(),
+                            'qty': $('#qty').val(),
+                        },
+                        success: function (res) {
+                            if (res.success) {
+                                $('#Modal2').modal('toggle');
+                                get_detail();
+                            } else {
+                                popup(res.message, 'error');
+                            }
+                        }
+                    });
+                } else {
+                    popup(message, 'error');
+                }
+
             });
 
             document.querySelector('.custom-file-input').addEventListener('change', function (e) {
@@ -216,7 +252,7 @@
                     if (res.success) {
                         $('#current_qty').val(res.qty);
                     } else {
-                        alert(res.message);
+                        popup(res.message, 'error');
                     }
                 }
             });

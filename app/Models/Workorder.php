@@ -39,7 +39,7 @@ class Workorder extends Model {
     }
 
     public function detail() {
-        return $this->hasMany(WorkorderDetail::class, 'id', 'workorder_id');
+        return $this->hasMany(WorkorderDetail::class, 'workorder_id', 'id');
     }
 
     public function getStatus() {

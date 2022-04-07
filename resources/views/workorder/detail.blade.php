@@ -13,7 +13,7 @@
             @foreach ($detailItem as $row)
             <tr>
                 <td align='center'>{{ $row->product_name }}</td>
-                <td align='center'>{{ __('Rp. ') }}@price($row->price)</td>
+                <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td>
                 <td align='center'>{{ number_format($row->qty, 2, ',', '.') }}</td>
                 <td align='center'><button type="button" onclick="deleteTemp({{ $row->id }})" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
             </tr>

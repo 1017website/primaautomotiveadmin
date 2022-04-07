@@ -347,7 +347,7 @@
                         if (res.success) {
                             window.location.href = "/invoice/" + res.message;
                         } else {
-                            alert(res.message);
+                            popup(res.message, 'error');
                         }
                     }
                 });

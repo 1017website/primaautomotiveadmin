@@ -13,6 +13,7 @@
         <link href="{{asset('plugins/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/select2/dist/css/select2.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
+        <link href="{{asset('plugins/libs/notification/notifications.css')}}" rel="stylesheet">
         <link rel="icon" type="image/png" sizes="16x16" href="{{asset('plugins/images/favicon.png')}}">
         @livewireStyles
         <!-- Scripts -->
@@ -24,7 +25,6 @@
         <script src="{{asset('plugins/extra-libs/sparkline/sparkline.js')}}"></script>
         <script src="{{asset('js/waves.js')}}"></script>
         <script src="{{asset('js/sidebarmenu.js')}}"></script>
-        <script src="{{asset('js/custom.min.js')}}"></script>
         <script src="{{asset('plugins/libs/flot/excanvas.js')}}"></script>
         <script src="{{asset('plugins/libs/flot/jquery.flot.js')}}"></script>
         <script src="{{asset('plugins/libs/flot/jquery.flot.pie.js')}}"></script>
@@ -37,6 +37,8 @@
         <script src="{{asset('plugins/libs/select2/dist/js/select2.full.min.js')}}"></script>
         <script src="{{asset('plugins/libs/select2/dist/js/select2.min.js')}}"></script>
         <script src="{{asset('plugins/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
+        <script src="{{asset('plugins/libs/notification/notifications.js')}}"></script>
+        <script src="{{asset('js/custom.min.js')}}"></script>
         @livewireScripts       
     </head>
     <body>
