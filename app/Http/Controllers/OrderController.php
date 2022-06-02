@@ -7,6 +7,10 @@ use App\Models\OrderDetail;
 use App\Models\OrderDetailTemp;
 use App\Models\Service;
 use App\Models\Invoice;
+use App\Models\Car;
+use App\Models\CarBrand;
+use App\Models\CarType;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -21,7 +25,10 @@ class OrderController extends Controller {
 
     public function create() {
         $service = Service::all();
-        return view('order.create', compact('service'));
+        $car = Car::all();
+        $carBrand = CarBrand::all();
+        $carType = CarType::all();
+        return view('order.create', compact('service', 'car', 'carBrand', 'carType'));
     }
 
     public function store(Request $request) {
@@ -30,9 +37,9 @@ class OrderController extends Controller {
 
         $validateData = $request->validate([
             'date' => 'required|date_format:d-m-Y',
-            'description' => 'max:500', 'cust_address' => 'max:500',
-            'cust_name' => 'required|max:255', 'cust_id_card' => 'max:255', 'vehicle_name' => 'required|max:255', 'vehicle_type' => 'required|max:255',
-            'vehicle_brand' => 'required|max:255', 'vehicle_year' => 'max:255', 'vehicle_color' => 'max:255', 'vehicle_plate' => 'required|max:255',
+            'description' => 'max:500', 'cust_address' => 'required|max:500',
+            'cust_name' => 'required|max:255', 'cust_id_card' => 'max:255', 'cars_id' => 'required', 'car_types_id' => 'required',
+            'car_brands_id' => 'required', 'vehicle_year' => 'max:255', 'vehicle_color' => 'max:255', 'vehicle_plate' => 'required|max:255',
             'cust_phone' => 'required|max:50',
             'vehicle_document' => 'file|mimes:zip,rar,jpg,png,jpeg,pdf,doc,docx|max:5120'
         ]);
@@ -52,7 +59,42 @@ class OrderController extends Controller {
                 }
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
                 $validateData['code'] = $this->generateCode(date('Ymd'));
+                $car = Car::findOrFail($request['cars_id']);
+                $validateData['vehicle_name'] = $car->name;
+                $carBrand = CarBrand::findOrFail($request['car_brands_id']);
+                $validateData['vehicle_brand'] = $carBrand->name;
+                $carType = CarType::findOrFail($request['car_types_id']);
+                $validateData['vehicle_type'] = $carType->name;
                 $order = Order::create($validateData);
+
+                //save customer if not exist
+                if ($order) {
+                    $checkCustomer = Customer::where([
+                                'cars_id' => $order->cars_id,
+                                'car_types_id' => $order->car_types_id,
+                                'car_brands_id' => $order->car_brands_id,
+                                'car_plate' => $order->vehicle_plate,
+                            ])->first();
+                    if (!isset($checkCustomer)) {
+                        $checkCustomer = new Customer();
+                        $checkCustomer->name = $order->cust_name;
+                        $checkCustomer->cars_id = $order->cars_id;
+                        $checkCustomer->car_types_id = $order->car_types_id;
+                        $checkCustomer->car_brands_id = $order->car_brands_id;
+                        $checkCustomer->id_card = $order->cust_id_card;
+                        $checkCustomer->phone = $order->cust_phone;
+                        $checkCustomer->address = $order->cust_address;
+                        $checkCustomer->car_year = $order->vehicle_year;
+                        $checkCustomer->car_color = $order->vehicle_color;
+                        $checkCustomer->car_plate = $order->vehicle_plate;
+                        $checkCustomer->status = '1';
+                        $saved = $checkCustomer->save();
+                        if (!$saved) {
+                            $success = false;
+                            $message = 'Failed save customer';
+                        }
+                    }
+                }
 
                 foreach ($temp as $row) {
                     //detail
@@ -61,6 +103,8 @@ class OrderController extends Controller {
                     $orderDetail->service_id = $row->service_id;
                     $orderDetail->service_name = $row->service_name;
                     $orderDetail->service_price = $row->service_price;
+                    $orderDetail->service_qty = $row->service_qty;
+                    $orderDetail->service_total = $row->service_total;
                     $saved = $orderDetail->save();
                     if (!$saved) {
                         $success = false;
@@ -93,7 +137,7 @@ class OrderController extends Controller {
 
     public function show($id) {
         $order = Order::findorfail($id);
-        $total = OrderDetail::where('order_id', $id)->sum('service_price');
+        $total = OrderDetail::where('order_id', $id)->sum('service_total');
         return view('order.show', compact('order', 'total'));
     }
 
@@ -127,6 +171,8 @@ class OrderController extends Controller {
                 $service = Service::findOrFail($request['service_id']);
                 $temp->service_name = $service->name;
                 $temp->service_price = $service->estimated_costs;
+                $temp->service_qty = str_replace('.', '', $request['service_qty']);
+                $temp->service_total = $service->estimated_costs * $request['service_qty'];
                 $temp->save();
             } else {
                 $success = false;

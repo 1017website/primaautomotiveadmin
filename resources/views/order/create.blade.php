@@ -109,28 +109,40 @@
                                     <div class="col-sm-6">
 
                                         <div class="form-group row">
-                                            <label for="vehicle_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                                            <label for="cars_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="vehicle_name" name="vehicle_name" value="{{ old('vehicle_name') }}" required="true">
+                                                <select class="select2 form-control custom-select" id="cars_id" name="cars_id" style="width: 100%;">                              
+                                                    @foreach($car as $row)                                
+                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="vehicle_type" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                            <label for="car_types_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="vehicle_type" name="vehicle_type" value="{{ old('vehicle_type') }}" required="true">
+                                                <select class="select2 form-control custom-select" id="car_types_id" name="car_types_id" style="width: 100%;">                              
+                                                    @foreach($carType as $row)                                
+                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="vehicle_brand" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand') }}</label>
+                                            <label for="car_brands_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="vehicle_brand" name="vehicle_brand" value="{{ old('vehicle_brand') }}" required="true">
+                                                <select class="select2 form-control custom-select" id="car_brands_id" name="car_brands_id" style="width: 100%;">                              
+                                                    @foreach($carBrand as $row)                                
+                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="vehicle_document" class="col-sm-2 text-left control-label col-form-label">{{ __('Document') }}</label>
+                                            <label for="vehicle_document" class="col-sm-2 text-left control-label col-form-label">{{ __('Checklist') }}</label>
                                             <div class="col-sm-10">
                                                 <div class="custom-file">
                                                     <input type="file" class="custom-file-input" id="vehicle_document" name="vehicle_document">
@@ -200,13 +212,20 @@
                         <div class="modal-body">
 
                             <div class="form-group row">
-                                <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Service') }}</label>
+                                <label for="service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Service') }}</label>
                                 <div class="col-sm-10">
                                     <select class="select2 form-control custom-select" id="service_id" name="service_id" style="width: 100%;">                              
                                         @foreach($service as $row)                                
                                         <option value="{{$row->id}}">{{$row->name}}</option>    
                                         @endforeach
                                     </select>
+                                </div>                                
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="service_qty" name="service_qty" required="true" value="1">
                                 </div>
                             </div>
 
@@ -252,7 +271,8 @@
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        'service_id': $('#service_id').val()
+                        'service_id': $('#service_id').val(),
+                        'service_qty': $('#service_qty').val(),
                     },
                     success: function (res) {
                         if (res.success) {
@@ -271,6 +291,24 @@
             var fileName = document.getElementById("vehicle_document").files[0].name;
             var nextSibling = e.target.nextElementSibling
             nextSibling.innerText = fileName
+        });
+
+        $(function () {
+            $("input[id*='service_qty']").keydown(function (event) {
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+                } else {
+                    event.preventDefault();
+                }
+                if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
+                    event.preventDefault();
+                //if a decimal has been added, disable the "."-button
+            });
         });
     </script>
 

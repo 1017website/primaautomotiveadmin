@@ -4,17 +4,17 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class OrderDetailTemp extends Model {
+class CarType extends Model {
 
     use HasFactory,
+        SoftDeletes,
         Userstamps;
 
-    protected $table = 'order_detail_temp';
     protected $fillable = [
-        'user_id', 'service_id', 'service_name', 'service_price', 'service_qty',
-        'service_total'
+        'name'
     ];
 
     public function userCreated() {
@@ -23,10 +23,6 @@ class OrderDetailTemp extends Model {
 
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
-    }
-
-    public function service() {
-        return $this->hasOne(Service::class, 'id', 'service_id');
     }
 
 }

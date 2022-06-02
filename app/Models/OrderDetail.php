@@ -13,7 +13,8 @@ class OrderDetail extends Model {
 
     protected $table = 'order_detail';
     protected $fillable = [
-        'order_id', 'service_id', 'service_name', 'service_price'
+        'order_id', 'service_id', 'service_name', 'service_price', 'service_qty',
+        'service_total'
     ];
 
     public function userCreated() {

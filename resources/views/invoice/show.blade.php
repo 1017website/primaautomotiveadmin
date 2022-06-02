@@ -194,7 +194,9 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center" style="width:5%">#</th>
-                                                <th class="text-left" style="width:50%">{{ __('Service') }}</th>
+                                                <th class="text-left" style="width:40%">{{ __('Service') }}</th>
+                                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
+                                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
                                                 <th class="text-right" style="width:15%">{{ __('Total Price') }}</th>
                                             </tr>
                                         </thead>
@@ -202,8 +204,10 @@
                                             @foreach ($invoice->order->detail as $row => $value)
                                             <tr>
                                                 <td class="text-center">{{ ($row+1) }}</td>
-                                                <td class="text-left">{{ $value->service_name }}</td>
-                                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                                <td class="text-left">{{ $value->service_name }}</td>                                               
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                                <td class="text-left">{{ $value->service_qty }}</td>
+                                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                                             </tr>
                                             @endforeach
                                             <tr class="last-row"></tr>

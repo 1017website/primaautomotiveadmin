@@ -17,7 +17,7 @@ class Order extends Model {
     protected $fillable = [
         'code', 'date', 'description', 'cust_name', 'cust_id_card', 'cust_address', 'cust_phone',
         'vehicle_type', 'vehicle_brand', 'vehicle_name', 'vehicle_year', 'vehicle_color',
-        'vehicle_plate', 'vehicle_document', 'status'
+        'vehicle_plate', 'vehicle_document', 'status', 'cars_id', 'car_brands_id', 'car_types_id'
     ];
 
     public function userCreated() {
@@ -26,6 +26,18 @@ class Order extends Model {
 
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
+    }
+
+    public function car() {
+        return $this->hasOne(Car::class, 'id', 'cars_id');
+    }
+
+    public function carBrand() {
+        return $this->hasOne(CarBrand::class, 'id', 'car_brands_id');
+    }
+
+    public function carType() {
+        return $this->hasOne(CarType::class, 'id', 'car_types_id');
     }
 
     public function detail() {

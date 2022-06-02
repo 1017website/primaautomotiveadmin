@@ -165,7 +165,7 @@
 
                                 <div class="row p-3">
                                     <div class="col-sm-2">
-                                        <strong>{{ __('Document') }}</strong>
+                                        <strong>{{ __('Checklist') }}</strong>
                                     </div>
                                     <div class="col-sm-10">
                                         @if((!empty($order->vehicle_document)))
@@ -222,7 +222,9 @@
                                     <thead class="thead-light">
                                         <tr>
                                             <th scope="col">Service</th>
-                                            <th scope="col">Est Cost</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Cost Service</th>
+                                            <th scope="col">Total</th>
                                         </tr>
                                     </thead>
                                     <tbody class="customtable">
@@ -230,7 +232,9 @@
                                         @foreach ($order->detail as $row)
                                         <tr>
                                             <td align='center'>{{ $row->service_name }}</td>
-                                            <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td>
+                                            <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
+                                            <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td> 
+                                            <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td> 
                                         </tr>
                                         @endforeach
                                         @else

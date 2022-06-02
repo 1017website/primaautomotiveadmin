@@ -37,28 +37,28 @@
                     <table id="invoice" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>{{ __('Customer') }}</th>
+                                <th>{{ __('Car') }}</th>
                                 <th>{{ __('Code') }}</th>
                                 <th>{{ __('Order') }}</th>
                                 <th>{{ __('Date') }}</th>
                                 <th>{{ __('Total') }}</th>
                                 <th>{{ __('Status') }}</th>
                                 <th>{{ __('Status Payment') }}</th>
-                                <th>{{ __('Created By') }}</th>
-                                <th>{{ __('Created At') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($invoice as $row)
                             <tr>
+                                <td>{{ $row->order->cust_name .' - '. $row->order->cust_phone }}</td>
+                                <td>{{ $row->order->car->name .' - '. $row->order->vehicle_plate }}</td>
                                 <td>{{ $row->code }}</td>
                                 <td>{{ $row->order->code }}</td>          
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ __('Rp. ') }}@price($row->total)</td>
                                 <td>{{ $row->getStatus() }}</td>
                                 <td>{{ $row->getStatusPayment() }}</td>
-                                <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
-                                <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
                                     <a class="btn btn-info" href="{{ route('invoice.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                 </td>
