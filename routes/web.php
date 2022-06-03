@@ -5,6 +5,7 @@ use App\Http\Controllers\TypeProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\MechanicController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CarController;
 use App\Http\Controllers\CarBrandController;
 use App\Http\Controllers\CarTypeController;
@@ -28,6 +29,8 @@ Route::resource('product', ProductController::class)->middleware(['auth']);
 Route::resource('service', ServiceController::class)->middleware(['auth']);
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
+
+Route::resource('customer', CustomerController::class)->middleware(['auth']);
 
 Route::resource('car', CarController::class)->middleware(['auth']);
 

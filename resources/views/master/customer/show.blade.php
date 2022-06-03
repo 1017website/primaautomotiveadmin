@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Mechanic') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('customer.index') }}">{{ __('Customer') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -19,24 +19,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('mechanic.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('customer.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Detail Mechanic') }}</h5>
-                <div class="border-top"></div>
-
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Image') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        @if(!empty($mechanic->image))
-                        <img src="{{ asset('storage/'.$mechanic->image) }}" class="img-fluid img-view">
-                        @endif
-                    </div>
-                </div>
+                <h5 class="card-title">{{ __('Detail Customer') }}</h5>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
@@ -44,7 +32,7 @@
                         <strong>{{ __('Id Card') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->id_card }}
+                        {{ $customer->id_card }}
                     </div>
                 </div>
 
@@ -54,17 +42,7 @@
                         <strong>{{ __('Name') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->name }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Birth Date') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ date('d-m-Y', strtotime($mechanic->birth_date)) }}
+                        {{ $customer->name }}
                     </div>
                 </div>
 
@@ -74,7 +52,7 @@
                         <strong>{{ __('Phone') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->phone }}
+                        {{ $customer->phone }}
                     </div>
                 </div>
 
@@ -84,7 +62,47 @@
                         <strong>{{ __('Address') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->address }}
+                        {{ $customer->address }}
+                    </div>
+                </div>
+                              
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Car') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $customer->carBrand->name . ' ' . $customer->car->name .' '. $customer->car_plate }}
+                    </div>
+                </div>
+                
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Car Type') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $customer->carType->name }}
+                    </div>
+                </div>
+                
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Car Color') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $customer->car_color }}
+                    </div>
+                </div>
+                
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Car Year') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $customer->car_year }}
                     </div>
                 </div>
 
@@ -94,7 +112,7 @@
                         <strong>{{ __('Created By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($mechanic->userCreated) ? $mechanic->userCreated->name : '-' }}
+                        {{ isset($customer->userCreated) ? $customer->userCreated->name : '-' }}
                     </div>
                 </div>
 
@@ -104,7 +122,7 @@
                         <strong>{{ __('Updated By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($mechanic->userUpdated) ? $mechanic->userUpdated->name : '-' }}
+                        {{ isset($customer->userUpdated) ? $customer->userUpdated->name : '-' }}
                     </div>
                 </div>
 
@@ -114,7 +132,7 @@
                         <strong>{{ __('Created At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->created_at }}
+                        {{ $customer->created_at }}
                     </div>
                 </div>
 
@@ -124,7 +142,7 @@
                         <strong>{{ __('Updated At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $mechanic->updated_at }}
+                        {{ $customer->updated_at }}
                     </div>
                 </div>
 

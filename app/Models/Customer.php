@@ -27,8 +27,8 @@ class Customer extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
-    public function cars() {
-        return $this->hasOne(Cars::class, 'id', 'cars_id');
+    public function car() {
+        return $this->hasOne(Car::class, 'id', 'cars_id');
     }
 
     public function carBrand() {

@@ -45,6 +45,7 @@
                         <li class="sidebar-item"><a href="/product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Items') }}</span></a></li>
                         <li class="sidebar-item"><a href="/service" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service') }}</span></a></li>
                         <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-clipboard-account"></i><span class="hide-menu">{{ __('Mechanic') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/customer" class="sidebar-link"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">{{ __('Customer') }}</span></a></li>
                         <li class="sidebar-item"><a href="/car" class="sidebar-link"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Cars') }}</span></a></li>
                         <li class="sidebar-item"><a href="/car-brand" class="sidebar-link"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Car Brands') }}</span></a></li>
                         <li class="sidebar-item"><a href="/car-type" class="sidebar-link"><i class="mdi mdi-car-connected"></i><span class="hide-menu">{{ __('Car Types') }}</span></a></li>
