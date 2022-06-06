@@ -13,6 +13,8 @@ use App\Http\Controllers\StockController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\WorkorderController;
+use App\Http\Controllers\ExpenseSpendingController;
+use App\Http\Controllers\ExpenseInvestmentController;
 
 Route::get('/', function () {
     return view('dashboard');
@@ -73,3 +75,7 @@ Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     echo 'ok';
 });
+
+Route::resource('expense-spending', ExpenseSpendingController::class)->middleware(['auth']);
+
+Route::resource('expense-investment', ExpenseInvestmentController::class)->middleware(['auth']);
