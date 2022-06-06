@@ -26,8 +26,8 @@ class CustomerController extends Controller {
     public function store(Request $request) {
         $validateData = $request->validate([
             'name' => 'required|max:255', 'id_card' => 'max:255', 'phone' => 'required|max:255', 'address' => 'required|max:500',
-            'cars_id' => 'required', 'car_types_id' => 'required', 'car_brands_id' => 'required',
-            'image' => 'image|file|max:2048',
+            'cars_id' => 'required', 'car_types_id' => 'required', 'car_brands_id' => 'required', 'car_plate' => 'required',
+            'car_year' => 'max:255', 'car_color' => 'max:255', 'image' => 'image|file|max:2048',
         ]);
 
         if ($request->file('image')) {
@@ -46,17 +46,17 @@ class CustomerController extends Controller {
     }
 
     public function edit(Customer $customer) {
-        return view('master.customer.edit', compact('customer'));
+        $car = Car::all();
+        $carBrand = CarBrand::all();
+        $carType = CarType::all();
+        return view('master.customer.edit', compact('car', 'carBrand', 'carType', 'customer'));
     }
 
     public function update(Request $request, Customer $customer) {
         $validateData = $request->validate([
-            'name' => 'required|max:255',
-            'id_card' => 'max:255',
-            'birth_date' => 'date_format:d-m-Y',
-            'phone' => 'max:255',
-            'address' => 'max:500',
-            'image' => 'image|file|max:2048',
+            'name' => 'required|max:255', 'id_card' => 'max:255', 'phone' => 'required|max:255', 'address' => 'required|max:500',
+            'cars_id' => 'required', 'car_types_id' => 'required', 'car_brands_id' => 'required', 'car_plate' => 'required',
+            'car_year' => 'max:255', 'car_color' => 'max:255', 'image' => 'image|file|max:2048',
         ]);
 
         if ($request->file('image') && request('image') != '') {
@@ -67,8 +67,6 @@ class CustomerController extends Controller {
             }
             $validateData['image'] = $request->file('image')->storeAs('customer-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }
-
-        $validateData['birth_date'] = (!empty($request->birth_date) ? date('Y-m-d', strtotime($request->birth_date)) : NULL);
 
         $customer->update($validateData);
 

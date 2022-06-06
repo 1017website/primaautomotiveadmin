@@ -26,123 +26,164 @@
             <div class="card-body">
                 <h5 class="card-title">{{ __('Detail Customer') }}</h5>
 
-                <div class="border-top"></div>
                 <div class="row p-3">
                     <div class="col-sm-2">
-                        <strong>{{ __('Id Card') }}</strong>
+                        <strong>{{ __('Image') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $customer->id_card }}
+                        @if(!empty($customer->image))
+                        <img src="{{ asset('storage/'.$customer->image) }}" class="img-fluid img-view">
+                        @endif
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Name') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Name') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ $customer->name }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ $customer->name }}
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Phone') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->phone }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Phone') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Id Card') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ $customer->id_card }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ $customer->phone }}
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Address') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->address }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Address') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Car') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ $customer->carBrand->name . ' ' . $customer->car->name .' '. $customer->car_plate }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ $customer->address }}
-                    </div>
-                </div>
-                              
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Car') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $customer->carBrand->name . ' ' . $customer->car->name .' '. $customer->car_plate }}
-                    </div>
-                </div>
-                
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Car Type') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $customer->carType->name }}
-                    </div>
-                </div>
-                
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Car Color') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $customer->car_color }}
-                    </div>
-                </div>
-                
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Car Year') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $customer->car_year }}
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Car Type') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->carType->name }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Created By') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Car Color') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ $customer->car_color }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ isset($customer->userCreated) ? $customer->userCreated->name : '-' }}
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Car Year') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->car_year }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Updated By') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Created By') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ isset($customer->userCreated) ? $customer->userCreated->name : '-' }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ isset($customer->userUpdated) ? $customer->userUpdated->name : '-' }}
+
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Created At') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->created_at }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
                 <div class="border-top"></div>
                 <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Created At') }}</strong>
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Updated By') }}</strong>
+                            </div>
+                            <div class="col-sm-4">
+                                {{ isset($customer->userUpdated) ? $customer->userUpdated->name : '-' }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        {{ $customer->created_at }}
-                    </div>
-                </div>
 
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Updated At') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $customer->updated_at }}
+                    <div class="col-sm-6">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>{{ __('Updated At') }}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                {{ $customer->updated_at }}
+                            </div>
+                        </div>
                     </div>
                 </div>
 
