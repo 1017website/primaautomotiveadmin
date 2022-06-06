@@ -59,6 +59,12 @@
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/order" aria-expanded="false"><i class="mdi mdi-cart"></i><span class="hide-menu">{{ __('Order') }}</span></a></li>
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/invoice" aria-expanded="false"><i class="mdi mdi-receipt"></i><span class="hide-menu">{{ __('Invoice') }}</span></a></li>
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/workorder" aria-expanded="false"><i class="mdi mdi-worker"></i><span class="hide-menu">{{ __('Work Order') }}</span></a></li>
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-currency-usd"></i><span class="hide-menu">{{ __('Expense') }}</span></a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Spending') }}</span></a></li>
+                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Investment') }}</span></a></li>
+                    </ul>
+                </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span class="hide-menu">{{ __('Report') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-clipboard-check"></i><span class="hide-menu">{{ __('Report Current Stock') }}</span></a></li>
