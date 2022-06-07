@@ -6,7 +6,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('expense-spending.index') }}">{{ __('Spending') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('expense-investment.index') }}">{{ __('Investment') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
                     </nav>
@@ -18,12 +18,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('expense-spending.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('expense-investment.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Add Spending') }}</h5>
+                <h5 class="card-title">{{ __('Add Investment') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -36,7 +36,7 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('expense-spending.store') }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('expense-investment.store') }}" method="POST" enctype="multipart/form-data">
                     @csrf
 
                     <div class="row">
@@ -67,6 +67,13 @@
                                         <label for="cost" class="col-sm-2 text-left control-label col-form-label">{{ __('Costs') }}</label>
                                         <div class="col-sm-10">
                                             <input value="{{ old('cost') }}" type="text" class="form-control" id="cost" name="cost" required="true">
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="shrink" class="col-sm-2 text-left control-label col-form-label">{{ __('Month') }}</label>
+                                        <div class="col-sm-10">
+                                            <input value="{{ old('shrink') }}" type="text" class="form-control" id="shrink" name="shrink" required="true">
                                         </div>
                                     </div>
 
@@ -115,6 +122,24 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
+
+        $(function () {
+            $("input[id*='shrink']").keydown(function (event) {
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46) {
+                } else {
+                    event.preventDefault();
+                }
+                if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
+                    event.preventDefault();
+                //if a decimal has been added, disable the "."-button
+            });
+        });
     </script>
 
 </x-app-layout>

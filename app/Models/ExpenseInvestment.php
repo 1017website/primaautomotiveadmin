@@ -13,6 +13,7 @@ class ExpenseInvestment extends Model {
         SoftDeletes,
         Userstamps;
 
+    protected $table = 'expense_investment';
     protected $fillable = [
         'description', 'date', 'cost', 'shrink'
     ];

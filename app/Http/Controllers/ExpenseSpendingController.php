@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class ExpenseSpendingController extends Controller {
 
     public function index() {
-        $expenseSpending = ExpenseSpending::all();
+        $expenseSpending = ExpenseSpending::orderBy('date')->get();
         return view('expense.spending.index', compact('expenseSpending'));
     }
 
@@ -17,19 +17,21 @@ class ExpenseSpendingController extends Controller {
     }
 
     public function store(Request $request) {
-        $request->validate([
+        $validateData = $request->validate([
             'description' => 'required|max:500',
             'date' => 'required|date_format:d-m-Y',
+            'cost' => 'required',
         ]);
-
-        ExpenseSpending::create($request->all());
+        $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
+        $validateData['cost'] = substr(str_replace('.', '', $request->cost), 3);
+        ExpenseSpending::create($validateData);
 
         return redirect()->route('expense-spending.index')
                         ->with('success', 'Spending created successfully.');
     }
 
     public function show(ExpenseSpending $expenseSpending) {
-        return view('expense.spending.show', compact('expenseSpending'));
+        
     }
 
     public function edit(ExpenseSpending $expenseSpending) {
@@ -37,11 +39,11 @@ class ExpenseSpendingController extends Controller {
     }
 
     public function update(Request $request, ExpenseSpending $expenseSpending) {
-
+        
     }
 
     public function destroy(ExpenseSpending $expenseSpending) {
-
+        
     }
 
 }
