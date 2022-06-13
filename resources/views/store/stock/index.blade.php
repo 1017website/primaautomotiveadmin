@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Product') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Stock') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -18,12 +18,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('store-product.create') }}">{{ __('Create') }}</a>
+            <a class="btn btn-default" href="{{ route('store-stock.create') }}">{{ __('Add') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Product') }}</h5>
+                <h5 class="card-title">{{ __('Stock') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -35,37 +35,25 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table id="store-product" class="table table-striped table-bordered">
+                    <table id="stock" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>{{ __('Type Item') }}</th>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('HPP') }}</th>
-                                <th>{{ __('Margin(%)') }}</th>
-                                <th>{{ __('Price') }}</th>
+                                <th>{{ __('Date') }}</th>
+                                <th>{{ __('Description') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Created At') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($storeProduct as $row)
+                            @foreach ($storeStock as $row)
                             <tr>
-                                <td>{{ isset($row->typeProduct) ? $row->typeProduct->name : '-' }}</td>
-                                <td>{{ $row->name }}</td>
-                                <td align='center'>{{ __('Rp. ') }}@price($row->hpp)</td>
-                                <td align='center'>{{ number_format($row->margin_profit, 2, ',', '.') }}</td>
-                                <td align='center'>{{ __('Rp. ') }}@price($row->price)</td>
+                                <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
+                                <td>{{ $row->description }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
-                                    <form action="{{ route('store-product.destroy',$row->id) }}" method="POST">
-                                        <a class="btn btn-info" href="{{ route('store-product.show',$row->id) }}"><i class="fas fa-eye"></i></a>
-                                        <a class="btn btn-default" href="{{ route('store-product.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
-                                    </form>
+                                    <a class="btn btn-info" href="{{ route('stock.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                             @endforeach
@@ -79,7 +67,7 @@
     </div>
 
     <script>
-        $('#store-product').DataTable();
+        $('#stock').DataTable();
     </script>
 
 

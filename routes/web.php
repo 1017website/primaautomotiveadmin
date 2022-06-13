@@ -75,6 +75,13 @@ Route::resource('expense-investment', ExpenseInvestmentController::class)->middl
 //workshop
 //store
 Route::resource('store-product', StoreProductController::class)->middleware(['auth']);
+Route::controller(StoreStockController::class)->group(function () {
+    Route::get('store-stock/detail', 'detail')->name('store-stock.detail')->middleware(['auth']);
+    Route::post('store-stock/price', 'price')->name('store-stock.price')->middleware(['auth']);
+    Route::post('store-stock/add', 'add')->name('store-stock.add')->middleware(['auth']);
+    Route::post('store-stock/delete', 'delete')->name('store-stock.delete')->middleware(['auth']);
+    //Route::get('stock/{id}', 'show')->name('stock.show')->middleware(['auth']);
+});
 Route::resource('store-stock', StoreStockController::class)->middleware(['auth']);
 Route::resource('store-cashier', StoreCashierController::class)->middleware(['auth']);
 Route::resource('store-customer', StoreCustomerController::class)->middleware(['auth']);
