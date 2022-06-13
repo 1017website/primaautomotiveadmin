@@ -6,8 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('product.index') }}">{{ __('Item') }}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-product.index') }}">{{ __('Product') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +19,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('product.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('store-product.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Detail Item') }}</h5>
+                <h5 class="card-title">{{ __('Detail Product') }}</h5>
                 <div class="border-top"></div>
 
                 <div class="row p-3">
@@ -32,8 +32,8 @@
                         <strong>{{ __('Image') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        @if(!empty($product->image))
-                        <img src="{{ asset('storage/'.$product->image) }}" class="img-fluid img-view">
+                        @if(!empty($storeProduct->image))
+                        <img src="{{ asset('storage/'.$storeProduct->image) }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>
@@ -44,7 +44,7 @@
                         <strong>{{ __('Type Item') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->typeProduct) ? $product->typeProduct->name : '-' }}
+                        {{ isset($storeProduct->typeProduct) ? $storeProduct->typeProduct->name : '-' }}
                     </div>
                 </div>
 
@@ -54,7 +54,49 @@
                         <strong>{{ __('Name') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->name }}
+                        {{ $storeProduct->name }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('HPP') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ __('Rp. ') }}@price($storeProduct->hpp)
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Margin Profit') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ number_format($storeProduct->margin_profit, 0, ',', '.') }}%
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Price') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ __('Rp. ') }}@price($storeProduct->price)
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Document') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        @if((!empty($storeProduct->document)))
+                        <a href="{{ asset('storage/'.$storeProduct->document) }}" class="btn btn-default" target="_blank">Download</a>
+                        @endif
                     </div>
                 </div>
 
@@ -64,7 +106,7 @@
                         <strong>{{ __('Created By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->userCreated) ? $product->userCreated->name : '-' }}
+                        {{ isset($storeProduct->userCreated) ? $storeProduct->userCreated->name : '-' }}
                     </div>
                 </div>
 
@@ -74,7 +116,7 @@
                         <strong>{{ __('Updated By') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ isset($product->userUpdated) ? $product->userUpdated->name : '-' }}
+                        {{ isset($storeProduct->userUpdated) ? $storeProduct->userUpdated->name : '-' }}
                     </div>
                 </div>
 
@@ -84,7 +126,7 @@
                         <strong>{{ __('Created At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->created_at }}
+                        {{ $storeProduct->created_at }}
                     </div>
                 </div>
 
@@ -94,7 +136,7 @@
                         <strong>{{ __('Updated At') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $product->updated_at }}
+                        {{ $storeProduct->updated_at }}
                     </div>
                 </div>
 
