@@ -56,7 +56,7 @@
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
-                                <td class="action-button">
+                                <td id="test_1" class="action-button">
                                     <form action="{{ route('product.destroy',$row->id) }}" method="POST">
                                         <a class="btn btn-info" href="{{ route('product.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                         <a class="btn btn-default" href="{{ route('product.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
