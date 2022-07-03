@@ -6,14 +6,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
-class StoreInventoryProduct extends Model {
+class StoreChasierDetailTemp extends Model {
 
     use HasFactory,
         Userstamps;
 
-    protected $table = 'store_inventory_product';
+    protected $table = 'store_chasier_detail_temp';
     protected $fillable = [
-        'product_id', 'type_product_id', 'price', 'qty', 'status'
+        'user_id', 'stock_id', 'type_product_id', 'product_id', 'product_name', 'product_price', 'qty'
     ];
 
     public function userCreated() {
@@ -25,11 +25,7 @@ class StoreInventoryProduct extends Model {
     }
 
     public function product() {
-        return $this->hasOne(StoreProduct::class, 'id', 'product_id');
-    }
-
-    public function typeProduct() {
-        return $this->hasOne(Typeproduct::class, 'id', 'type_product_id');
+        return $this->hasOne(Product::class, 'id', 'product_id');
     }
 
 }
