@@ -23,7 +23,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Stock') }}</h5>
+                <h5 class="card-title">{{ __('Store Stock') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -53,7 +53,7 @@
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
-                                    <a class="btn btn-info" href="{{ route('stock.show',$row->id) }}"><i class="fas fa-eye"></i></a>
+                                    <a class="btn btn-info" href="{{ route('store-stock.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                             @endforeach

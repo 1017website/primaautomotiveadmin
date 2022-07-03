@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Inventory') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('stock.index') }}">{{ __('Stock') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-stock.index') }}">{{ __('Stock') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -19,7 +19,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('stock.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('store-stock.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
@@ -32,7 +32,7 @@
                         <strong>{{ __('Date') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ date('d-m-Y', strtotime($inventoryStock->date)) }}
+                        {{ date('d-m-Y', strtotime($storeStock->date)) }}
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@
                         <strong>{{ __('Description') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        {{ $inventoryStock->description }}
+                        {{ $storeStock->description }}
                     </div>
                 </div>
 
@@ -64,8 +64,8 @@
                                         </tr>
                                     </thead>
                                     <tbody class="customtable">
-                                        @if (count($inventoryStock->detail) > 0)
-                                        @foreach ($inventoryStock->detail as $row)
+                                        @if (count($storeStock->detail) > 0)
+                                        @foreach ($storeStock->detail as $row)
                                         <tr>
                                             <td align='center'>{{ ucfirst($row->type) }}</td>
                                             <td align='center'>{{ $row->product->name }}</td>
