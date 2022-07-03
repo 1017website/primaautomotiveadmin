@@ -30,9 +30,8 @@ Route::get('/', function () {
     return view('dashboard');
 })->middleware(['auth']);
 
-Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
-    return view('dashboard');
-})->name('dashboard');
+Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
+Route::middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);

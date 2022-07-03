@@ -7,8 +7,8 @@ use App\Models\Order;
 use App\Models\Mechanic;
 use App\Models\Workorder;
 use App\Models\WorkorderDetail;
-use App\Models\InventoryProduct;
-use App\Models\InventoryProductHistory;
+use App\Models\StoreInventoryProduct;
+use App\Models\StoreInventoryProductHistory;
 use App\Models\WorkorderDetailTemp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,7 +35,7 @@ class WorkorderController extends Controller {
     }
 
     public function edit(Workorder $workorder) {
-        $items = InventoryProduct::all();
+        $items = StoreInventoryProduct::all();
 
         return view('workorder.edit', compact('workorder', 'items'));
     }
@@ -66,7 +66,7 @@ class WorkorderController extends Controller {
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $stock = InventoryProduct::findorfail($request['stock_id']);
+        $stock = StoreInventoryProduct::findorfail($request['stock_id']);
         $qty = $stock->qty;
 
         return json_encode(['success' => $success, 'message' => $message, 'qty' => $qty]);
@@ -89,7 +89,7 @@ class WorkorderController extends Controller {
                 $temp = new WorkorderDetailTemp();
                 $temp->user_id = Auth::id();
                 $temp->stock_id = $request['stock_id'];
-                $stock = InventoryProduct::findOrFail($request['stock_id']);
+                $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
                 $temp->product_id = $stock->product_id;
                 $temp->type_product_id = $stock->type_product_id;
                 $temp->product_name = $stock->product->name;
@@ -157,7 +157,7 @@ class WorkorderController extends Controller {
                     }
 
                     //history
-                    $inventoryHistory = new InventoryProductHistory();
+                    $inventoryHistory = new StoreInventoryProductHistory();
                     $inventoryHistory->product_id = $row->product_id;
                     $inventoryHistory->type_product_id = $row->type_product_id;
                     $inventoryHistory->price = $row->product_price;
@@ -171,7 +171,7 @@ class WorkorderController extends Controller {
                     }
 
                     //stock
-                    $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
+                    $inventory = StoreInventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
                     if (isset($inventory)) {
                         $inventory->qty = $inventory->qty - $row->qty;
                         $saved = $inventory->save();
