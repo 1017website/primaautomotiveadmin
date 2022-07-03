@@ -84,6 +84,9 @@ Route::controller(StoreStockController::class)->group(function () {
 Route::resource('store-stock', StoreStockController::class)->middleware(['auth']);
 Route::resource('store-cashier', StoreCashierController::class)->middleware(['auth']);
 Route::resource('store-customer', StoreCustomerController::class)->middleware(['auth']);
+Route::controller(StoreCustomerController::class)->group(function () {
+    Route::post('store-customer/store', 'store')->name('store-customer.store')->middleware(['auth']);
+});
 Route::resource('store-spending', StoreSpendingController::class)->middleware(['auth']);
 Route::resource('store-investment', StoreInvestmentController::class)->middleware(['auth']);
 //store
