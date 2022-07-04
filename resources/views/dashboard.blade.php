@@ -145,16 +145,18 @@
 								<h5 class="card-title">Used Product</h5>
 							</div>
 						</div>
-						@foreach ($products as $row)
+						
 						<div class="row">
-							<div class="col-12" style="padding-bottom:5px;">
+							@foreach ($products as $row)
+							<div class="col-4" style="padding-bottom:5px;">
 								<div class="bg-cyan p-10 text-white text-center">
 									<h5 class="mb-0 mt-1">{{ number_format(isset($row->qty)?$row->qty:0) }}</h5>
 									<small class="font-light">{{ $row->name }}</small>
 								</div>
 							</div>
+							@endforeach
 						</div>
-						@endforeach
+						
 						</div>
 						</div>
 					</div>
