@@ -27,11 +27,10 @@ use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
 //store
 
-Route::get('/', function () {
-    return view('dashboard');
-})->middleware(['auth']);
+
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
+Route::resource('/', DashboardController::class)->middleware(['auth']);
 
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);

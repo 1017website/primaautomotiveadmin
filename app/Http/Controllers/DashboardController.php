@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class DashboardController extends Controller {
 
     public function index() {
+
         $union1 = DB::table('invoice')
                 ->selectRaw('0 as orders, 0 as progress, 0 as done, sum(dp) as revenue, 0 as expense')
                 ->whereRaw(' date <= LAST_DAY(NOW())');
@@ -83,7 +84,7 @@ class DashboardController extends Controller {
                 ->selectRaw("
 				b.name, sum(a.qty) as qty
 			")
-                ->join('products as b', 'b.id', '=', 'a.product_id')
+                ->join('store_products as b', 'b.id', '=', 'a.product_id')
                 ->groupBy('b.id')
                 ->get();
 
