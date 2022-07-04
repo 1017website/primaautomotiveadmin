@@ -39,7 +39,7 @@ class DashboardController extends Controller {
 				sum(if(a.status = 3, 1, 0)) as progress, 
 				sum(if(a.status = 4, 1, 0)) as done
 			")
-                ->whereRaw("a.status <> 0 and a.date > (LAST_DAY(NOW()) - INTERVAL 6 MONTH)")
+                ->whereRaw("a.status <> 0 and a.date > (LAST_DAY(NOW()) - INTERVAL 1 MONTH)")
                 ->groupBy(DB::raw("concat(year(a.date),lpad(month(a.date),2,0))"))
                 ->orderBy(DB::raw("concat(year(a.date),lpad(month(a.date),2,0))"))
                 ->get();
@@ -49,7 +49,7 @@ class DashboardController extends Controller {
 				concat(year(date),'-',lpad(month(date),2,0)) as month,
 					sum(dp) as revenue
 			")
-                ->whereRaw("date > (LAST_DAY(NOW()) - INTERVAL 6 MONTH) and date <= (LAST_DAY(NOW()))")
+                ->whereRaw("date > (LAST_DAY(NOW()) - INTERVAL 1 MONTH) and date <= (LAST_DAY(NOW()))")
                 ->groupBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->orderBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->get();
@@ -59,19 +59,19 @@ class DashboardController extends Controller {
 				concat(year(date),'-',lpad(month(date),2,0)) as month,
 					sum(cost) as expense
 			")
-                ->whereRaw("date > (LAST_DAY(NOW()) - INTERVAL 6 MONTH) and date <= (LAST_DAY(NOW()))")
+                ->whereRaw("date > (LAST_DAY(NOW()) - INTERVAL 1 MONTH) and date <= (LAST_DAY(NOW()))")
                 ->groupBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->orderBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->get();
         $data = [];
         foreach ($orders as $v) {
-            $data[$v->month]['order'] = $v;
+            $data['month']['order'] = $v;
         }
         foreach ($revenue as $v) {
-            $data[$v->month]['revenue'] = $v;
+            $data['month']['revenue'] = $v;
         }
         foreach ($expense as $v) {
-            $data[$v->month]['expense'] = $v;
+            $data['month']['expense'] = $v;
         }
         foreach ($all as $v) {
             $data['ALL']['order'] = $v;

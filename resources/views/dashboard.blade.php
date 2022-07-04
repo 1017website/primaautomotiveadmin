@@ -22,55 +22,142 @@
                 <h5 class="card-title">{{ __('Dashboard') }}</h5>
                 <div class="border-top"></div>
 
+				<div class="row">
+				
+				</div>
                 <div class="row">
-                    <div class="col-sm-6">
-                        <table id="order" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Month') }}</th>
-                                    <th>{{ __('Order') }}</th>
-                                    <th>{{ __('Progress') }}</th>
-                                    <th>{{ __('Done') }}</th>
-                                    <th>{{ __('Revenue') }}</th>
-                                    <th>{{ __('Expense') }}</th>
-                                    <th>{{ __('Balance') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($data as $index => $row)
-                                <tr>
-                                    <td align=center>{{ $index }}</td>
-                                    <td align=right>{{ number_format(isset($row['order']->orders)?$row['order']->orders:0) }}</td>          
-                                    <td align=right>{{ number_format(isset($row['order']->progress)?$row['order']->progress:0) }}</td>
-                                    <td align=right>{{ number_format(isset($row['order']->done)?$row['order']->done:0) }}</td>
-                                    <td align=right>{{ number_format(isset($row['revenue']->revenue)?$row['revenue']->revenue:0) }}</td>
-                                    <td align=right>{{ number_format(isset($row['expense']->expense)?$row['expense']->expense:0) }}</td>
-                                    <td align=right>{{ number_format((isset($row['revenue']->revenue)?$row['revenue']->revenue:0) - (isset($row['expense']->expense)?$row['expense']->expense:0)) }}</td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                    <div class="col-sm-8">
+					<div class="card">
+						<div class="card-body">
+							<div class="d-md-flex align-items-center">
+								<div>
+									<h5 class="card-title">Overview Summary</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-book-multiple fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['ALL']['order']->orders)?$data['ALL']['order']->orders:0) }}</h5>
+										<small class="font-light">Total Orders</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-wrench fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['ALL']['order']->progress)?$data['ALL']['order']->progress:0) }}</h5>
+										<small class="font-light">Total Progress</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-check-circle-outline fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['ALL']['order']->done)?$data['ALL']['order']->done:0) }}</h5>
+										<small class="font-light">Total Done</small>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-success p-10 text-white text-center">
+										<i class="mdi mdi-diamond fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['ALL']['revenue']->revenue)?$data['ALL']['revenue']->revenue:0) }}</h5>
+										<small class="font-light">Total Revenue</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-danger p-10 text-white text-center">
+										<i class="mdi mdi-directions fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['ALL']['expense']->expense)?$data['ALL']['expense']->expense:0) }}</h5>
+										<small class="font-light">Total Expense</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-info p-10 text-white text-center">
+										<i class="mdi mdi-bookmark fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format((isset($data['ALL']['revenue']->revenue)?$data['ALL']['revenue']->revenue:0) - (isset($data['ALL']['expense']->expense)?$data['ALL']['expense']->expense:0)) }}</h5>
+										<small class="font-light">Balance</small>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div class="card-body">
+							<div class="d-md-flex align-items-center">
+								<div>
+									<h5 class="card-title">Overview Latest Month</h5>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-book-multiple fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['month']['order']->orders)?$data['month']['order']->orders:0) }}</h5>
+										<small class="font-light">Total Orders</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-wrench fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['month']['order']->progress)?$data['month']['order']->progress:0) }}</h5>
+										<small class="font-light">Total Progress</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-dark p-10 text-white text-center">
+										<i class="mdi mdi-check-circle-outline fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['month']['order']->done)?$data['month']['order']->done:0) }}</h5>
+										<small class="font-light">Total Done</small>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-success p-10 text-white text-center">
+										<i class="mdi mdi-diamond fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['month']['revenue']->revenue)?$data['month']['revenue']->revenue:0) }}</h5>
+										<small class="font-light">Total Revenue</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-danger p-10 text-white text-center">
+										<i class="mdi mdi-directions fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format(isset($data['month']['expense']->expense)?$data['month']['expense']->expense:0) }}</h5>
+										<small class="font-light">Total Expense</small>
+									</div>
+								</div>
+								<div class="col-4" style="padding-bottom:5px;">
+									<div class="bg-info p-10 text-white text-center">
+										<i class="mdi mdi-bookmark fs-3 mb-1 font-16"></i>
+										<h5 class="mb-0 mt-1">{{ number_format((isset($data['month']['revenue']->revenue)?$data['month']['revenue']->revenue:0) - (isset($data['month']['expense']->expense)?$data['month']['expense']->expense:0)) }}</h5>
+										<small class="font-light">Balance</small>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
                     </div>
 
-                    <div class="col-sm-6">
-                        <table id="order" class="table table-striped table-bordered">
-                            <thead>
-                                <tr>
-                                    <th>{{ __('Product') }}</th>
-                                    <th>{{ __('Qty') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($products as $row)
-                                <tr>
-                                    <td>{{ ($row->name) }}</td>
-                                    <td align=right>{{ number_format($row->qty) }}</td>          
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-
+                    <div class="col-sm-4">
+					<div class="card">
+						<div class="card-body">
+						<div class="d-md-flex align-items-center">
+							<div>
+								<h5 class="card-title">Used Product</h5>
+							</div>
+						</div>
+						@foreach ($products as $row)
+						<div class="row">
+							<div class="col-12" style="padding-bottom:5px;">
+								<div class="bg-cyan p-10 text-white text-center">
+									<h5 class="mb-0 mt-1">{{ number_format(isset($row->qty)?$row->qty:0) }}</h5>
+									<small class="font-light">{{ $row->name }}</small>
+								</div>
+							</div>
+						</div>
+						@endforeach
+						</div>
+						</div>
+					</div>
                 </div>
 
             </div>
