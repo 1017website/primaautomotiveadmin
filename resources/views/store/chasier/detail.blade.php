@@ -26,17 +26,17 @@
 </div>
 
 <script>
-	function get_detail() {
-		$.ajax({
-			url: "{{ route('store-chasier.detail') }}",
-			type: 'GET',
-			dataType: 'html',
-			success: function (res) {
-				$('.detail').html(res);
-			}
-		});
-	}
-	
+    function get_detail() {
+    $.ajax({
+    url: "{{ route('store-chasier.detail') }}",
+            type: 'GET',
+            dataType: 'html',
+            success: function (res) {
+            $('.detail').html(res);
+            }
+    });
+    }
+
     function deleteTemp(id) {
     $.ajax({
     url: "{{ route('store-chasier.deleteProduct') }}",

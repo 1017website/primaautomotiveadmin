@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 //workshop
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\TypeProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
@@ -20,7 +21,7 @@ use App\Http\Controllers\ExpenseInvestmentController;
 //store
 use App\Http\Controllers\StoreProductController;
 use App\Http\Controllers\StoreStockController;
-use App\Http\Controllers\StoreCashierController;
+use App\Http\Controllers\StoreChasierController;
 use App\Http\Controllers\StoreCustomerController;
 use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
@@ -31,7 +32,6 @@ Route::get('/', function () {
 })->middleware(['auth']);
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
-Route::middleware(['auth:sanctum', 'verified'])->name('dashboard');
 
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);

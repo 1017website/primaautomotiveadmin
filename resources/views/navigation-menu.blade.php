@@ -43,7 +43,7 @@
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="/store-product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Product') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-stock" class="sidebar-link"><i class="mdi mdi-scale-balance"></i><span class="hide-menu">{{ __('Stock') }}</span></a></li>
-                        <li class="sidebar-item"><a href="/store-cashier" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Cashier') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/store-chasier" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Cashier') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-customer" class="sidebar-link"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">{{ __('Customer') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-spending" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Spending') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-investment" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Investment') }}</span></a></li>

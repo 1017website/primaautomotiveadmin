@@ -123,7 +123,7 @@
                                 </div>
                             </fieldset>
                         </div>
-					</div>
+                    </div>
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>

@@ -72,11 +72,11 @@
                                         <div class="form-group row">
                                             <label for="cust_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                                             <div class="col-sm-10">
-												<select class="select2 form-control custom-select" id="cust_id" name="cust_id" style="width: 100%;" required="true">                              
-													@foreach($customer as $item)                                
-													<option value="{{$item->id}}">{{$item->name}}</option>    
-													@endforeach
-												</select>
+                                                <select class="select2 form-control custom-select" id="cust_id" name="cust_id" style="width: 100%;" required="true">                              
+                                                    @foreach($customer as $item)                                
+                                                    <option value="{{$item->id}}">{{$item->name}}</option>    
+                                                    @endforeach
+                                                </select>
                                             </div>
                                         </div>
 
@@ -184,8 +184,8 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-			$("#product_id").trigger("change"); 
-			$("#cust_id").trigger("change"); 
+            $("#product_id").trigger("change");
+            $("#cust_id").trigger("change");
             function get_detail() {
                 $.ajax({
                     url: "{{ route('store-chasier.detail') }}",
@@ -235,57 +235,57 @@
                 //if a decimal has been added, disable the "."-button
             });
         });
-		
-		$('#product_id').on('change', function () {
-			$.ajax({
-				url: "{{ route('store-chasier.price') }}",
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					'product_id': this.value
-				},
-				success: function (res) {
-					$('#price').val(res.price);
-					var price = document.getElementById('price');
-					var formated = formatRupiah($('#price').val(), 'Rp. ');
-					price.value = formated;
-				}
-			});
-		});
 
-		$('#cust_id').on('change', function () {
-			$.ajax({
-				url: "{{ route('store-chasier.customer') }}",
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					'cust_id': this.value
-				},
-				success: function (res) {
-					$('#cust_id_card').val(res.card);
-					$('#cust_phone').val(res.phone);
-					$('#cust_address').val(res.address);
+        $('#product_id').on('change', function () {
+            $.ajax({
+                url: "{{ route('store-chasier.price') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'product_id': this.value
+                },
+                success: function (res) {
+                    $('#price').val(res.price);
+                    var price = document.getElementById('price');
+                    var formated = formatRupiah($('#price').val(), 'Rp. ');
+                    price.value = formated;
+                }
+            });
+        });
 
-				}
-			});
-		});
-		
-		function formatRupiah(angka, prefix)
-		{
-			var number_string = angka.replace(/[^,\d]/g, '').toString(),
-					split = number_string.split(','),
-					sisa = split[0].length % 3,
-					rupiah = split[0].substr(0, sisa),
-					ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+        $('#cust_id').on('change', function () {
+            $.ajax({
+                url: "{{ route('store-chasier.customer') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'cust_id': this.value
+                },
+                success: function (res) {
+                    $('#cust_id_card').val(res.card);
+                    $('#cust_phone').val(res.phone);
+                    $('#cust_address').val(res.address);
 
-			if (ribuan) {
-				separator = sisa ? '.' : '';
-				rupiah += separator + ribuan.join('.');
-			}
+                }
+            });
+        });
 
-			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-		}
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
     </script>
 
 </x-app-layout>

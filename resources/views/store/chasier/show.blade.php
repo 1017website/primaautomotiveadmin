@@ -130,7 +130,7 @@
             @if($invoice->status_payment == 0 || $invoice->status_payment == 1)
             <a class="btn btn-success" data-toggle="modal" data-target="#Modal2"><i class="fas fa-dollar-sign"></i>{{ __('Pay') }}</a>
             @endif
-            <a class="btn btn-default" href="{{ route('invoice.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('store-chasier.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">

@@ -23,9 +23,9 @@ class StoreChasierController extends Controller {
     }
 
     public function create() {
-		$product = StoreInventoryProduct::all();
-		$customer = StoreCustomer::all();
-        return view('store.chasier.create', compact('product','customer'));
+        $product = StoreInventoryProduct::all();
+        $customer = StoreCustomer::all();
+        return view('store.chasier.create', compact('product', 'customer'));
     }
 
     public function store(Request $request) {
@@ -50,9 +50,9 @@ class StoreChasierController extends Controller {
                 //save header
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
                 $validateData['code'] = $this->generateCode(date('Ymd'));
-				$validateData['total'] = 0;
-				$validateData['status'] = 1;
-				$validateData['status_payment'] = 0;
+                $validateData['total'] = 0;
+                $validateData['status'] = 1;
+                $validateData['status_payment'] = 0;
                 $order = StoreChasier::create($validateData);
 
                 foreach ($temp as $row) {
@@ -70,8 +70,8 @@ class StoreChasierController extends Controller {
                         $success = false;
                         $message = 'Failed save detail';
                     }
-					$order->total += ($row->qty * $row->product_price);
-					
+                    $order->total += ($row->qty * $row->product_price);
+
                     //history
                     $inventoryHistory = new StoreInventoryProductHistory();
                     $inventoryHistory->product_id = $row->product_id;
@@ -103,11 +103,11 @@ class StoreChasierController extends Controller {
                     $success = false;
                     $message = 'Failed delete temp';
                 }
-				$saved = $order->save();
-				if (!$saved) {
-					$success = false;
-					$message = 'Failed save Chasier Total';
-				}
+                $saved = $order->save();
+                if (!$saved) {
+                    $success = false;
+                    $message = 'Failed save Chasier Total';
+                }
 
                 if ($success) {
                     DB::commit();
@@ -154,9 +154,9 @@ class StoreChasierController extends Controller {
         try {
             $invoice = StoreChasier::findorfail($request['invoice_id']);
             $dp = substr(str_replace('.', '', $request['dp']), 3);
-			if(!empty($invoice->dp)){
-				$dp += $invoice->dp;
-			}
+            if (!empty($invoice->dp)) {
+                $dp += $invoice->dp;
+            }
             if ($dp > $invoice->total) {
                 $success = false;
                 $message = "Payment does not match";
@@ -191,7 +191,7 @@ class StoreChasierController extends Controller {
 
         //return $pdf->download('Print-'.$invoice->code.'.pdf');
     }
-	
+
     public function workOrder() {
         $success = true;
         $message = '';
@@ -242,37 +242,35 @@ class StoreChasierController extends Controller {
 
         return json_encode(['success' => $success, 'message' => $message]);
     }
-	
+
     public function price() {
         $request = array_merge($_POST, $_GET);
         $price = 0;
 
-        if(isset($request)){
-           $storeProduct = StoreInventoryProduct::findOrFail($request['product_id']);
-           $price = $storeProduct->price;
+        if (isset($request)) {
+            $storeProduct = StoreInventoryProduct::findOrFail($request['product_id']);
+            $price = $storeProduct->price;
         }
-        
+
         return json_encode(['price' => $price]);
-        
     }
-	
+
     public function customer() {
         $request = array_merge($_POST, $_GET);
         $phone = '';
-		$address = '';
-		$card = '';
+        $address = '';
+        $card = '';
 
-        if(isset($request)){
-           $cust = StoreCustomer::findOrFail($request['cust_id']);
-           $phone = $cust->phone;
-		   $address = $cust->address;
-		   $card = $cust->id_card;
+        if (isset($request)) {
+            $cust = StoreCustomer::findOrFail($request['cust_id']);
+            $phone = $cust->phone;
+            $address = $cust->address;
+            $card = $cust->id_card;
         }
-        
+
         return json_encode(['phone' => $phone, 'card' => $card, 'address' => $address]);
-        
     }
-	
+
     public function add() {
         $success = true;
         $message = '';
@@ -285,18 +283,18 @@ class StoreChasierController extends Controller {
                         'product_price' => substr(str_replace('.', '', $request['price']), 3)
                     ])->first();
             if (isset($temp)) {
-				$temp->qty = $temp->qty - str_replace(',', '.', $request['qty']);
+                $temp->qty = $temp->qty - str_replace(',', '.', $request['qty']);
                 $temp->save();
             } else {
                 $temp = new StoreChasierDetailTemp();
-				$temp->stock_id = $request['stock_id'];
-				$inv = StoreInventoryProduct::findOrFail($request['stock_id']);
-				$product = $inv->product;
+                $temp->stock_id = $request['stock_id'];
+                $inv = StoreInventoryProduct::findOrFail($request['stock_id']);
+                $product = $inv->product;
                 $temp->user_id = Auth::id();
                 $temp->product_id = $product->id;
-               
+
                 $temp->type_product_id = $product->type_product_id;
-				$temp->product_name = $product->name;
+                $temp->product_name = $product->name;
                 $temp->qty = str_replace(',', '.', $request['qty']);
                 $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
                 $temp->save();
@@ -308,7 +306,7 @@ class StoreChasierController extends Controller {
 
         return json_encode(['success' => $success, 'message' => $message]);
     }
-	
+
     public static function generateCode($date) {
         $count = StoreChasier::where('code', 'LIKE', '%CHA' . $date . '%')->count();
         $n = 0;
