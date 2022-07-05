@@ -267,7 +267,7 @@ class StoreChasierController extends Controller {
 
         if (isset($request)) {
             $storeProduct = StoreInventoryProduct::findOrFail($request['product_id']);
-            $price = $storeProduct->price;
+            $price = $storeProduct->product->price;
         }
 
         return json_encode(['price' => $price]);
