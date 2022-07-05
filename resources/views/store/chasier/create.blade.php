@@ -48,7 +48,7 @@
                                     <div class="form-group row">
                                         <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                         <div class="col-sm-5 input-group">
-                                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ old('date') }}" placeholder="dd/mm/yyyy" autocomplete="off">
+                                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ !empty(old('date'))?old('date'):date('d-m-Y') }}" placeholder="dd/mm/yyyy" autocomplete="off">
                                             <div class="input-group-append">
                                                 <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                             </div>
@@ -72,18 +72,14 @@
                                         <div class="form-group row">
                                             <label for="cust_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                                             <div class="col-sm-10">
-                                                <select class="select2 form-control custom-select" id="cust_id" name="cust_id" style="width: 100%;" required="true">                              
-                                                    @foreach($customer as $item)                                
-                                                    <option value="{{$item->id}}">{{$item->name}}</option>    
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control name" id="cust_name" name="cust_name" value="{{ old('cust_name') }}" required="true">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label for="cust_phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Phone') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" disabled class="form-control phone" id="cust_phone" name="cust_phone" value="{{ old('cust_phone') }}" required="true">
+                                                <input type="text" class="form-control phone" id="cust_phone" name="cust_phone" value="{{ old('cust_phone') }}" required="true">
                                             </div>
                                         </div>
                                     </div>
@@ -92,14 +88,14 @@
                                         <div class="form-group row">
                                             <label for="cust_id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" disabled class="form-control" id="cust_id_card" name="cust_id_card" value="{{ old('cust_id_card') }}" placeholder="Ktp/Sim">
+                                                <input type="text" class="form-control" id="cust_id_card" name="cust_id_card" value="{{ old('cust_id_card') }}" placeholder="Ktp/Sim">
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
                                             <label for="cust_address" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" disabled class="form-control" id="cust_address" name="cust_address" value="{{ old('cust_address') }}">
+                                                <input type="text" class="form-control" id="cust_address" name="cust_address" value="{{ old('cust_address') }}">
                                             </div>
                                         </div>
                                     </div>
@@ -113,6 +109,13 @@
                                 <div class="detail">
 
                                 </div>
+								<div class="form-group row">
+									<div class="col-sm-8"></div>
+									<label for="pay" class="col-sm-1 text-left control-label col-form-label">Payment</label>
+									<div class="col-sm-3">
+										<input type="text" class="form-control" id="dp" name="dp" required="" value="{{ old('dp') }}">
+									</div>
+								</div>
                             </fieldset>
 
                             <div class="border-top"></div>
@@ -174,6 +177,11 @@
         </div>
     </div>
     <!-- Modal -->
+	
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+
+
     <script type="text/javascript">
         $(document).ready(function ($) {
 
@@ -269,6 +277,34 @@
                 }
             });
         });
+
+		$( "#cust_name" ).autocomplete({
+			source: function( request, response ) {
+				$.ajax( {
+				  url: "{{ route('store-chasier.customer') }}",
+				  dataType: "JSON",
+				  data: {
+					term: request.term
+				  },
+				  success: function( data ) {
+					response( data );
+				  }
+				} );
+			},
+			minLength: 2,
+			select: function( event, ui ) {
+				$( "#cust_name" ).val( ui.item.label );
+				$( "#cust_phone" ).val( ui.item.phone );
+				$( "#cust_address" ).val( ui.item.address );
+				$( "#cust_id_card" ).val(ui.item.id_card);
+
+				return false;
+			}
+		}).autocomplete( "instance" )._renderItem = function( ul, item ) {
+		  return $( "<li>" )
+			.append( "<div>" + "<span style='font-size:12px'>"+item.label + "</span>&nbsp;- <span style='font-size:12px'>Phone : " + item.phone + "</span></div>" )
+			.appendTo( ul );
+		};
 
         function formatRupiah(angka, prefix)
         {

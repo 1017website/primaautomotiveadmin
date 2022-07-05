@@ -86,7 +86,7 @@ Route::controller(StoreChasierController::class)->group(function () {
     Route::get('store-chasier/detail', 'detail')->name('store-chasier.detail')->middleware(['auth']);
 	Route::post('store-chasier/add', 'add')->name('store-chasier.add')->middleware(['auth']);
 	Route::post('store-chasier/price', 'price')->name('store-chasier.price')->middleware(['auth']);
-	Route::post('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
+	Route::get('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
 	Route::get('store-chasier/print/{id}', 'print')->name('store-chasier.print')->middleware(['auth']);
 	Route::post('store-chasier/payInvoice', 'payInvoice')->name('payInvoice')->middleware(['auth']);
 	Route::post('store-chasier/deleteProduct', 'deleteProduct')->name('store-chasier.deleteProduct')->middleware(['auth']);

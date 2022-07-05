@@ -6,7 +6,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Chasier') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Cashier') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -22,7 +22,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Chasier') }}</h5>
+                <h5 class="card-title">{{ __('Cashier') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -39,6 +39,7 @@
                             <tr>
                                 <th>{{ __('Customer') }}</th>
                                 <th>{{ __('Date') }}</th>
+								<th>{{ __('Nomer') }}</th>
                                 <th>{{ __('Total') }}</th>
                                 <th>{{ __('Status') }}</th>
                                 <th>{{ __('Status Payment') }}</th>
@@ -50,6 +51,7 @@
                             <tr>
                                 <td>{{ isset($row->customer->name)?$row->customer->name:'-' }}</td>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
+								<td>{{ isset($row->code)?$row->code:'-' }}</td>
                                 <td>{{ __('Rp. ') }}@price($row->total)</td>
                                 <td>{{ $row->getStatus() }}</td>
                                 <td>{{ $row->getStatusPayment() }}</td>

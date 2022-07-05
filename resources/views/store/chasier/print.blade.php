@@ -208,7 +208,7 @@
 
                             <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
 
-                            <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+                            <p>{{ __('Change') }} : {{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</p>
 
                         </div>
                     </div>

@@ -115,7 +115,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('store-chasier.index') }}">{{ __('Chasier') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-chasier.index') }}">{{ __('Cashier') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -221,7 +221,7 @@
 
                                         <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
 
-                                        <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
+                                        <p>{{ __('Change') }} : {{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</p>
 
                                     </div>
                                 </div>

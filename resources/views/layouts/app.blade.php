@@ -19,6 +19,7 @@
         <!-- Scripts -->
         <script src="{{asset('js/app.js') }}" defer></script>
         <script src="{{asset('plugins/libs/jquery/dist/jquery.min.js')}}"></script>
+		<script src="{{asset('js/jquery-ui.js')}}"></script>
         <script src="{{asset('plugins/libs/popper.js/dist/umd/popper.min.js')}}"></script>
         <script src="{{asset('plugins/libs/bootstrap/dist/js/bootstrap.min.js')}}"></script>
         <script src="{{asset('plugins/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js')}}"></script>
