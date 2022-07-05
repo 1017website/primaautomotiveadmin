@@ -326,13 +326,13 @@ class StoreChasierController extends Controller {
     }
 
     public static function generateCode($date) {
-        $count = StoreChasier::where('code', 'LIKE', '%CAS' . $date . '%')->count();
+        $count = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->count();
         $n = 0;
         if ($count > 0) {
-            $invoice = StoreChasier::where('code', 'LIKE', '%CAS' . $date . '%')->orderBy('code', 'DESC')->first();
+            $invoice = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->orderBy('code', 'DESC')->first();
             $n = (int) substr($invoice->code, -4);
         }
-        return (string) 'CHA' . $date . sprintf('%04s', ($n + 1));
+        return (string) 'STR' . $date . sprintf('%04s', ($n + 1));
     }
 
     public static function generateCodeWo($date) {
