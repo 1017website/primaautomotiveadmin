@@ -171,8 +171,20 @@
                                     </div>
 
                                     <div class="col-sm-4 to">
-                                        <p class="lead marginbottom">To : {{ $invoice->customer->name }}</p>
-                                        <p>{{ $invoice->customer->address }}<p>
+										<?php
+											if(empty($invoice->workorder_id)){
+												$cust = $invoice->customer->name;
+												$add = $invoice->customer->address;
+												$note = '';
+											}else{
+												$cust = $invoice->workorder->order->cust_name;
+												$add = $invoice->workorder->order->cust_address;
+												$note = 'Invoice '.$invoice->workorder->invoice->code;
+											}
+										?>
+                                        <p class="lead marginbottom">To : {{ $cust }}</p>
+                                        <p>{{ $add }}<p>
+										<p><?=  $note ?><p>
                                     </div>
 
                                     <div class="col-sm-4 text-right payment-details">
@@ -266,7 +278,7 @@
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-default" id="payInvoice">Pay</button>
+                            <button type="button" class="btn btn-default" id="payStore">Pay</button>
                         </div>
                     </div>
                 </div>
@@ -313,10 +325,10 @@
             }
         });
 
-        $("#payInvoice").click(function () {
+        $("#payStore").click(function () {
             if ($('#dp').val() != '' && $('#dp').val() != null) {
                 $.ajax({
-                    url: "{{ route('payInvoice') }}",
+                    url: "{{ route('payStore') }}",
                     type: 'POST',
                     dataType: 'json',
                     data: {

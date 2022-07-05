@@ -122,7 +122,7 @@
                             <select class="select2 form-control custom-select" id="stock_id" name="stock_id" style="width: 100%;">
                                 <option></option>
                                 @foreach($items as $item)                                
-                                <option value="{{$item->id}}">{{$item->product->name}} - {{ number_format($item->qty, 2, ',', '.') }} - {{ __('Rp. ') }}@price($item->price)</option>    
+                                <option value="{{$item->id}}">{{$item->product->name}} - {{ number_format($item->qty, 2, ',', '.') }} - {{ __('Rp. ') }}@price($item->product->hpp)</option>    
                                 @endforeach
                             </select>
                         </div>

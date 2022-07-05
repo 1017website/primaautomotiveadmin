@@ -34,8 +34,8 @@ class StoreChasier extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
-    public function order() {
-        return $this->hasOne(Order::class, 'id', 'order_id');
+    public function workorder() {
+        return $this->hasOne(Workorder::class, 'id', 'workorder_id');
     }
 
     public function getStatus() {

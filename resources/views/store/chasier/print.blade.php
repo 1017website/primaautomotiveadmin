@@ -158,8 +158,20 @@
                         </div>
 
                         <div class="col-sm-4 to">
-                            <p class="lead marginbottom">To : {{ $invoice->customer->name }}</p>
-                            <p>{{ $invoice->customer->address }}<p>
+							<?php
+								if(empty($invoice->workorder_id)){
+									$cust = $invoice->customer->name;
+									$add = $invoice->customer->address;
+									$note = '';
+								}else{
+									$cust = $invoice->workorder->order->cust_name;
+									$add = $invoice->workorder->order->cust_address;
+									$note = 'Invoice '.$invoice->workorder->invoice->code;
+								}
+							?>
+							<p class="lead marginbottom">To : {{ $cust }}</p>
+							<p>{{ $add }}<p>
+							<p><?=  $note ?><p>
                         </div>
 
                         <div class="col-sm-4 text-right payment-details">
