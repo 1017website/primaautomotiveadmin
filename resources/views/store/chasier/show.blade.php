@@ -179,11 +179,12 @@
 											}else{
 												$cust = $invoice->workorder->order->cust_name;
 												$add = $invoice->workorder->order->cust_address;
-												$note = 'Invoice '.$invoice->workorder->invoice->code;
+												$note = '<a target="_blank" href="'. route('invoice.show',$invoice->workorder->invoice_id) .'">Invoice '.$invoice->workorder->invoice->code.'</a>';
 											}
 										?>
                                         <p class="lead marginbottom">To : {{ $cust }}</p>
                                         <p>{{ $add }}<p>
+										<p>&nbsp;<p>
 										<p><?=  $note ?><p>
                                     </div>
 
