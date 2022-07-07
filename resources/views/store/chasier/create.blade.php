@@ -109,13 +109,13 @@
                                 <div class="detail">
 
                                 </div>
-								<div class="form-group row">
-									<div class="col-sm-8"></div>
-									<label for="pay" class="col-sm-1 text-left control-label col-form-label">Payment</label>
-									<div class="col-sm-3">
-										<input type="text" class="form-control" id="dp" name="dp" required="" value="{{ old('dp') }}">
-									</div>
-								</div>
+                                <div class="form-group row">
+                                    <div class="col-sm-8"></div>
+                                    <label for="pay" class="col-sm-1 text-left control-label col-form-label">Payment</label>
+                                    <div class="col-sm-3">
+                                        <input type="text" class="form-control" id="dp" name="dp" required="" value="{{ old('dp') }}">
+                                    </div>
+                                </div>
                             </fieldset>
 
                             <div class="border-top"></div>
@@ -132,7 +132,7 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="Modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="Modal2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -177,9 +177,9 @@
         </div>
     </div>
     <!-- Modal -->
-	
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="/resources/demos/style.css">
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
 
 
     <script type="text/javascript">
@@ -278,33 +278,43 @@
             });
         });
 
-		$( "#cust_name" ).autocomplete({
-			source: function( request, response ) {
-				$.ajax( {
-				  url: "{{ route('store-chasier.customer') }}",
-				  dataType: "JSON",
-				  data: {
-					term: request.term
-				  },
-				  success: function( data ) {
-					response( data );
-				  }
-				} );
-			},
-			minLength: 2,
-			select: function( event, ui ) {
-				$( "#cust_name" ).val( ui.item.label );
-				$( "#cust_phone" ).val( ui.item.phone );
-				$( "#cust_address" ).val( ui.item.address );
-				$( "#cust_id_card" ).val(ui.item.id_card);
+        $("#cust_name").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "{{ route('store-chasier.customer') }}",
+                    dataType: "JSON",
+                    data: {
+                        term: request.term
+                    },
+                    success: function (data) {
+                        response(data);
+                    }
+                });
+            },
+            minLength: 2,
+            select: function (event, ui) {
+                $("#cust_name").val(ui.item.label);
+                $("#cust_phone").val(ui.item.phone);
+                $("#cust_address").val(ui.item.address);
+                $("#cust_id_card").val(ui.item.id_card);
 
-				return false;
-			}
-		}).autocomplete( "instance" )._renderItem = function( ul, item ) {
-		  return $( "<li>" )
-			.append( "<div>" + "<span style='font-size:12px'>"+item.label + "</span>&nbsp;- <span style='font-size:12px'>Phone : " + item.phone + "</span></div>" )
-			.appendTo( ul );
-		};
+                return false;
+            }
+        }).autocomplete("instance")._renderItem = function (ul, item) {
+            return $("<li>")
+                    .append("<div>" + "<span style='font-size:12px'>" + item.label + "</span>&nbsp;- <span style='font-size:12px'>Phone : " + item.phone + "</span></div>")
+                    .appendTo(ul);
+        };
+
+        var harga = document.getElementById('dp');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#dp').val(), 'Rp. ');
+            harga.value = formated;
+        });
+
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
 
         function formatRupiah(angka, prefix)
         {
