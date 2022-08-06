@@ -85,7 +85,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <div class="form-group row">
+                                        <div class="form-group row" style="display:none;">
                                             <label for="cust_id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card') }}</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="cust_id_card" name="cust_id_card" value="{{ old('cust_id_card') }}" placeholder="Ktp/Sim">

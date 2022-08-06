@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Stock') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Adjusting Stock') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -23,7 +23,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Store Stock') }}</h5>
+                <h5 class="card-title">{{ __('Adjusting Stock') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">

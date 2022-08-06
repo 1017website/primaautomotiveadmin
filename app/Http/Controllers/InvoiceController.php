@@ -57,6 +57,7 @@ class InvoiceController extends Controller {
         try {
             $invoice = Invoice::findorfail($request['invoice_id']);
             $dp = substr(str_replace('.', '', $request['dp']), 3);
+            $dp = $invoice->dp + $dp;
             if ($dp > $invoice->total) {
                 $success = false;
                 $message = "Payment does not match";

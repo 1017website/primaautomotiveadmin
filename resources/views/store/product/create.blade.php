@@ -123,14 +123,14 @@
                             <div class="form-group row">
                                 <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('') }}</label>
                                 <div class="col-sm-10">
-                                    <button type="button" id="calculate" class="btn btn-default">Calculate</button>
+                                    <p style="font-style: italic">Price = HPP + (HPP * Margin Profit (%))</p>
                                 </div>
                             </div>
 
                             <div class="form-group row">
                                 <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="price" name="price" placeholder="" value="{{ old('price') }}" readonly>
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="" value="{{ old('price') }}">
                                 </div>
                             </div>
 
@@ -174,24 +174,89 @@
                     event.preventDefault();
                 //if a decimal has been added, disable the "."-button
             });
+
+            $("input[id*='margin_profit']").keydown(function (event) {
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+                } else {
+                    event.preventDefault();
+                }
+                if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
+                    event.preventDefault();
+                //if a decimal has been added, disable the "."-button
+            });
+
+            $("input[id*='hpp']").keyup(function (event) {
+                var hpp = $('#hpp').val();
+                var hpp = hpp.replace(/[^\d,-]/g, '');
+                var hpp = hpp.replace(',', '.');
+
+                var margin = $('#margin_profit').val();
+                var margin = margin.replace(/[^\d,-]/g, '');
+                var margin = margin.replace(',', '.');
+
+                if (parseFloat(hpp) > 0 && parseFloat(margin) > 0) {
+                    price(parseFloat(hpp), parseFloat(margin));
+                }
+            });
+
+            $("input[id*='margin_profit']").keyup(function (event) {
+                var hpp = $('#hpp').val();
+                var hpp = hpp.replace(/[^\d,-]/g, '');
+                var hpp = hpp.replace(',', '.');
+
+                var margin = $('#margin_profit').val();
+                var margin = margin.replace(/[^\d,-]/g, '');
+                var margin = margin.replace(',', '.');
+
+                if (parseFloat(hpp) > 0 && parseFloat(margin) > 0) {
+                    price(parseFloat(hpp), parseFloat(margin));
+                }
+            });
+
+            $("input[id*='price']").keyup(function (event) {
+                var hpp = $('#hpp').val();
+                var hpp = hpp.replace(/[^\d,-]/g, '');
+                var hpp = hpp.replace(',', '.');
+
+                var total = $('#price').val();
+                var total = total.replace(/[^\d,-]/g, '');
+                var total = total.replace(',', '.');
+
+                if (parseFloat(hpp) > 0 && parseFloat(total) > 0) {
+                    margin(parseFloat(hpp), parseFloat(total));
+                }
+            });
         });
 
         var harga = document.getElementById('hpp');
+        var price_for = document.getElementById('price');
         $(document).ready(function () {
             var formated = formatRupiah($('#hpp').val(), 'Rp. ');
             harga.value = formated;
+            var formated2 = formatRupiah($('#price').val(), 'Rp. ');
+            price_for.value = formated2;
         });
 
         harga.addEventListener('keyup', function (e) {
             harga.value = formatRupiah(this.value, 'Rp. ');
         });
 
+        price_for.addEventListener('keyup', function (e) {
+            price_for.value = formatRupiah(this.value, 'Rp. ');
+        });
+
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-            split = number_string.split(','),
-            sisa = split[0].length % 3,
-            rupiah = split[0].substr(0, sisa),
-            ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
                 separator = sisa ? '.' : '';
@@ -201,27 +266,21 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
-
-        $("#calculate").click(function () {
-            var hpp = $('#hpp').val();
-            var hpp = hpp.replace(/[^\d,-]/g, '');
-            var hpp = hpp.replace(',', '.');
-
-            var margin = $('#margin_profit').val();
-            var margin = margin.replace(/[^\d,-]/g, '');
-            var margin = margin.replace(',', '.');
-            
-            if(parseFloat(hpp) > 0 && parseFloat(margin) > 0){
-                price(parseFloat(hpp), parseFloat(margin));
-            }
-        });
-
-        function price(hpp, margin) {            
-            total = hpp + (hpp * margin/100);
+        function price(hpp, margin) {
+            total = hpp + (hpp * margin / 100);
             var harga = document.getElementById('price');
             harga.value = total;
             var formated = formatRupiah($('#price').val(), 'Rp. ');
             harga.value = formated;
         }
+
+        function margin(hpp, total) {
+            total_margin = (total - hpp) * 100 / hpp;
+            var margin = document.getElementById('margin_profit');
+            val = total_margin.toFixed(2);
+            margin.value = val.replace('.', ',');
+        }
+
+
     </script>
 </x-app-layout>

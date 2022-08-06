@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('store-stock.index') }}">{{ __('Stock') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-stock.index') }}">{{ __('Adjusting Stock') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
                     </nav>
@@ -24,7 +24,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Add Stock') }}</h5>
+                <h5 class="card-title">{{ __('Add Adjusting Stock') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">

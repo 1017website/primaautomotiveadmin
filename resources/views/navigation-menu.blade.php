@@ -3,12 +3,8 @@
         <div class="navbar-header" data-logobg="skin5">
             <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
             <a class="navbar-brand" href="index.html">
-                <b class="logo-icon p-l-10">
-                    <img src="{{asset('plugins/images/logo-icon.png')}}" alt="homepage" class="light-logo" />
-
-                </b>
-                <span class="logo-text">
-                    <img src="{{asset('plugins/images/logo-text.png')}}" alt="homepage" class="light-logo" />
+                <span class="logo-text" style="margin-left: auto;margin-right: auto;">
+                    <img src="{{asset('plugins/images/logo.png')}}" alt="homepage" class="light-logo" style="margin-left: auto;margin-right: auto;"/>
                 </span>
             </a>
             <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
