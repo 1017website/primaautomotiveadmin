@@ -37,11 +37,10 @@
                     <table id="invoice" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>{{ __('Customer') }}</th>
                                 <th>{{ __('Date') }}</th>
-								<th>{{ __('Nomer') }}</th>
+                                <th>{{ __('Customer') }}</th>
+                                <th>{{ __('Nomer') }}</th>
                                 <th>{{ __('Total') }}</th>
-                                <th>{{ __('Status') }}</th>
                                 <th>{{ __('Description') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
@@ -49,11 +48,10 @@
                         <tbody>
                             @foreach ($invoice as $row)
                             <tr>
-                                <td>{{ empty($row->workorder_id)?(isset($row->customer->name)?$row->customer->name:'-'):(isset($row->workorder->order->cust_name)?$row->workorder->order->cust_name:'-') }}</td>
-                                <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
-								<td>{{ isset($row->code)?$row->code:'-' }}</td>
+                                <td>{{ date('d-m-Y H:i:s', strtotime($row->created_at)) }}</td>
+                                <td>{{ (!empty($row->workorder_id) ? 'Workshop' : $row->customer->name) }}</td>
+                                <td>{{ isset($row->code)?$row->code:'-' }}</td>
                                 <td>{{ __('Rp. ') }}@price($row->total)</td>
-                                <td>{{ $row->getStatus() }}</td>
                                 <td>{{ $row->description }}</td>
                                 <td class="action-button">
                                     <a class="btn btn-info" href="{{ route('store-chasier.show',$row->id) }}"><i class="fas fa-eye"></i></a>

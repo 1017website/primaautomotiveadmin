@@ -10,6 +10,47 @@ class DashboardController extends Controller {
 
     public function index() {
 
+        //workshop
+        $dataWorkshop = $this->getDataWorkshop();
+        //store
+        $dataStore = $this->getDataStore();
+
+        return view('dashboard', compact('dataWorkshop', 'dataStore'));
+    }
+
+    private function getDataStore() {
+        $dataStore = [];
+
+        //month
+        $dataStore['invoice_month'] = DB::table('store_chasier')
+                ->whereRaw('MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())')
+                ->count();
+        $dataStore['revenue_month'] = DB::table('store_chasier')
+                ->whereRaw('MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())')
+                ->sum('total');
+        $dataStore['expense_month'] = DB::table('store_spending')
+                ->whereRaw('MONTH(date) = MONTH(CURRENT_DATE()) AND YEAR(date) = YEAR(CURRENT_DATE())')
+                ->sum('cost');
+
+        //summary
+        $dataStore['invoice_summary'] = DB::table('store_chasier')->count();
+        $dataStore['revenue_summary'] = DB::table('store_chasier')->sum('total');
+        $dataStore['expense_summary'] = DB::table('store_spending')->sum('cost');
+
+        $dataStore['products'] = DB::table('store_chasier_detail as a')
+                ->selectRaw("
+				b.name, sum(a.qty) as qty
+			")
+                ->join('store_products as b', 'b.id', '=', 'a.product_id')
+                ->groupBy('b.id')
+                ->limit(12)
+                ->get();
+
+        return $dataStore;
+    }
+
+    private function getDataWorkshop() {
+        $dataWorkshop = [];
         $union1 = DB::table('invoice')
                 ->selectRaw('0 as orders, 0 as progress, 0 as done, sum(dp) as revenue, 0 as expense')
                 ->whereRaw(' date <= LAST_DAY(NOW())');
@@ -64,31 +105,32 @@ class DashboardController extends Controller {
                 ->groupBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->orderBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
                 ->get();
-        $data = [];
+
         foreach ($orders as $v) {
-            $data['month']['order'] = $v;
+            $dataWorkshop['month']['order'] = $v;
         }
         foreach ($revenue as $v) {
-            $data['month']['revenue'] = $v;
+            $dataWorkshop['month']['revenue'] = $v;
         }
         foreach ($expense as $v) {
-            $data['month']['expense'] = $v;
+            $dataWorkshop['month']['expense'] = $v;
         }
         foreach ($all as $v) {
-            $data['ALL']['order'] = $v;
-            $data['ALL']['revenue'] = $v;
-            $data['ALL']['expense'] = $v;
+            $dataWorkshop['ALL']['order'] = $v;
+            $dataWorkshop['ALL']['revenue'] = $v;
+            $dataWorkshop['ALL']['expense'] = $v;
         }
 
-        $products = DB::table('workorder_detail as a')
+        $dataWorkshop['products'] = DB::table('workorder_detail as a')
                 ->selectRaw("
 				b.name, sum(a.qty) as qty
 			")
                 ->join('store_products as b', 'b.id', '=', 'a.product_id')
                 ->groupBy('b.id')
+                ->limit(20)
                 ->get();
 
-        return view('dashboard', compact('data', 'products'));
+        return $dataWorkshop;
     }
 
 }
