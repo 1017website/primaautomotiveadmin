@@ -60,6 +60,7 @@
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
                                     <form action="{{ route('store-product.destroy',$row->id) }}" method="POST">
+                                        <a class="btn btn-primary" href="{{ route('store-product.print', $row->id) }}" target="_blank"><i class="fa fa-print"></i></a>
                                         <a class="btn btn-info" href="{{ route('store-product.show',$row->id) }}"><i class="fas fa-eye"></i></a>
                                         <a class="btn btn-default" href="{{ route('store-product.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
                                         @csrf
