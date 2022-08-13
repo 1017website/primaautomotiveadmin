@@ -58,7 +58,7 @@
                             <div class="form-group row">
                                 <label for="barcode" class="col-sm-2 text-left control-label col-form-label">{{ __('Barcode') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="barcode" name="barcode" placeholder="" value="{{ time() }}" readonly>
+                                    <input type="text" class="form-control" id="barcode" name="barcode" placeholder="" value="">
                                 </div>
                             </div>
 
@@ -123,7 +123,7 @@
                             <div class="form-group row">
                                 <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('') }}</label>
                                 <div class="col-sm-10">
-                                    <p style="font-style: italic">Price = HPP + (HPP * Margin Profit (%))</p>
+                                    <p style="font-style: italic">*Price = HPP + (HPP * Margin Profit (%))</p>
                                 </div>
                             </div>
 
@@ -281,6 +281,14 @@
             margin.value = val.replace('.', ',');
         }
 
+        $(document).ready(function () {
+            $("#barcode").focus();
+        });
 
+        $('.btn-action').on("click", function () {
+            if($('#barcode').val() == ''){
+                $('#barcode').val({{ time() }})
+            }
+        });
     </script>
 </x-app-layout>

@@ -19,12 +19,14 @@ use App\Http\Controllers\ExpenseSpendingController;
 use App\Http\Controllers\ExpenseInvestmentController;
 //workshop
 //store
+use App\Http\Controllers\StoreTypeProductController;
 use App\Http\Controllers\StoreProductController;
 use App\Http\Controllers\StoreStockController;
 use App\Http\Controllers\StoreChasierController;
 use App\Http\Controllers\StoreCustomerController;
 use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
+
 //store
 
 
@@ -72,7 +74,13 @@ Route::resource('expense-spending', ExpenseSpendingController::class)->middlewar
 Route::resource('expense-investment', ExpenseInvestmentController::class)->middleware(['auth']);
 //workshop
 //store
+Route::resource('store-type-product', StoreTypeProductController::class)->middleware(['auth']);
+
+Route::controller(StoreProductController::class)->group(function () {
+    Route::get('store-product/print/{id}', 'print')->name('store-product.print')->middleware(['auth']);
+});
 Route::resource('store-product', StoreProductController::class)->middleware(['auth']);
+
 Route::controller(StoreStockController::class)->group(function () {
     Route::get('store-stock/detail', 'detail')->name('store-stock.detail')->middleware(['auth']);
     Route::post('store-stock/price', 'price')->name('store-stock.price')->middleware(['auth']);
@@ -84,12 +92,12 @@ Route::resource('store-stock', StoreStockController::class)->middleware(['auth']
 
 Route::controller(StoreChasierController::class)->group(function () {
     Route::get('store-chasier/detail', 'detail')->name('store-chasier.detail')->middleware(['auth']);
-	Route::post('store-chasier/add', 'add')->name('store-chasier.add')->middleware(['auth']);
-	Route::post('store-chasier/price', 'price')->name('store-chasier.price')->middleware(['auth']);
-	Route::get('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
-	Route::get('store-chasier/print/{id}', 'print')->name('store-chasier.print')->middleware(['auth']);
-	Route::post('store-chasier/payInvoice', 'payStore')->name('payStore')->middleware(['auth']);
-	Route::post('store-chasier/deleteProduct', 'deleteProduct')->name('store-chasier.deleteProduct')->middleware(['auth']);
+    Route::post('store-chasier/add', 'add')->name('store-chasier.add')->middleware(['auth']);
+    Route::post('store-chasier/price', 'price')->name('store-chasier.price')->middleware(['auth']);
+    Route::get('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
+    Route::get('store-chasier/print/{id}', 'print')->name('store-chasier.print')->middleware(['auth']);
+    Route::post('store-chasier/payInvoice', 'payStore')->name('payStore')->middleware(['auth']);
+    Route::post('store-chasier/deleteProduct', 'deleteProduct')->name('store-chasier.deleteProduct')->middleware(['auth']);
 });
 Route::resource('store-chasier', StoreChasierController::class)->middleware(['auth']);
 

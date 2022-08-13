@@ -1,3 +1,8 @@
+@php
+$generator = new Picqer\Barcode\BarcodeGeneratorHTML();
+$generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+@endphp
+
 <x-app-layout>
 
     <div class="page-breadcrumb">
@@ -19,6 +24,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
+            <a class="btn btn-primary" href="{{ route('store-product.print', $storeProduct->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
             <a class="btn btn-default" href="{{ route('store-product.index') }}">{{ __('Back') }}</a>
         </div>
 
@@ -35,6 +41,16 @@
                         @if(!empty($storeProduct->image))
                         <img src="{{ asset('storage/'.$storeProduct->image) }}" class="img-fluid img-view">
                         @endif
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Barcode') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {!! $generator->getBarcode($storeProduct->barcode, $generator::TYPE_CODE_128) !!}
                     </div>
                 </div>
 

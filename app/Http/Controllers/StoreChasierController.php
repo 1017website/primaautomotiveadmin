@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\StoreChasier;
 use App\Models\StoreCustomer;
 use App\Models\StoreChasierDetail;
-use App\Models\StoreInventoryProductHistory;
 use App\Models\StoreChasierDetailTemp;
-use App\Models\StoreProduct;
 use App\Models\StoreInventoryProduct;
+use App\Models\StoreInventoryProductHistory;
+use App\Models\InventoryProduct;
+use App\Models\InventoryProductHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -35,7 +36,7 @@ class StoreChasierController extends Controller {
         $validateData = $request->validate([
             'date' => 'required|date_format:d-m-Y',
             'description' => 'max:500',
-            'cust_phone' => 'required',
+            'cust_phone' => '',
             'dp' => 'required'
         ]);
 
@@ -63,21 +64,25 @@ class StoreChasierController extends Controller {
                 $validateData['status_payment'] = 2;
                 $validateData['dp'] = substr(str_replace('.', '', $request->dp), 3);
 
-                $cust = StoreCustomer::where('phone', $validateData['cust_phone'])->first();
-
-                if (empty($cust)) {
-                    $custData = new StoreCustomer();
-                    $custData->name = $request->cust_name;
-                    $custData->phone = $request->cust_phone;
-                    $custData->id_card = $request->cust_id_card;
-                    $custData->address = $request->cust_address;
-                    $custData->save();
-                    $custId = $custData->id;
-                } else {
-                    $custId = $cust->id;
+                if (strlen($validateData['cust_phone']) > 0) {
+                    $cust = StoreCustomer::where('phone', $validateData['cust_phone'])->first();
+                    if (empty($cust)) {
+                        $custData = new StoreCustomer();
+                        $custData->name = $request->cust_name;
+                        $custData->phone = $request->cust_phone;
+                        $custData->id_card = $request->cust_id_card;
+                        $custData->address = $request->cust_address;
+                        $custData->save();
+                        $custId = $custData->id;
+                    } else {
+                        $custId = $cust->id;
+                    }
+                    $validateData['cust_id'] = $custId;
                 }
-                $validateData['cust_id'] = $custId;
+
                 $order = StoreChasier::create($validateData);
+                //save header
+
                 foreach ($temp as $row) {
                     //detail
                     $orderDetail = new StoreChasierDetail();
@@ -94,7 +99,6 @@ class StoreChasierController extends Controller {
                         $message = 'Failed save detail';
                     }
 
-
                     //history
                     $inventoryHistory = new StoreInventoryProductHistory();
                     $inventoryHistory->product_id = $row->product_id;
@@ -110,9 +114,43 @@ class StoreChasierController extends Controller {
                     }
 
                     //stock
-                    $inventory = StoreInventoryProduct::where(['id' => $row->stock_id])->first();
-                    if (isset($inventory)) {
-                        $inventory->qty = $inventory->qty - $row->qty;
+                    $inventoryStore = StoreInventoryProduct::where(['id' => $row->stock_id])->first();
+                    if (isset($inventoryStore)) {
+                        $inventoryStore->qty = $inventoryStore->qty - $row->qty;
+                        $saved = $inventoryStore->save();
+                        if (!$saved) {
+                            $success = false;
+                            $message = 'Failed save inventory product';
+                        }
+                    }
+
+                    //insert ke stock bengkel
+                    if ($request->type == 'internal') {
+                        //history
+                        $inventoryWorkshop = new InventoryProductHistory();
+                        $inventoryWorkshop->product_id = $row->product_id;
+                        $inventoryWorkshop->type_product_id = $row->type_product_id;
+                        $inventoryWorkshop->price = $row->product_price;
+                        $inventoryWorkshop->description = 'Cashier ' . $order->code;
+                        $inventoryWorkshop->qty_out = 0;
+                        $inventoryWorkshop->qty_in = $row->qty;
+                        $saved = $inventoryWorkshop->save();
+                        if (!$saved) {
+                            $success = false;
+                            $message = 'Failed save inventory product history';
+                        }
+
+                        //stock
+                        $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
+                        if (!isset($inventory)) {
+                            $inventory = new InventoryProduct();
+                            $inventory->product_id = $row->product_id;
+                            $inventory->type_product_id = $row->type_product_id;
+                            $inventory->price = $row->product_price;
+                            $inventory->qty = $row->qty;
+                        } else {
+                            $inventory->qty = $inventory->qty + $row->qty;
+                        }
                         $saved = $inventory->save();
                         if (!$saved) {
                             $success = false;

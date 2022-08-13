@@ -6,7 +6,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('store-chasier.index') }}">{{ __('Chasier') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-chasier.index') }}">{{ __('Cashier') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
                     </nav>
@@ -56,6 +56,16 @@
                                     </div>
 
                                     <div class="form-group row">
+                                        <label for="type" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                        <div class="col-sm-10">
+                                            <select class="select2 form-control custom-select" id="type" name="type" style="width: 100%;">                              
+                                                <option value="eksternal">Eksternal</option>
+                                                <option value="internal">Internal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
                                         <label for="description" class="col-sm-2 text-left control-label col-form-label">{{ __('Note') }}</label>
                                         <div class="col-sm-10">
                                             <textarea class="form-control" id="description" name="description">{{ old('description') }}</textarea>
@@ -64,7 +74,7 @@
                                 </div>
                             </div>
 
-                            <fieldset class="border p-2">
+                            <fieldset class="border p-2 fieldset-customer">
                                 <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('Customer') }}</legend>
                                 <div class ="row">
                                     <div class="col-sm-6">
@@ -148,7 +158,7 @@
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" id="product_id" name="product_id" style="width: 100%;">                              
                                 @foreach($product as $item)                                
-                                <option value="{{$item->id}}">{{$item->product->name}}</option>    
+                                <option value="{{$item->id}}">{{$item->product->name}} (Stock : {{ $item->qty }})</option>    
                                 @endforeach
                             </select>
                         </div>
@@ -177,10 +187,6 @@
         </div>
     </div>
     <!-- Modal -->
-
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-    <link rel="stylesheet" href="/resources/demos/style.css">
-
 
     <script type="text/javascript">
         $(document).ready(function ($) {
@@ -332,6 +338,18 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
+
+        $('#type').on('change', function () {
+            if ($(this).val() == 'internal') {
+                $('.fieldset-customer').hide(1000);
+                $('#cust_name').removeAttr('required');
+                $('#cust_phone').removeAttr('required');
+            } else {
+                $('.fieldset-customer').show(1000);
+                $('#cust_name').attr('required', 'true');
+                $('#cust_phone').attr('required', 'true');
+            }
+        });
     </script>
 
 </x-app-layout>

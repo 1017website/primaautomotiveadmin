@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreProduct;
-use App\Models\TypeProduct;
+use App\Models\StoreTypeProduct;
 use App\Models\StoreInventoryProduct;
 use App\Models\StoreInventoryProductHistory;
 use Illuminate\Http\Request;
@@ -18,14 +18,18 @@ class StoreProductController extends Controller {
     }
 
     public function create() {
-        $typeProducts = TypeProduct::all();
+        $typeProducts = StoreTypeProduct::all();
         return view('store.product.create', compact('typeProducts'));
     }
 
     public function store(Request $request) {
         $success = true;
         $message = "";
-        
+
+        if (empty($request->barcode)) {
+            $request->barcode = time();
+        }
+
         $validateData = $request->validate([
             'name' => 'required|max:255|unique:store_products,name,NULL,id,deleted_at,NULL',
             'barcode' => 'required|unique:store_products,barcode,NULL,id,deleted_at,NULL',
@@ -100,7 +104,7 @@ class StoreProductController extends Controller {
     }
 
     public function edit(StoreProduct $storeProduct) {
-        $typeProducts = TypeProduct::all();
+        $typeProducts = StoreTypeProduct::all();
         return view('store.product.edit', compact('storeProduct', 'typeProducts'));
     }
 
@@ -117,7 +121,7 @@ class StoreProductController extends Controller {
             }
             $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }
-        
+
         if ($request->file('document') && request('document') != '') {
             if (Storage::exists($storeProduct->document)) {
                 Storage::delete($storeProduct->document);
@@ -142,6 +146,11 @@ class StoreProductController extends Controller {
         }
         return redirect()->route('store-product.index')
                         ->with('success', 'Product <b>' . $storeProduct->name . '</b> deleted successfully');
+    }
+
+    public function print($id) {
+        $storeProduct = StoreProduct::findorfail($id);
+        return view('store.product.print', compact('storeProduct'));
     }
 
 }

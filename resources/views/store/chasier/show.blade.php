@@ -171,21 +171,21 @@
                                     </div>
 
                                     <div class="col-sm-4 to">
-										<?php
-											if(empty($invoice->workorder_id)){
-												$cust = $invoice->customer->name;
-												$add = $invoice->customer->address;
-												$note = '';
-											}else{
-												$cust = $invoice->workorder->order->cust_name;
-												$add = $invoice->workorder->order->cust_address;
-												$note = '<a target="_blank" href="'. route('invoice.show',$invoice->workorder->invoice_id) .'">Invoice '.$invoice->workorder->invoice->code.'</a>';
-											}
-										?>
+                                        <?php
+                                        if (!empty($invoice->cust_id)) {
+                                            $cust = $invoice->customer->name;
+                                            $add = $invoice->customer->address;
+                                            $note = '';
+                                        } else {
+                                            $cust = 'Internal';
+                                            $add = '';
+                                            $note = '';
+                                        }
+                                        ?>
                                         <p class="lead marginbottom">To : {{ $cust }}</p>
                                         <p>{{ $add }}<p>
-										<p>&nbsp;<p>
-										<p><?=  $note ?><p>
+                                        <p>&nbsp;<p>
+                                        <p><?= $note ?><p>
                                     </div>
 
                                     <div class="col-sm-4 text-right payment-details">
