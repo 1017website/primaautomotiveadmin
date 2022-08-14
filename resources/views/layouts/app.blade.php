@@ -10,6 +10,7 @@
         <link href="{{asset('plugins/libs/flot/css/float-chart.css')}}" rel="stylesheet">
         <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/custom.css')}}" rel="stylesheet">
+        <link href="{{asset('css/toastr.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/select2/dist/css/select2.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
@@ -40,6 +41,8 @@
         <script src="{{asset('plugins/libs/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js')}}"></script>
         <script src="{{asset('plugins/libs/notification/notifications.js')}}"></script>
         <script src="{{asset('js/custom.min.js')}}"></script>
+        <script src="{{asset('js/toastr.min.js')}}"></script>
+
         @livewireScripts       
     </head>
     <body>
@@ -66,34 +69,34 @@
         @stack('modals')        
 
         <script>
-            $('[data-toggle="tooltip"]').tooltip();
-            $(".preloader").fadeOut();
-            $(".select2").select2();
-            $('.mydatepicker').datepicker({
-                autoclose: true,
-                format: 'dd-mm-yyyy' 
-            });
-            (function($) {
-                $.fn.inputFilter = function(inputFilter) {
-                  return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-                    if (inputFilter(this.value)) {
-                      this.oldValue = this.value;
-                      this.oldSelectionStart = this.selectionStart;
-                      this.oldSelectionEnd = this.selectionEnd;
-                    } else if (this.hasOwnProperty("oldValue")) {
-                      this.value = this.oldValue;
-                      this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                    } else {
-                      this.value = "";
-                    }
-                  });
-                };
-            }(jQuery));
-            $(document).ready(function() {
-                $(".phone").inputFilter(function(value) {
-                  return /^\d*$/.test(value);    // Allow digits only, using a RegExp
-                });
-            });
+$('[data-toggle="tooltip"]').tooltip();
+$(".preloader").fadeOut();
+$(".select2").select2();
+$('.mydatepicker').datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy'
+});
+(function ($) {
+    $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                this.value = "";
+            }
+        });
+    };
+}(jQuery));
+$(document).ready(function () {
+    $(".phone").inputFilter(function (value) {
+        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+    });
+});
         </script>
     </body>
 </html>

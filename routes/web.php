@@ -93,6 +93,7 @@ Route::resource('store-stock', StoreStockController::class)->middleware(['auth']
 Route::controller(StoreChasierController::class)->group(function () {
     Route::get('store-chasier/detail', 'detail')->name('store-chasier.detail')->middleware(['auth']);
     Route::post('store-chasier/add', 'add')->name('store-chasier.add')->middleware(['auth']);
+    Route::post('store-chasier/barcode', 'barcode')->name('store-chasier.barcode')->middleware(['auth']);
     Route::post('store-chasier/price', 'price')->name('store-chasier.price')->middleware(['auth']);
     Route::get('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
     Route::get('store-chasier/print/{id}', 'print')->name('store-chasier.print')->middleware(['auth']);

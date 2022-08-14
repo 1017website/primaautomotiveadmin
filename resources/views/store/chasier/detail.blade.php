@@ -30,7 +30,7 @@
                 <tr>
                     <td colspan="5" class="text-muted text-center">Item is empty</td>
                 </tr>
-<?php } ?>
+            <?php } ?>
         </tbody>
         <tfoot class="customtable">
             <tr>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StoreChasier;
+use App\Models\StoreProduct;
 use App\Models\StoreCustomer;
 use App\Models\StoreChasierDetail;
 use App\Models\StoreChasierDetailTemp;
@@ -333,31 +334,86 @@ class StoreChasierController extends Controller {
         $request = array_merge($_POST, $_GET);
 
         try {
-            $temp = StoreChasierDetailTemp::where([
-                        'user_id' => Auth::id(),
-                        'stock_id' => $request['stock_id'],
-                        'product_price' => substr(str_replace('.', '', $request['price']), 3)
-                    ])->first();
-            if (isset($temp)) {
-                $temp->qty = $temp->qty + str_replace(',', '.', $request['qty']);
-                $temp->save();
+            $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
+            if ($stock->qty < str_replace(',', '.', $request['qty'])) {
+                $success = false;
+                $message = 'Insufficient Stock.';
             } else {
-                $temp = new StoreChasierDetailTemp();
-                $temp->stock_id = $request['stock_id'];
-                $inv = StoreInventoryProduct::findOrFail($request['stock_id']);
-                $product = $inv->product;
-                $temp->user_id = Auth::id();
-                $temp->product_id = $product->id;
+                $temp = StoreChasierDetailTemp::where([
+                            'user_id' => Auth::id(),
+                            'stock_id' => $request['stock_id'],
+                            'product_price' => substr(str_replace('.', '', $request['price']), 3)
+                        ])->first();
+                if (isset($temp)) {
+                    $temp->qty = $temp->qty + str_replace(',', '.', $request['qty']);
+                    if ($stock->qty < $temp->qty) {
+                        $success = false;
+                        $message = 'Insufficient Stock.';
+                    } else {
+                        $temp->save();
+                    }
+                } else {
+                    $temp = new StoreChasierDetailTemp();
+                    $temp->stock_id = $request['stock_id'];
+                    $product = $stock->product;
+                    $temp->user_id = Auth::id();
+                    $temp->product_id = $product->id;
 
-                $temp->type_product_id = $product->type_product_id;
-                $temp->product_name = $product->name;
-                $temp->qty = str_replace(',', '.', $request['qty']);
-                $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
-                $temp->save();
+                    $temp->type_product_id = $product->type_product_id;
+                    $temp->product_name = $product->name;
+                    $temp->qty = str_replace(',', '.', $request['qty']);
+                    $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
+                    $temp->save();
+                }
             }
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public function barcode() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $product = StoreProduct::where('barcode', $request['barcode'])->first();
+        if (isset($product)) {
+            $stock = StoreInventoryProduct::where(['product_id' => $product->id])->first();
+            if (isset($stock)) {
+                try {
+                    $temp = StoreChasierDetailTemp::where([
+                                'user_id' => Auth::id(),
+                                'stock_id' => $stock->id,
+                                'product_price' => $stock->price,
+                            ])->first();
+                    if (isset($temp)) {
+                        $temp->qty = $temp->qty + 1;
+                        $temp->save();
+                    } else {
+                        $temp = new StoreChasierDetailTemp();
+                        $temp->stock_id = $stock->id;
+                        $inv = StoreInventoryProduct::findOrFail($stock->id);
+                        $product = $inv->product;
+                        $temp->user_id = Auth::id();
+                        $temp->product_id = $product->id;
+
+                        $temp->type_product_id = $product->type_product_id;
+                        $temp->product_name = $product->name;
+                        $temp->qty = 1;
+                        $temp->product_price = $stock->price;
+                        $temp->save();
+                    }
+                } catch (\Exception $e) {
+                    $success = false;
+                    $message = $e->getMessage();
+                }
+            } else {
+                $success = false;
+                $message = 'Stock Product Tidak Ada !';
+            }
         }
 
         return json_encode(['success' => $success, 'message' => $message]);

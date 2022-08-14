@@ -6,6 +6,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('store-chasier.index') }}">{{ __('Cashier') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
@@ -115,7 +116,14 @@
 
                             <fieldset class="border p-2">
                                 <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Product') }}</legend>
-                                <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2">{{ __('Add Product') }}</button>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control" id="barcode" name="barcode" required="" value="" placeholder="Barcode..." style="width:15rem;" autocomplete="off">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2">{{ __('Add Product') }}</button>
+                                    </div>
+                                </div>
                                 <div class="detail">
 
                                 </div>
@@ -189,10 +197,12 @@
     <!-- Modal -->
 
     <script type="text/javascript">
+        $(document).ready(function () {
+            $("#barcode").focus();
+        });
+
         $(document).ready(function ($) {
-
             get_detail();
-
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -225,11 +235,12 @@
                         if (res.success) {
                             $('#Modal2').modal('toggle');
                             get_detail();
+                        }else{
+                            Command: toastr["error"](res.message)
                         }
                     }
                 });
             });
-
         });
 
         $(function () {
@@ -350,6 +361,26 @@
                 $('#cust_phone').attr('required', 'true');
             }
         });
+
+        $("#barcode").on("keypress change", function (e) {
+            if (e.which == 13) {
+                $.ajax({
+                    url: "{{ route('store-chasier.barcode') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'barcode': $(this).val()
+                    },
+                    success: function (res) {
+                        get_detail();
+                    }
+                });
+
+                $('#barcode').val('');
+                $('#barcode').focus();
+            }
+
+        })
     </script>
 
 </x-app-layout>
