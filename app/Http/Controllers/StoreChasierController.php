@@ -419,6 +419,34 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
+    public function save() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        try {
+            $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
+            if ($stock->qty < str_replace(',', '.', $request['qty'])) {
+                $success = false;
+                $message = 'Insufficient Stock.';
+            } else {
+                $temp = StoreChasierDetailTemp::findOrFail($request['id']);
+                if (isset($temp)) {
+                    $temp->qty = str_replace(',', '.', $request['qty']);
+                    $temp->save();
+                } else {
+                    $success = false;
+                    $message = 'Temporary Not Found.';
+                }
+            }
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
     public static function generateCode($date) {
         $count = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->count();
         $n = 0;
