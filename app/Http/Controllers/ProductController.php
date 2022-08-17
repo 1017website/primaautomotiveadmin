@@ -21,7 +21,7 @@ class ProductController extends Controller {
 
     public function store(Request $request) {
         $validateData = $request->validate([
-            'name' => 'required|max:255|unique:products,name,NULL,id,deleted_at,NULL',
+            'name' => 'required|max:255|unique:products,name,NULL,id,type_product_id,NULL,deleted_at,NULL',
             'type_product_id' => 'required',
             'image' => 'image|file|max:2048',
         ]);
@@ -47,7 +47,8 @@ class ProductController extends Controller {
 
     public function update(Request $request, Product $product) {
         $validateData = $request->validate([
-            'name' => 'required|max:255|unique:products,name,' . $product->id . ',id,deleted_at,NULL',
+            //'name' => 'required|max:255|unique:products,name,' . $product->id . ',id,deleted_at,NULL',
+            'name' => 'required|max:255|unique:products,name,' . $product->name . ',id,type_product_id,' . $product->type_product_id . ',deleted_at,NULL',
             'type_product_id' => 'required',
             'image' => 'image|file|max:2048',
         ]);

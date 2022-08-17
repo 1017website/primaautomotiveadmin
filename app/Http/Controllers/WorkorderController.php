@@ -7,11 +7,9 @@ use App\Models\Order;
 use App\Models\Mechanic;
 use App\Models\Workorder;
 use App\Models\WorkorderDetail;
-use App\Models\StoreInventoryProduct;
-use App\Models\StoreInventoryProductHistory;
+use App\Models\InventoryProduct;
+use App\Models\InventoryProductHistory;
 use App\Models\WorkorderDetailTemp;
-use App\Models\StoreChasier;
-use App\Models\StoreChasierDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -37,7 +35,7 @@ class WorkorderController extends Controller {
     }
 
     public function edit(Workorder $workorder) {
-        $items = StoreInventoryProduct::all();
+        $items = InventoryProduct::all();
 
         return view('workorder.edit', compact('workorder', 'items'));
     }
@@ -68,7 +66,7 @@ class WorkorderController extends Controller {
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $stock = StoreInventoryProduct::findorfail($request['stock_id']);
+        $stock = InventoryProduct::findorfail($request['stock_id']);
         $qty = $stock->qty;
 
         return json_encode(['success' => $success, 'message' => $message, 'qty' => $qty]);
@@ -91,7 +89,7 @@ class WorkorderController extends Controller {
                 $temp = new WorkorderDetailTemp();
                 $temp->user_id = Auth::id();
                 $temp->stock_id = $request['stock_id'];
-                $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
+                $stock = InventoryProduct::findOrFail($request['stock_id']);
                 $temp->product_id = $stock->product_id;
                 $temp->type_product_id = $stock->type_product_id;
                 $temp->product_name = $stock->product->name;
@@ -130,7 +128,7 @@ class WorkorderController extends Controller {
                 if ($request->file('document')) {
                     $validateData['document'] = $request->file('document')->storeAs('workorder', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
                 }
-                $validateData['date_done'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
+                $validateData['date_done'] = (!empty($request->date_done) ? date('Y-m-d', strtotime($request->date_done)) : NULL);
                 $validateData['status'] = '2';
                 $workorder->update($validateData);
 
@@ -138,33 +136,15 @@ class WorkorderController extends Controller {
                 $invoice->status = '3';
                 $invoice->save();
 
-				$total = 0;
+                $total = 0;
                 $order = Order::findorfail($workorder->order_id);
                 $order->status = '4';
                 $order->save();
 
-				foreach ($temp as $row) {
-					$total += ($row->qty * $row->product_price);
-				}
-				
-				$cashier = new StoreChasier();
-				
-				$cashier->code = $this->generateCode(date('Ymd'));
-				$cashier->workorder_id = $workorder->id;
-				$cashier->date = date('Y-m-d');
-				$cashier->total = $total;
-				$cashier->dp = $total;
-				$cashier->date_dp = date('Y-m-d');
-				$cashier->status = 1;
-				$cashier->status_payment = 2;
-				$cashier->description = "Work Order ". $workorder->code;
-				
-				$saved = $cashier->save();
-				if (!$saved) {
-					$success = false;
-					$message = 'Failed save Cashier';
-				}
-				
+                foreach ($temp as $row) {
+                    $total += ($row->qty * $row->product_price);
+                }
+
                 foreach ($temp as $row) {
                     //detail
                     $orderDetail = new WorkorderDetail();
@@ -181,22 +161,8 @@ class WorkorderController extends Controller {
                         $message = 'Failed save workorder detail';
                     }
 
-                    $cashierDetail = new StoreChasierDetail();
-                    $cashierDetail->header_id = $cashier->id;
-                    $cashierDetail->stock_id = $row->stock_id;
-                    $cashierDetail->product_id = $row->product_id;
-                    $cashierDetail->type_product_id = $row->type_product_id;
-                    $cashierDetail->product_name = $row->product_name;
-                    $cashierDetail->product_price = $row->product_price;
-                    $cashierDetail->qty = $row->qty;
-                    $saved = $cashierDetail->save();
-                    if (!$saved) {
-                        $success = false;
-                        $message = 'Failed save cashier detail';
-                    }
-					
                     //history
-                    $inventoryHistory = new StoreInventoryProductHistory();
+                    $inventoryHistory = new InventoryProductHistory();
                     $inventoryHistory->product_id = $row->product_id;
                     $inventoryHistory->type_product_id = $row->type_product_id;
                     $inventoryHistory->price = $row->product_price;
@@ -210,7 +176,7 @@ class WorkorderController extends Controller {
                     }
 
                     //stock
-                    $inventory = StoreInventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
+                    $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
                     if (isset($inventory)) {
                         $inventory->qty = $inventory->qty - $row->qty;
                         $saved = $inventory->save();
@@ -244,13 +210,4 @@ class WorkorderController extends Controller {
         return redirect()->route('workorder.index')->with('success', 'Work Order successfully done.');
     }
 
-    public static function generateCode($date) {
-        $count = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->count();
-        $n = 0;
-        if ($count > 0) {
-            $invoice = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->orderBy('code', 'DESC')->first();
-            $n = (int) substr($invoice->code, -4);
-        }
-        return (string) 'STR' . $date . sprintf('%04s', ($n + 1));
-    }
 }

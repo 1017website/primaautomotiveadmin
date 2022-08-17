@@ -118,7 +118,7 @@
                                 <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Product') }}</legend>
                                 <div class="row">
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" id="barcode" name="barcode" required="" value="" placeholder="Barcode..." style="width:15rem;" autocomplete="off">
+                                        <input type="text" class="form-control" id="barcode" name="barcode" value="" placeholder="Barcode..." style="width:15rem;" autocomplete="off">
                                     </div>
                                     <div class="col-sm-6">
                                         <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal2">{{ __('Add Product') }}</button>

@@ -78,7 +78,7 @@
                 <div class="row pt-3">
                     <div class="col-sm-12">
                         <h5 class="card-title">{{ __('Customer') }}</h5>
-
+                        
                         <div class="row">
                             <div class="col-sm-6">
 
@@ -103,15 +103,6 @@
                             </div>
 
                             <div class="col-sm-6">
-
-                                <div class="row p-3">
-                                    <div class="col-sm-2">
-                                        <strong>{{ __('Id Card') }}</strong>
-                                    </div>
-                                    <div class="col-sm-10">
-                                        {{ $order->cust_id_card }}
-                                    </div>
-                                </div>
 
                                 <div class="row p-3">
                                     <div class="col-sm-2">

@@ -38,6 +38,8 @@
                     <table id="car" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>{{ __('Type') }}</th>
+                                <th>{{ __('Brand') }}</th>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
@@ -49,6 +51,8 @@
                         <tbody>
                             @foreach ($car as $row)
                             <tr>
+                                <td>{{ $row->type->name }}</td>
+                                <td>{{ $row->brand->name }}</td>
                                 <td>{{ $row->name }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>

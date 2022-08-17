@@ -45,7 +45,7 @@
                         <li class="sidebar-item"><a href="/store-spending" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Spending') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-investment" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Investment') }}</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span class="hide-menu">{{ __('Report') }}</span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
+                            <ul aria-expanded="false" class="collapse  second-level">
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-clipboard-check"></i><span class="hide-menu">{{ __('Report Current Stock') }}</span></a></li>
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-clipboard-flow"></i><span class="hide-menu">{{ __('Report History Stock') }}</span></a></li>
                                 <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="mdi mdi-currency-usd"></i><span class="hide-menu">{{ __('Report Revenue') }}</span></a></li>
@@ -58,7 +58,7 @@
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Workshop') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-format-list-bulleted"></i><span class="hide-menu">{{ __('Master') }}</span></a>
-                            <ul aria-expanded="false" class="collapse  first-level">
+                            <ul aria-expanded="false" class="collapse  second-level">
                                 <li class="sidebar-item"><a href="/type-product" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Type Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/service" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service') }}</span></a></li>

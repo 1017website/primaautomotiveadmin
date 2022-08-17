@@ -38,8 +38,8 @@ class OrderController extends Controller {
         $validateData = $request->validate([
             'date' => 'required|date_format:d-m-Y',
             'description' => 'max:500', 'cust_address' => 'required|max:500',
-            'cust_name' => 'required|max:255', 'cust_id_card' => 'max:255', 'cars_id' => 'required', 'car_types_id' => 'required',
-            'car_brands_id' => 'required', 'vehicle_year' => 'max:255', 'vehicle_color' => 'max:255', 'vehicle_plate' => 'required|max:255',
+            'cust_name' => 'required|max:255', 'cust_id_card' => 'max:255', 'cars_id' => 'required',
+            'vehicle_year' => 'max:255', 'vehicle_color' => 'max:255', 'vehicle_plate' => 'required|max:255',
             'cust_phone' => 'required|max:50',
             'vehicle_document' => 'file|mimes:zip,rar,jpg,png,jpeg,pdf,doc,docx|max:5120'
         ]);
@@ -61,32 +61,25 @@ class OrderController extends Controller {
                 $validateData['code'] = $this->generateCode(date('Ymd'));
                 $car = Car::findOrFail($request['cars_id']);
                 $validateData['vehicle_name'] = $car->name;
-                $carBrand = CarBrand::findOrFail($request['car_brands_id']);
-                $validateData['vehicle_brand'] = $carBrand->name;
-                $carType = CarType::findOrFail($request['car_types_id']);
-                $validateData['vehicle_type'] = $carType->name;
+                $validateData['vehicle_brand'] = $car->brand->name;
+                $validateData['vehicle_type'] = $car->type->name;
                 $order = Order::create($validateData);
 
                 //save customer if not exist
                 if ($order) {
                     $checkCustomer = Customer::where([
                                 'cars_id' => $order->cars_id,
-                                'car_types_id' => $order->car_types_id,
-                                'car_brands_id' => $order->car_brands_id,
-                                'car_plate' => $order->vehicle_plate,
+                                'car_plate' => $this->clean($order->vehicle_plate),
                             ])->first();
                     if (!isset($checkCustomer)) {
                         $checkCustomer = new Customer();
                         $checkCustomer->name = $order->cust_name;
                         $checkCustomer->cars_id = $order->cars_id;
-                        $checkCustomer->car_types_id = $order->car_types_id;
-                        $checkCustomer->car_brands_id = $order->car_brands_id;
-                        $checkCustomer->id_card = $order->cust_id_card;
                         $checkCustomer->phone = $order->cust_phone;
                         $checkCustomer->address = $order->cust_address;
                         $checkCustomer->car_year = $order->vehicle_year;
                         $checkCustomer->car_color = $order->vehicle_color;
-                        $checkCustomer->car_plate = $order->vehicle_plate;
+                        $checkCustomer->car_plate = $this->clean($order->vehicle_plate);
                         $checkCustomer->status = '1';
                         $saved = $checkCustomer->save();
                         if (!$saved) {
@@ -251,6 +244,12 @@ class OrderController extends Controller {
             $n = (int) substr($inv->code, -4);
         }
         return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    private function clean($string) {
+        $string = str_replace(' ', '', $string);
+
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
 }

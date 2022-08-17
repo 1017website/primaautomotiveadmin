@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\InventoryStock;
 use App\Models\InventoryStockDetail;
 use App\Models\InventoryStockDetailTemp;
-use App\Models\InventoryProduct;
-use App\Models\InventoryProductHistory;
+use App\Models\InventoryProductWorkshop;
+use App\Models\InventoryProductWorkshopHistory;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -65,7 +65,7 @@ class StockController extends Controller {
                     }
 
                     //history
-                    $inventoryHistory = new InventoryProductHistory();
+                    $inventoryHistory = new InventoryProductWorkshopHistory();
                     $inventoryHistory->product_id = $row->product_id;
                     $inventoryHistory->type_product_id = $row->type_product_id;
                     $inventoryHistory->price = $row->price;
@@ -84,9 +84,9 @@ class StockController extends Controller {
                     }
 
                     //stock
-                    $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->price])->first();
+                    $inventory = InventoryProductWorkshop::where(['product_id' => $row->product_id, 'price' => $row->price])->first();
                     if (!isset($inventory)) {
-                        $inventory = new InventoryProduct();
+                        $inventory = new InventoryProductWorkshop();
                         $inventory->product_id = $row->product_id;
                         $inventory->type_product_id = $row->type_product_id;
                         $inventory->price = $row->price;

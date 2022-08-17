@@ -14,8 +14,16 @@ class Car extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name'
+        'name', 'car_brand_id', 'car_type_id'
     ];
+
+    public function brand() {
+        return $this->hasOne(CarBrand::class, 'id', 'car_brand_id');
+    }
+
+    public function type() {
+        return $this->hasOne(CarType::class, 'id', 'car_type_id');
+    }
 
     public function userCreated() {
         return $this->hasOne(User::class, 'id', 'created_by');

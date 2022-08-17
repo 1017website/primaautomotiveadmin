@@ -50,7 +50,7 @@
                                     <div class="form-group row">
                                         <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                         <div class="col-sm-5 input-group">
-                                            <input type="text" class="form-control mydatepicker" id="date_done" name="date_done" value="{{ old('date_done') }}" placeholder="dd/mm/yyyy" autocomplete="off">
+                                            <input type="text" class="form-control mydatepicker" id="date_done" name="date_done" value="{{ !empty(old('date_done'))?old('date_done'):date('d-m-Y') }}" placeholder="dd/mm/yyyy" autocomplete="off">
                                             <div class="input-group-append">
                                                 <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                             </div>

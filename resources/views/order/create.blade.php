@@ -48,7 +48,7 @@
                                     <div class="form-group row">
                                         <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                         <div class="col-sm-5 input-group">
-                                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ old('date') }}" placeholder="dd/mm/yyyy" autocomplete="off">
+                                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ !empty(old('date'))?old('date'):date('d-m-Y') }}" placeholder="dd/mm/yyyy" autocomplete="off">
                                             <div class="input-group-append">
                                                 <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                             </div>
@@ -85,7 +85,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <div class="form-group row">
+                                        <div class="form-group row hidden">
                                             <label for="cust_id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card') }}</label>
                                             <div class="col-sm-10">
                                                 <input type="text" class="form-control" id="cust_id_card" name="cust_id_card" value="{{ old('cust_id_card') }}" placeholder="Ktp/Sim">
@@ -113,31 +113,16 @@
                                             <div class="col-sm-10">
                                                 <select class="select2 form-control custom-select" id="cars_id" name="cars_id" style="width: 100%;">                              
                                                     @foreach($car as $row)                                
-                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                                    <option value="{{$row->id}}">{{ $row->type->name }} - {{ $row->brand->name }} - {{$row->name}}</option>    
                                                     @endforeach
                                                 </select>
                                             </div>
                                         </div>
 
                                         <div class="form-group row">
-                                            <label for="car_types_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                            <label for="vehicle_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Plate') }}</label>
                                             <div class="col-sm-10">
-                                                <select class="select2 form-control custom-select" id="car_types_id" name="car_types_id" style="width: 100%;">                              
-                                                    @foreach($carType as $row)                                
-                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="car_brands_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand') }}</label>
-                                            <div class="col-sm-10">
-                                                <select class="select2 form-control custom-select" id="car_brands_id" name="car_brands_id" style="width: 100%;">                              
-                                                    @foreach($carBrand as $row)                                
-                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control" id="vehicle_plate" name="vehicle_plate" value="{{ old('vehicle_plate') }}">
                                             </div>
                                         </div>
 
@@ -171,12 +156,6 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
-                                            <label for="vehicle_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Plate') }}</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="vehicle_plate" name="vehicle_plate" value="{{ old('vehicle_plate') }}">
-                                            </div>
-                                        </div>
                                     </div>
 
                                 </div>
@@ -310,6 +289,8 @@
                 //if a decimal has been added, disable the "."-button
             });
         });
+        
+        $('#cars_id').val("{{ old('cars_id') }}").change();
     </script>
 
 </x-app-layout>

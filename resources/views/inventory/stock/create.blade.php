@@ -112,7 +112,7 @@
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" id="product_id" name="product_id" style="width: 100%;">                              
                                 @foreach($items as $item)                                
-                                <option value="{{$item->id}}">{{$item->name}}</option>    
+                                <option value="{{$item->id}}">{{$item->name}} - {{$item->typeProduct->name}}</option>    
                                 @endforeach
                             </select>
                         </div>
