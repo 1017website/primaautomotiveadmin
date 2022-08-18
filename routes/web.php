@@ -17,6 +17,7 @@ use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\WorkorderController;
 use App\Http\Controllers\ExpenseSpendingController;
 use App\Http\Controllers\ExpenseInvestmentController;
+use App\Http\Controllers\ReportController;
 //workshop
 //store
 use App\Http\Controllers\StoreTypeProductController;
@@ -26,11 +27,9 @@ use App\Http\Controllers\StoreChasierController;
 use App\Http\Controllers\StoreCustomerController;
 use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
+use App\Http\Controllers\ReportStoreController;
 
 //store
-
-
-
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
 
@@ -72,6 +71,17 @@ Route::controller(WorkorderController::class)->group(function () {
 Route::resource('workorder', WorkorderController::class)->middleware(['auth']);
 Route::resource('expense-spending', ExpenseSpendingController::class)->middleware(['auth']);
 Route::resource('expense-investment', ExpenseInvestmentController::class)->middleware(['auth']);
+
+Route::controller(ReportController::class)->group(function () {
+    Route::get('report/current-stock', 'currentStock')->name('currentStock')->middleware(['auth']);
+    Route::get('report/current-stock-view', 'currentStockView')->name('currentStockView')->middleware(['auth']);
+    Route::get('report/history-stock', 'historyStock')->name('historyStock')->middleware(['auth']);
+    Route::get('report/history-stock-view', 'historyStockView')->name('historyStockView')->middleware(['auth']);
+    Route::get('report/revenue', 'revenue')->name('revenue')->middleware(['auth']);
+    Route::get('report/revenue-view', 'revenueView')->name('revenueView')->middleware(['auth']);
+    Route::get('report/expense', 'expense')->name('expense')->middleware(['auth']);
+    Route::get('report/expense-view', 'expenseView')->name('expenseView')->middleware(['auth']);
+});
 //workshop
 //store
 Route::resource('store-type-product', StoreTypeProductController::class)->middleware(['auth']);
@@ -110,7 +120,19 @@ Route::resource('store-customer', StoreCustomerController::class)->middleware(['
 
 Route::resource('store-spending', StoreSpendingController::class)->middleware(['auth']);
 Route::resource('store-investment', StoreInvestmentController::class)->middleware(['auth']);
+
+Route::controller(ReportStoreController::class)->group(function () {
+    Route::get('report-store/current-stock', 'currentStock')->middleware(['auth']);
+    Route::get('report-store/current-stock-view', 'currentStockView')->middleware(['auth']);
+    Route::get('report-store/history-stock', 'historyStock')->middleware(['auth']);
+    Route::get('report-store/history-stock-view', 'historyStockView')->middleware(['auth']);
+    Route::get('report-store/revenue', 'revenue')->middleware(['auth']);
+    Route::get('report-store/revenue-view', 'revenueView')->middleware(['auth']);
+    Route::get('report-store/expense', 'expense')->middleware(['auth']);
+    Route::get('report-store/expense-view', 'expenseView')->middleware(['auth']);
+});
 //store
+
 Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     echo 'ok';
