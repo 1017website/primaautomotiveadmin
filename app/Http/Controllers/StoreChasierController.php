@@ -38,7 +38,8 @@ class StoreChasierController extends Controller {
             'date' => 'required|date_format:d-m-Y',
             'description' => 'max:500',
             'cust_phone' => '',
-            'dp' => 'required'
+            'dp' => 'required',
+            'type' => 'required'
         ]);
 
         $temp = StoreChasierDetailTemp::where('user_id', Auth::id())->get();
@@ -61,6 +62,7 @@ class StoreChasierController extends Controller {
                 //save header
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
                 $validateData['code'] = $this->generateCode(date('Ymd'));
+                $validateData['type'] = $request->type;
                 $validateData['status'] = 1;
                 $validateData['status_payment'] = 2;
                 $validateData['dp'] = substr(str_replace('.', '', $request->dp), 3);
@@ -306,7 +308,7 @@ class StoreChasierController extends Controller {
 
         if (isset($request)) {
             $storeProduct = StoreInventoryProduct::findOrFail($request['product_id']);
-            $price = $storeProduct->product->price;
+            $price = $storeProduct->price;
         }
 
         return json_encode(['price' => $price]);

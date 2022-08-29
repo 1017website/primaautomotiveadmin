@@ -29,7 +29,7 @@ class StoreInventoryProduct extends Model {
     }
 
     public function typeProduct() {
-        return $this->hasOne(Typeproduct::class, 'id', 'type_product_id');
+        return $this->hasOne(StoreTypeProduct::class, 'id', 'type_product_id');
     }
 
 }

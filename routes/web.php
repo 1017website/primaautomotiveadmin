@@ -122,14 +122,14 @@ Route::resource('store-spending', StoreSpendingController::class)->middleware(['
 Route::resource('store-investment', StoreInvestmentController::class)->middleware(['auth']);
 
 Route::controller(ReportStoreController::class)->group(function () {
-    Route::get('report-store/current-stock', 'currentStock')->middleware(['auth']);
-    Route::get('report-store/current-stock-view', 'currentStockView')->middleware(['auth']);
-    Route::get('report-store/history-stock', 'historyStock')->middleware(['auth']);
-    Route::get('report-store/history-stock-view', 'historyStockView')->middleware(['auth']);
-    Route::get('report-store/revenue', 'revenue')->middleware(['auth']);
-    Route::get('report-store/revenue-view', 'revenueView')->middleware(['auth']);
-    Route::get('report-store/expense', 'expense')->middleware(['auth']);
-    Route::get('report-store/expense-view', 'expenseView')->middleware(['auth']);
+    Route::get('report-store/current-stock', 'currentStock')->name('currentStockStore')->middleware(['auth']);
+    Route::get('report-store/current-stock-view', 'currentStockView')->name('currentStockViewStore')->middleware(['auth']);
+    Route::get('report-store/history-stock', 'historyStock')->name('historyStockStore')->middleware(['auth']);
+    Route::get('report-store/history-stock-view', 'historyStockView')->name('historyStockViewStore')->middleware(['auth']);
+    Route::get('report-store/revenue', 'revenue')->name('revenueStore')->middleware(['auth']);
+    Route::get('report-store/revenue-view', 'revenueView')->name('revenueViewStore')->middleware(['auth']);
+    Route::get('report-store/expense', 'expense')->name('expenseStore')->middleware(['auth']);
+    Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
 });
 //store
 

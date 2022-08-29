@@ -50,7 +50,7 @@
                             @foreach ($invoice as $row)
                             <tr>
                                 <td>{{ date('d-m-Y H:i:s', strtotime($row->created_at)) }}</td>
-                                <td>{{ (!empty($row->cust_id) ? $row->customer->name : 'Internal') }}</td>
+                                <td>{{ ucfirst($row->type) }}</td>
                                 <td>{{ isset($row->code)?$row->code:'-' }}</td>
                                 <td>{{ __('Rp. ') }}@price($row->total)</td>
                                 <td>{{ $row->description }}</td>
