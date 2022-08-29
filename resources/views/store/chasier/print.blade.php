@@ -50,8 +50,8 @@
         height:88px;
         overflow:hidden;
         position:absolute;
-        top:-1px;
-        right:11px;
+        top:0px;
+        right:0px;
     }
 
     .ribbon-inner {
@@ -108,31 +108,82 @@
         @page {
             size: landscape;
             margin: 0;
+            size: 21.59cm 13.97cm;
         }
 
         html, body {
-            height: 14cm;
-            width: 22.5cm;
+            /*height: 13.97cm;
+            width: 21.59cm;*/
+            height: 99%;
+            display: block;
+            font-family: "Calibri";
+            margin: 0;
         }
+
+        .pagebreak {
+            break-after:page
+        } /* page-break-after works, as well */
 
     }
 
     html, body {
-        height: 14cm;
-        width: 22.5cm;
+        height: 13.97cm;
+        width: 21.59cm;
     }
 
+    .paper-size:last-child {
+        page-break-after: auto;
+    }
 
+    .page-layout {
+        background-color: #fff;
+        box-sizing: border-box;
+        box-shadow: 0 0 5px rgb(0 0 0 / 10%);
+        height: 16cm;
+        width: 100%;
+        margin-bottom: 20px;
+        display: inline-block;
+        padding: 10px;
+        position: relative;
+    }
+
+    .page-layout .page-header {
+        border-bottom: unset;
+        margin: 0;
+        padding: 0;
+        page-break-inside: avoid;
+        position: relative;
+        width: 100%;
+        margin-bottom: 20px;
+        padding-top: 20px;
+    }
+
+    .page-layout .page-footer {
+        bottom: 15px !important;
+        box-sizing: border-box;
+        left: 0;
+        page-break-inside: avoid;
+        padding: 0 15px;
+        position: absolute;
+        width: 100%;
+    }
 </style>
 
-<div class="container-fluid">
-    <div class="row paper-size">
-        <div class="col-sm-12">
-            <div class="panel panel-default invoice" id="invoice">
-                <div class="panel-body">
+<?php
+$pages = 1;
+$pageof = 1;
+?>
+
+<div class="row paper-size">
+    <?php foreach ($invoice->detail as $index => $value) : ?>
+        <?php if ($pages == 1) : ?>
+            <!-- COUNTER ITEM -->
+            <div class="page-layout">
+                <!-- HEADER -->
+                <div class="page-header">
                     <div class="invoice-ribbon">
                         <div class="ribbon-inner {{ $invoice->getColorPayment() }}">
-                            {{ strtoupper($invoice->getStatusPayment()) }}
+                            <b>{{ strtoupper($invoice->getStatusPayment()) }}</b>
                         </div>
                     </div>
                     <div class="row">
@@ -141,7 +192,7 @@
                             <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
                         </div>
 
-                        <div class="col-sm-6 top-right">
+                        <div class="col-sm-6 top-right text-center">
                             <h3 class="marginright">{{ $invoice->code }}</h3>
                             <span class="marginright">{{ date('d M Y', strtotime($invoice->date)) }}</span>
                         </div>
@@ -181,34 +232,10 @@
                         </div>
 
                     </div>
-
-                    <div class="row table-row">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" style="width:5%">#</th>
-                                    <th class="text-left" style="width:40%">{{ __('Product') }}</th>
-                                    <th class="text-left" style="width:20%">{{ __('Price') }}</th>
-                                    <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                    <th class="text-right" style="width:15%">{{ __('Total') }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($invoice->detail as $row => $value)
-                                <tr>
-                                    <td class="text-center">{{ ($row+1) }}</td>
-                                    <td class="text-left">{{ $value->product_name }}</td>                                               
-                                    <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
-                                    <td class="text-left">{{ $value->qty }}</td>
-                                    <td class="text-right">{{ __('Rp. ') }}@price($value->product_price * $value->qty)</td>
-                                </tr>
-                                @endforeach
-                                <tr class="last-row"></tr>
-                            </tbody>
-                        </table>
-
-                    </div>
-
+                </div>
+                <!-- /HEADER -->
+                <!-- FOOTER -->
+                <div class="page-footer">
                     <div class="row">
                         <div class="col-sm-6 margintop">
                             <p>{{ __('Noted') }} : {{ $invoice->description }}</p>
@@ -224,10 +251,50 @@
 
                         </div>
                     </div>
-
                 </div>
+                <!-- /FOOTER -->
+                <!-- CONTENT -->
+                <div class="page-content">
+                    <table class="table-content" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:5%">#</th>
+                                <th class="text-left" style="width:40%">{{ __('Product') }}</th>
+                                <th class="text-left" style="width:20%">{{ __('Price') }}</th>
+                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
+                                <th class="text-right" style="width:15%">{{ __('Total') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php endif; ?>
+                        <tr>
+                            <td class="text-center">{{ ($index+1) }}</td>
+                            <td class="text-left">{{ $value->product_name }}</td>                                               
+                            <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
+                            <td class="text-left">{{ $value->qty }}</td>
+                            <td class="text-right">{{ __('Rp. ') }}@price($value->product_price * $value->qty)</td>
+                        </tr>
+                        <?php if ($pages == 6 || $index == (count($invoice->detail) - 1)) : ?>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /CONTENT -->
             </div>
-        </div>
-    </div>
+            <!-- /COUNTER ITEM -->
+        <?php endif; ?>
+        <!-- /end counter item -->
+        <?php
+        $pages++;
+        if ($pages > 6)
+            $pages = 1;
+    endforeach;
+    ?>
+    <!-- /endforeach detail item -->
 </div>
 
+<script>
+    setTimeout(function () {
+        print();
+        close();
+    }, 600);
+</script>
