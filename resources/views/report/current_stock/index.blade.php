@@ -57,6 +57,7 @@
                     <div class="form-group row">
                         <div class="col-sm-3 input-group">
                             <button type="button" class="btn btn-default" id="search">Show</button>
+                            <button type="button" class="btn btn-default" id="print">Print</button>
                         </div>
                     </div>
 
@@ -90,6 +91,30 @@
                         Command: toastr["error"](res.message);
                     }
                 }
+            });
+        });
+
+        $("body").off("click", "#print").on("click", "#print", function ()
+        {
+            var w = window.open(),
+                    newstr = $('.detail').html();
+            $.get("{{asset('css/report.css')}}", function (css) {
+                var judul = "Report Current Stock";
+                w.document.write("<html>");
+                w.document.write("<head>");
+                w.document.write("<style>");
+                w.document.write(css);
+                w.document.write("</style>");
+                w.document.write("</head>");
+                w.document.write("<body>");
+                w.document.write("<div class=\"title-report\">" + judul + "</div>");
+                w.document.write(newstr);
+                w.document.write("</body>");
+                w.document.write("</html>");
+                setTimeout(function () {
+                    w.print();
+                    w.close();
+                }, 600);
             });
         });
     </script>

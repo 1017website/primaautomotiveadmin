@@ -2,7 +2,7 @@
     <nav class="navbar top-navbar navbar-expand-md navbar-dark">
         <div class="navbar-header" data-logobg="skin5">
             <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
-            <a class="navbar-brand" href="index.html">
+            <a class="navbar-brand" href="/">
                 <span class="logo-text" style="margin-left: auto;margin-right: auto;">
                     <img src="{{asset('plugins/images/logo.png')}}" alt="homepage" class="light-logo" style="margin-left: auto;margin-right: auto;"/>
                 </span>
@@ -79,8 +79,8 @@
                         <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/workorder" aria-expanded="false"><i class="mdi mdi-worker"></i><span class="hide-menu">{{ __('Work Order') }}</span></a></li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-currency-usd"></i><span class="hide-menu">{{ __('Expense') }}</span></a>
                             <ul aria-expanded="false" class="collapse  first-level">
-                                <li class="sidebar-item"><a href="expense-spending" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Spending') }}</span></a></li>
-                                <li class="sidebar-item"><a href="expense-investment" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Investment') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/expense-spending" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Spending') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/expense-investment" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Investment') }}</span></a></li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-clipboard-text"></i><span class="hide-menu">{{ __('Report') }}</span></a>
