@@ -6,6 +6,7 @@ use App\Models\Invoice;
 use App\Models\Order;
 use App\Models\Mechanic;
 use App\Models\Workorder;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -38,7 +39,9 @@ class InvoiceController extends Controller {
         } elseif ($invoice->status_payment == 1) {
             $sisa = $invoice->total - $invoice->dp;
         }
-        return view('invoice.show', compact('invoice', 'sisa', 'date', 'mechanic'));
+
+        $setting = Setting::where('id', '1')->first();
+        return view('invoice.show', compact('invoice', 'sisa', 'date', 'mechanic', 'setting'));
     }
 
     public function destroy(Invoice $invoice) {
@@ -113,7 +116,8 @@ class InvoiceController extends Controller {
 
     public function print($id) {
         $invoice = Invoice::findorfail($id);
-        return view('invoice.print', compact('invoice'));
+        $setting = Setting::where('id', '1')->first();
+        return view('invoice.print', compact('invoice', 'setting'));
 
         $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
         $pdf->setPaper('A5', 'landscape');

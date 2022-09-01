@@ -108,21 +108,17 @@
         @page {
             size: landscape;
             margin: 0;
-            size: 21.59cm 13.97cm;
         }
 
         html, body {
-            /*height: 13.97cm;
-            width: 21.59cm;*/
-            height: 99%;
+            height: 100%;
             display: block;
             font-family: "Calibri";
-            margin: 0;
         }
-
-        .pagebreak {
-            break-after:page
-        } /* page-break-after works, as well */
+        
+        .page-first{
+            margin-top:100px!important;
+        }
 
     }
 
@@ -139,12 +135,13 @@
         background-color: #fff;
         box-sizing: border-box;
         box-shadow: 0 0 5px rgb(0 0 0 / 10%);
-        height: 16cm;
         width: 100%;
         margin-bottom: 20px;
         display: inline-block;
         padding: 10px;
         position: relative;
+        page-break-after: always;
+        height: 16cm;
     }
 
     .page-layout .page-header {
@@ -155,7 +152,7 @@
         position: relative;
         width: 100%;
         margin-bottom: 20px;
-        padding-top: 20px;
+        padding-top:10px;
     }
 
     .page-layout .page-footer {
@@ -172,15 +169,16 @@
 <?php
 $pages = 1;
 $pageof = 1;
+$pagesFirst = true;
 ?>
 
 <div class="row paper-size">
-    <?php foreach ($invoice->order->detail as $index => $value) : ?>
-        <?php if ($pages == 1) : ?>
+    <?php foreach ($invoice->order->detail as $index => $value) { ?>
+        <?php if ($pages == 1) { ?>
             <!-- COUNTER ITEM -->
             <div class="page-layout">
                 <!-- HEADER -->
-                <div class="page-header">
+                <div class="page-header {{ (!$pagesFirst) ? 'page-first' : '' }}">
                     <div class="invoice-ribbon">
                         <div class="ribbon-inner {{ $invoice->getColorPayment() }}">
                             <b>{{ strtoupper($invoice->getStatusPayment()) }}</b>
@@ -202,10 +200,10 @@ $pageof = 1;
                     <div class="row">
 
                         <div class="col-sm-4 from">
-                            <p class="lead marginbottom">{{ __('From') }} : Ryan</p>
-                            <p>Semolowaru Timur II, Semolowaru, Kec. Sukolilo, Kota SBY, Jawa Timur 60119</p>
-                            <p>{{ __('Phone') }}: 0878-5372-2011</p>
-                            <p>{{ __('Email') }}: info@primaautomotive.id</p>
+                            <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
+                            <p>{{ isset($setting) ? $setting->address : '' }}</p>
+                            <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
+                            <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
                         </div>
 
                         <div class="col-sm-4 to">
@@ -227,21 +225,23 @@ $pageof = 1;
                 <!-- /HEADER -->
                 <!-- FOOTER -->
                 <div class="page-footer">
-                    <div class="row">
-                        <div class="col-sm-6 margintop">
-                            <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                    <?php if ($pagesFirst) { ?>
+                        <div class="row">
+                            <div class="col-sm-6 margintop">
+                                <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
 
+                            </div>
+                            <div class="col-sm-6 text-right pull-right invoice-total">
+
+                                <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
+
+                                <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
+
+                                <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</p>
+
+                            </div>
                         </div>
-                        <div class="col-sm-6 text-right pull-right invoice-total">
-
-                            <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
-
-                            <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
-
-                            <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</p>
-
-                        </div>
-                    </div>
+                    <?php } ?>
                 </div>
                 <!-- /FOOTER -->
                 <!-- CONTENT -->
@@ -257,7 +257,7 @@ $pageof = 1;
                             </tr>
                         </thead>
                         <tbody>
-                        <?php endif; ?>
+                        <?php } ?>
                         <tr>
                             <td class="text-center">{{ ($index+1) }}</td>
                             <td class="text-left">{{ $value->service_name }}</td>                                               
@@ -265,20 +265,22 @@ $pageof = 1;
                             <td class="text-left">{{ $value->service_qty }}</td>
                             <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                         </tr>
-                        <?php if ($pages == 6 || $index == (count($invoice->order->detail) - 1)) : ?>
+                        <?php if ($pages == 8 || $index == (count($invoice->order->detail) - 1)) { ?>
                         </tbody>
                     </table>
                 </div>
                 <!-- /CONTENT -->
             </div>
             <!-- /COUNTER ITEM -->
-        <?php endif; ?>
+        <?php } ?>
         <!-- /end counter item -->
         <?php
         $pages++;
-        if ($pages > 6)
+        $pagesFirst = false;
+        if ($pages > 8) {
             $pages = 1;
-    endforeach;
+        }
+    }
     ?>
     <!-- /endforeach detail item -->
 </div>

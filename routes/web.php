@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 //workshop
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SettingController;
 use App\Http\Controllers\TypeProductController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ServiceController;
@@ -29,9 +30,9 @@ use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
 use App\Http\Controllers\ReportStoreController;
 
-//store
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
+Route::resource('setting', SettingController::class)->middleware(['auth']);
 
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);

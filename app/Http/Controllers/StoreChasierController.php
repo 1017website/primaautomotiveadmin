@@ -11,6 +11,7 @@ use App\Models\StoreInventoryProduct;
 use App\Models\StoreInventoryProductHistory;
 use App\Models\InventoryProduct;
 use App\Models\InventoryProductHistory;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -194,7 +195,9 @@ class StoreChasierController extends Controller {
         } elseif ($invoice->status_payment == 1) {
             $sisa = $invoice->total - $invoice->dp;
         }
-        return view('store.chasier.show', compact('invoice', 'sisa', 'date'));
+        
+        $setting = Setting::where('id', '1')->first();
+        return view('store.chasier.show', compact('invoice', 'sisa', 'date', 'setting'));
     }
 
     public function destroy(Invoice $invoice) {
@@ -241,7 +244,8 @@ class StoreChasierController extends Controller {
 
     public function print($id) {
         $invoice = StoreChasier::findorfail($id);
-        return view('store.chasier.print', compact('invoice'));
+        $setting = Setting::where('id', '1')->first();
+        return view('store.chasier.print', compact('invoice', 'setting'));
 
         $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
         $pdf->setPaper('A5', 'landscape');

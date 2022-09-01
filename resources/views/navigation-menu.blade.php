@@ -55,7 +55,7 @@
                     </ul>
                 </li>
 
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Workshop') }}</span></a>
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Workshop') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-format-list-bulleted"></i><span class="hide-menu">{{ __('Master') }}</span></a>
                             <ul aria-expanded="false" class="collapse  second-level">
@@ -93,7 +93,9 @@
                         </li>
                     </ul>
                 </li>
-
+                
+                <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
+                
             </ul>
         </nav>
     </div>

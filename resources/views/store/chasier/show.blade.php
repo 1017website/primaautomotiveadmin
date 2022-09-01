@@ -165,10 +165,10 @@
                                 <div class="row">
 
                                     <div class="col-sm-4 from">
-                                        <p class="lead marginbottom">{{ __('From') }} : Ryan</p>
-                                        <p>Semolowaru Timur II, Semolowaru, Kec. Sukolilo, Kota SBY, Jawa Timur 60119</p>
-                                        <p>{{ __('Phone') }}: 0878-5372-2011</p>
-                                        <p>{{ __('Email') }}: info@primaautomotive.id</p>
+                                        <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
+                                        <p>{{ isset($setting) ? $setting->address : '' }}</p>
+                                        <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
+                                        <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
                                     </div>
 
                                     <div class="col-sm-4 to">
