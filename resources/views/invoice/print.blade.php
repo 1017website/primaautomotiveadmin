@@ -61,11 +61,11 @@
         -ms-transform:rotate(45deg);
         -o-transform:rotate(45deg);
         position:relative;
-        padding:7px 0;
         left:-5px;
         top:11px;
         width:120px;
-        font-size:15px;
+        font-size:25px;
+        font-weight: bold;
         color:#fff;
     }
 
@@ -142,6 +142,7 @@
         position: relative;
         page-break-after: always;
         height: 16cm;
+        padding-left: 20px;
     }
 
     .page-layout .page-header {
