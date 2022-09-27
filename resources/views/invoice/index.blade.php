@@ -17,7 +17,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('invoice.create') }}">{{ __('Add') }}</a>
+            <a class="btn btn-default hidden" href="{{ route('invoice.create') }}">{{ __('Add') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
