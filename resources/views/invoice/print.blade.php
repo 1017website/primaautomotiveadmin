@@ -62,7 +62,7 @@
         -o-transform:rotate(45deg);
         position:relative;
         left:-5px;
-        top:11px;
+        top:20px;
         width:120px;
         font-size:25px;
         font-weight: bold;
