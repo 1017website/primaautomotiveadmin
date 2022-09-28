@@ -51,7 +51,7 @@
                             @foreach ($service as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
-                                <td align="right">{{ __('Rp. ') }}@price($row->estimated_costs)</td>
+                                <td align="right" data-order="{{ $row->estimated_costs }}">{{ __('Rp. ') }}@price($row->estimated_costs)</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>

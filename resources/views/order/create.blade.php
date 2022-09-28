@@ -208,6 +208,13 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="price" name="price" required="" readonly="">
+                                </div>
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -263,6 +270,8 @@
                     }
                 });
             });
+            
+            $("#service_id").trigger("change");
 
         });
 
@@ -289,8 +298,42 @@
                 //if a decimal has been added, disable the "."-button
             });
         });
-        
+
         $('#cars_id').val("{{ old('cars_id') }}").change();
+
+        $('#service_id').on('change', function () {
+            $.ajax({
+                url: "{{ route('order.price') }}",
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'service_id': this.value
+                },
+                success: function (res) {
+                    $('#price').val(res.price);
+                    var price = document.getElementById('price');
+                    var formated = formatRupiah($('#price').val(), 'Rp. ');
+                    price.value = formated;
+                }
+            });
+        });
+
+        function formatRupiah(angka, prefix)
+        {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
     </script>
 
 </x-app-layout>

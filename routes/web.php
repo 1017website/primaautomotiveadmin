@@ -55,6 +55,7 @@ Route::controller(OrderController::class)->group(function () {
     Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
     Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
     Route::post('order/addInvoice', 'addInvoice')->name('addInvoice')->middleware(['auth']);
+    Route::post('order/price', 'price')->name('order.price')->middleware(['auth']);
 });
 Route::resource('order', OrderController::class)->middleware(['auth']);
 Route::controller(InvoiceController::class)->group(function () {

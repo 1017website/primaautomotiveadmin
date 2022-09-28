@@ -252,4 +252,16 @@ class OrderController extends Controller {
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
+    public function price() {
+        $request = array_merge($_POST, $_GET);
+        $price = 0;
+
+        if (isset($request)) {
+            $service = Service::findOrFail($request['service_id']);
+            $price = $service->estimated_costs;
+        }
+
+        return json_encode(['price' => $price]);
+    }
+
 }

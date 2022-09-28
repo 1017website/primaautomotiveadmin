@@ -53,9 +53,9 @@
                             <tr>
                                 <td>{{ isset($row->typeProduct) ? $row->typeProduct->name : '-' }}</td>
                                 <td>{{ $row->name }}</td>
-                                <td align='center'>{{ __('Rp. ') }}@price($row->hpp)</td>
+                                <td align="right" data-order="{{ $row->hpp }}">{{ __('Rp. ') }}@price($row->hpp)</td>
                                 <td align='center'>{{ number_format($row->margin_profit, 2, ',', '.') }}</td>
-                                <td align='center'>{{ __('Rp. ') }}@price($row->price)</td>
+                                <td align="right" data-order="{{ $row->price }}">{{ __('Rp. ') }}@price($row->price)</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">

@@ -56,7 +56,7 @@
                                 <td>{{ $row->code }}</td>
                                 <td>{{ $row->order->code }}</td>          
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
-                                <td>{{ __('Rp. ') }}@price($row->total)</td>
+                                <td align="right" data-order="{{ $row->total }}">{{ __('Rp. ') }}@price($row->total)</td>
                                 <td>{{ $row->getStatus() }}</td>
                                 <td>{{ $row->getStatusPayment() }}</td>
                                 <td class="action-button">

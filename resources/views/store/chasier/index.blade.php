@@ -52,7 +52,7 @@
                                 <td>{{ date('d-m-Y H:i:s', strtotime($row->created_at)) }}</td>
                                 <td>{{ ucfirst($row->type) }}</td>
                                 <td>{{ isset($row->code)?$row->code:'-' }}</td>
-                                <td>{{ __('Rp. ') }}@price($row->total)</td>
+                                <td align="right" data-order="{{ $row->total }}">{{ __('Rp. ') }}@price($row->total)</td>
                                 <td>{{ $row->description }}</td>
                                 <td class="action-button">
                                     <a class="btn btn-info" href="{{ route('store-chasier.show',$row->id) }}"><i class="fas fa-eye"></i></a>

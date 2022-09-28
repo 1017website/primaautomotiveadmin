@@ -51,7 +51,7 @@
                             <tr>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ $row->description }}</td>
-                                <td>{{ __('Rp. ') }}@price($row->cost)</td>
+                                <td align="right" data-order="{{ $row->cost }}">{{ __('Rp. ') }}@price($row->cost)</td>
                                 <td>{{ $row->shrink }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
