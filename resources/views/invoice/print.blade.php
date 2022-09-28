@@ -113,6 +113,7 @@
             height: 100%;
             display: block;
             font-family: "Calibri";
+            font-size: 14px!important;
         }
 
         .page-first{
@@ -167,6 +168,7 @@
 
     table {
         border-collapse: collapse;
+        font-size: 14px!important;
     }
 
 </style>
@@ -232,6 +234,10 @@ $pagesFirst = true;
                 <div class="page-footer">
                     <?php if ($pagesFirst) { ?>
                         <div class="row">
+                            <div class="col-sm-12 margintop">
+                                <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                            </div>
+                            <br>
                             <div class="col-sm-4 margintop">
                                 <table>
                                     <tr style="vertical-align:top;">
@@ -274,7 +280,7 @@ $pagesFirst = true;
                                 </table>
                             </div>
                             <div class="col-sm-4 text-right pull-right invoice-total">
-                                <table style="float:right;text-align: right;font-size:16px;">
+                                <table style="float:right;text-align: right;">
                                     <tr>
                                         <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
                                     </tr>
@@ -288,6 +294,11 @@ $pagesFirst = true;
                             </div>
                         </div>
                     <?php } ?>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-right text-muted" style="font-style:italic;"><?= 'Page ' . ($pageof++) . ' Of ' . ceil((count($invoice->order->detail)) / 8) ?></p>
+                        </div>
+                    </div>
                 </div>
                 <!-- /FOOTER -->
                 <!-- CONTENT -->
@@ -332,9 +343,9 @@ $pagesFirst = true;
 </div>
 
 <script>
-    setTimeout(function () {
-        print();
-        close();
-    }, 600);
+//    setTimeout(function () {
+//        print();
+//        close();
+//    }, 600);
 </script>
 
