@@ -38,7 +38,6 @@
 
     .invoice .invoice-total {
         margin-right:-10px;
-        font-size:16px;
     }
 
     .invoice .last-row {
@@ -50,8 +49,8 @@
         height:88px;
         overflow:hidden;
         position:absolute;
-        top:0px;
-        right:0px;
+        top:-1px;
+        right:11px;
     }
 
     .ribbon-inner {
@@ -62,7 +61,7 @@
         -o-transform:rotate(45deg);
         position:relative;
         left:-5px;
-        top:11px;
+        top:20px;
         width:120px;
         font-size:25px;
         font-weight: bold;
@@ -114,6 +113,7 @@
             height: 100%;
             display: block;
             font-family: "Calibri";
+            font-size: 14px!important;
         }
 
         .page-first{
@@ -163,6 +163,11 @@
         padding: 0 15px;
         position: absolute;
         width: 100%;
+    }
+
+    table {
+        border-collapse: collapse;
+        font-size: 14px!important;
     }
 </style>
 
@@ -236,21 +241,70 @@ $pagesFirst = true;
                 <div class="page-footer">
                     <?php if ($pagesFirst) { ?>
                         <div class="row">
-                            <div class="col-sm-6 margintop">
-                                <p>{{ __('Noted') }} : {{ $invoice->description }}</p>
-
+                            <div class="col-sm-4 margintop">
+                                <table>
+                                    <tr style="vertical-align:top;">
+                                        <td colspan="3"><p>{{ __('Pembayaran Mohon Ditunjukan Ke : ') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('BCA') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('5200999721') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('BNI') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('0982099091') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('Mandiri') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('1400000250721') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('A/n') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('CV Prima Karya Otomotif / Muhammad Ryan Ramadhani') }}</p></td>
+                                    </tr>
+                                </table>
                             </div>
-                            <div class="col-sm-6 text-right pull-right invoice-total">
-
-                                <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
-
-                                <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
-
-                                <p>{{ __('Change') }} : {{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</p>
-
+                            <div class="col-sm-4 margintop">
+                                <table>
+                                    <tr>
+                                        <td style="width:8rem;text-align:center;white-space: nowrap;">Hormat Kami,</td>
+                                        <td style="width:5rem;"></td>
+                                        <td style="width:8rem;text-align:center;white-space: nowrap;">Penerima</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                        <td></td>
+                                        <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-4 text-right pull-right invoice-total">
+                                <table style="float:right;text-align: right;">
+                                    <tr>
+                                        <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ __('Payment') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ __('Change') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp - $invoice->total)</td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-12 margintop" style="margin-top:1rem;">
+                                <p>{{ __('Noted') }} : {{ $invoice->description }}</p>
                             </div>
                         </div>
                     <?php } ?>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-right text-muted" style="font-style:italic;"><?= 'Page ' . ($pageof++) . ' Of ' . ceil((count($invoice->detail)) / 8) ?></p>
+                        </div>
+                    </div>
                 </div>
                 <!-- /FOOTER -->
                 <!-- CONTENT -->

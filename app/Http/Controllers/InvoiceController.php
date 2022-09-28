@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Invoice;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Mechanic;
 use App\Models\Workorder;
 use App\Models\Setting;
@@ -11,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use PDF;
 
 class InvoiceController extends Controller {
@@ -151,6 +154,37 @@ class InvoiceController extends Controller {
             $n = (int) substr($wo->code, -4);
         }
         return (string) 'WRK' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    public function voidInvoice() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $user = User::where('is_owner', '1')->first();
+        if (!Hash::check($request['password'], $user->password)) {
+            $success = false;
+            $message = 'Wrong Password !';
+        }
+
+        if ($success) {
+            DB::beginTransaction();
+            try {
+                $invoice = Invoice::findorfail($request['invoice_id']);
+                $order = Order::findorfail($invoice->order_id);
+                OrderDetail::where('order_id', '=', $invoice->order_id)->forcedelete();
+                $order->forcedelete();
+                $invoice->forcedelete();
+                
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                $success = false;
+                $message = $e->getMessage();
+            }
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
     }
 
 }

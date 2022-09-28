@@ -127,6 +127,9 @@
     <div class="container-fluid">
 
         <div class="div-top">
+            @if($invoice->status == 1 && $invoice->status_payment == 0)
+            <a class="btn btn-danger" data-toggle="modal" data-target="#Modal1"><i class="fas fa-trash"></i>{{ __('Void') }}</a>
+            @endif
             @if($invoice->status == 1)
             <a class="btn btn-primary" data-toggle="modal" data-target="#Modal3"><i class="fas fa-wrench"></i>{{ __('Work On') }}</a>
             @endif
@@ -322,6 +325,38 @@
             </div>
             <!-- Modal -->
 
+            <!-- Modal -->
+            <div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Void Invoice</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Password') }}</label>
+                                <div class="col-sm-9 input-group">
+                                    <input type="password" class="form-control" id="password" name="date_work" value="" required="true">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"><i class="fa fa-key"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-danger" id="voidInvoice">Void</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+
         </div>
 
     </div>
@@ -403,6 +438,30 @@
                         }
                     }
                 });
+            }
+        });
+
+        $("#voidInvoice").click(function () {
+            if ($('#password').val() != '' && $('#password').val() != null) {
+                $.ajax({
+                    url: "{{ route('voidInvoice') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'invoice_id': <?= $invoice->id ?>,
+                        'password': $('#password').val(),
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = "/invoice";
+                            popup('Void Invoice Success', 'success');
+                        } else {
+                            popup(res.message, 'error');
+                        }
+                    }
+                });
+            } else {
+                popup('Password Required !', 'error');
             }
         });
     </script>

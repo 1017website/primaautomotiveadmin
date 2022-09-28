@@ -234,10 +234,6 @@ $pagesFirst = true;
                 <div class="page-footer">
                     <?php if ($pagesFirst) { ?>
                         <div class="row">
-                            <div class="col-sm-12 margintop">
-                                <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
-                            </div>
-                            <br>
                             <div class="col-sm-4 margintop">
                                 <table>
                                     <tr style="vertical-align:top;">
@@ -292,6 +288,9 @@ $pagesFirst = true;
                                     </tr>
                                 </table>
                             </div>
+                            <div class="col-sm-12 margintop" style="margin-top:1rem;">
+                                <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                            </div>
                         </div>
                     <?php } ?>
                     <div class="row">
@@ -343,9 +342,9 @@ $pagesFirst = true;
 </div>
 
 <script>
-//    setTimeout(function () {
-//        print();
-//        close();
-//    }, 600);
+    setTimeout(function () {
+        print();
+        close();
+    }, 600);
 </script>
 
