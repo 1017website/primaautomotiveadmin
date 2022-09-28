@@ -295,9 +295,9 @@ $pagesFirst = true;
                                     </tr>
                                 </table>
                             </div>
-                            <div class="col-sm-12 margintop" style="margin-top:1rem;">
+<!--                            <div class="col-sm-12 margintop" style="margin-top:1rem;">
                                 <p>{{ __('Noted') }} : {{ $invoice->description }}</p>
-                            </div>
+                            </div>-->
                         </div>
                     <?php } ?>
                     <div class="row">
