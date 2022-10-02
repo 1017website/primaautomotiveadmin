@@ -140,10 +140,13 @@ class StoreProductController extends Controller {
     }
 
     public function destroy(StoreProduct $storeProduct) {
-        $storeProduct->delete();
-        if (Storage::exists($storeProduct->image)) {
-            Storage::delete($storeProduct->image);
+        if (strlen($storeProduct->image) > 0) {
+            if (Storage::exists($storeProduct->image)) {
+                Storage::delete($storeProduct->image);
+            }
         }
+        $storeProduct->delete();
+
         return redirect()->route('store-product.index')
                         ->with('success', 'Product <b>' . $storeProduct->name . '</b> deleted successfully');
     }

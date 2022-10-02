@@ -222,7 +222,10 @@
                                 <div class="row">
                                     <div class="col-sm-6 margintop">
                                         <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                                        
                                         <a class="btn btn-primary" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
+                                        <a class="btn btn-primary" href="{{ route('invoice.download', $invoice->id) }}" target="_blank"><i class="fa fa-download"></i>{{ __('Download PDF') }}</a>
+                                        
                                     </div>
                                     <div class="col-sm-6 text-right pull-right invoice-total">
 

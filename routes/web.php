@@ -63,6 +63,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::post('invoice/workOrder', 'workOrder')->name('workOrder')->middleware(['auth']);
     Route::post('invoice/voidInvoice', 'voidInvoice')->name('voidInvoice')->middleware(['auth']);
     Route::get('invoice/print/{id}', 'print')->name('invoice.print')->middleware(['auth']);
+    Route::get('invoice/download/{id}', 'download')->name('invoice.download')->middleware(['auth']);
 });
 Route::resource('invoice', InvoiceController::class)->middleware(['auth']);
 Route::controller(WorkorderController::class)->group(function () {

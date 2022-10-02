@@ -123,11 +123,28 @@ class InvoiceController extends Controller {
         return view('invoice.print', compact('invoice', 'setting'));
 
         $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
-        $pdf->setPaper('A5', 'landscape');
+        $pdf->setPaper('A4', 'landscape');
         $pdf->render();
         return $pdf->stream();
 
         //return $pdf->download('Print-'.$invoice->code.'.pdf');
+    }
+
+    public function download($id) {
+        ini_set('max_execution_time', 300);
+        ini_set("memory_limit", "512M");
+
+        $invoice = Invoice::findorfail($id);
+        $setting = Setting::where('id', '1')->first();
+        
+        return view('invoice.download', compact('invoice', 'setting'));
+        
+        $pdf = PDF::loadview('invoice.download', ['invoice' => $invoice, 'setting' => $setting]);
+//        $pdf->setPaper('A5', 'landscape');
+        $pdf->render();
+        return $pdf->stream();
+
+        //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
     }
 
     public function detailInvoice() {
@@ -175,7 +192,7 @@ class InvoiceController extends Controller {
                 OrderDetail::where('order_id', '=', $invoice->order_id)->forcedelete();
                 $order->forcedelete();
                 $invoice->forcedelete();
-                
+
                 DB::commit();
             } catch (\Exception $e) {
                 DB::rollback();

@@ -67,10 +67,13 @@ class ProductController extends Controller {
     }
 
     public function destroy(Product $product) {
-        $product->delete();
-        if (Storage::exists($product->image)) {
-            Storage::delete($product->image);
+        if (strlen($product->image) > 0) {
+            if (Storage::exists($product->image)) {
+                Storage::delete($product->image);
+            }
         }
+        $product->delete();
+
         return redirect()->route('product.index')
                         ->with('success', 'Product <b>' . $product->name . '</b> deleted successfully');
     }
