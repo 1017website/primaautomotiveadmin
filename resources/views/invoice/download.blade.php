@@ -1,29 +1,41 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <link href="{{asset('css/app.css') }}" rel="stylesheet" type="text/css" media="all">
+    <!--    <link href="{{asset('css/app.css') }}" rel="stylesheet" type="text/css" media="all">-->
     <link href="{{asset('css/style.min.css')}}" rel="stylesheet" type="text/css" media="all">
     <link href="{{asset('css/custom.css')}}" rel="stylesheet" type="text/css" media="all">
 </head>
 <style>
+    .body{
+        font-family: 'Nunito Sans';
+    }
+
+    @media print {
+        @page {
+            size: auto;
+        }
+    }
+    .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+        border:0;
+        padding:0;
+        margin-left:-0.00001;
+        display: grid;
+    }
+
     .page{
         size: A4 portrait;
     }
     /*Invoice*/
     .invoice .top-left {
-        font-size:65px;
-        color:#3ba0ff;
+        text-align:left;
     }
 
     .invoice .top-right {
         text-align:right;
-        padding-right: 10px;
-        padding-top: 40px;
     }
 
     .invoice .table-row {
         margin-left:-15px;
         margin-right:-15px;
-        margin-top:25px;
     }
 
     .invoice .payment-info {
@@ -40,7 +52,6 @@
 
     .invoice .invoice-total {
         margin-right:-10px;
-        font-size:16px;
     }
 
     .invoice .last-row {
@@ -52,8 +63,8 @@
         height:88px;
         overflow:hidden;
         position:absolute;
-        top:-1px;
-        right:11px;
+        top:-45px;
+        right:-40px;
     }
 
     .ribbon-inner {
@@ -97,7 +108,7 @@
         }
 
         .invoice p.lead,.invoice .from p.lead,.invoice .to p.lead,.invoice .payment-details p.lead {
-            font-size:22px;
+            font-size: 14px!important;
         }
 
         .invoice .btn {
@@ -107,6 +118,8 @@
 
     @media print {
         .invoice {
+            font-family: monospace;
+            font-size: 14px!important;
             size: A4;
             -webkit-print-color-adjust: exact !important;   /* Chrome, Safari 6 – 15.3, Edge */
             color-adjust: exact !important;                 /* Firefox 48 – 96 */
@@ -127,51 +140,54 @@
                 </div>
                 <div class="row">
 
-                    <div class="col-sm-6 top-left">
-                        <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
-                    </div>
-
-                    <div class="col-sm-6 top-right">
-                        <h3 class="marginright">{{ $invoice->code }}</h3>
-                        <span class="marginright">{{ date('d M Y', strtotime($invoice->date)) }}</span>
-                    </div>
+                    <table style="width:100%;">
+                        <tr>
+                            <td class="top-left" style="width:50%;">
+                                <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
+                            </td>
+                            <td class="top-right" style="width:50%;">
+                                <h3 class="marginright">{{ $invoice->code }}</h3>
+                                <span class="marginright">{{ date('d M Y', strtotime($invoice->date)) }}</span>
+                            </td>
+                        </tr>
+                    </table>
 
                 </div>
                 <hr>
                 <div class="row">
-
-                    <div class="col-sm-4 from">
-                        <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
-                        <p>{{ isset($setting) ? $setting->address : '' }}</p>
-                        <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
-                        <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
-                    </div>
-
-                    <div class="col-sm-4 to">
-                        <p class="lead marginbottom">To : {{ $invoice->order->cust_name }}</p>
-                        <p>{{ $invoice->order->cust_address }}<p>
-                        <p>{{ __('Car') }}: {{ $invoice->order->vehicle_brand }} - {{ $invoice->order->vehicle_name }} {{ $invoice->order->vehicle_plate }}<p>
-                        <p>{{ __('Phone') }}: {{ $invoice->order->cust_phone }}</p>
-                    </div>
-
-                    <div class="col-sm-4 text-right payment-details">
-                        <p class="lead marginbottom payment-info">Payment details</p>
-                        <p>{{ __('Date') }}: {{ date('d M Y', strtotime($invoice->date)) }}</p>
-                        <p>{{ __('Order') }}: {{ $invoice->order->code }} </p>
-                        <p>{{ __('Total Amount') }}: {{ __('Rp. ') }}@price($invoice->total)</p>
-                    </div>
-
+                    <table style="width:100%;">
+                        <tr>
+                            <td class="top-left" style="width:33%;">
+                                <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
+                                <p>{{ isset($setting) ? $setting->address : '' }}</p>
+                                <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
+                                <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
+                            </td>
+                            <td class="top-left" style="width:33%;">
+                                <p class="lead marginbottom">To : {{ $invoice->order->cust_name }}</p>
+                                <p>{{ $invoice->order->cust_address }}<p>
+                                <p>{{ __('Car') }}: {{ $invoice->order->vehicle_brand }} - {{ $invoice->order->vehicle_name }} {{ $invoice->order->vehicle_plate }}<p>
+                                <p>{{ __('Phone') }}: {{ $invoice->order->cust_phone }}</p>
+                            </td>
+                            <td class="top-right" style="width:33%;">
+                                <p class="lead marginbottom payment-info">Payment details</p>
+                                <p>{{ __('Date') }}: {{ date('d M Y', strtotime($invoice->date)) }}</p>
+                                <p>{{ __('Order') }}: {{ $invoice->order->code }} </p>
+                                <p>{{ __('Total Amount') }}: {{ __('Rp. ') }}@price($invoice->total)</p>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="row table-row">
-                    <table class="table table-striped">
+                    <table class="table table-striped" style="width:100%;">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
-                                <th class="text-left" style="width:40%">{{ __('Service') }}</th>
+                                <th class="text-left" style="width:35%">{{ __('Service') }}</th>
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                <th class="text-right" style="width:15%">{{ __('Total Price') }}</th>
+                                <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -196,60 +212,71 @@
                             <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
                         </div>
 
-                        <div class="col-sm-4 margintop">
-                            <table>
-                                <tr style="vertical-align:top;">
-                                    <td colspan="3"><p>{{ __('Pembayaran Mohon Ditunjukan Ke : ') }}</p></td>
-                                </tr>
-                                <tr style="vertical-align:top;">
-                                    <td><p>{{ __('BCA') }}</td>
-                                    <td><p>{{ __(':') }}</p></td>
-                                    <td><p>{{ __('5200999721') }}</p></td>
-                                </tr>
-                                <tr style="vertical-align:top;">
-                                    <td><p>{{ __('BNI') }}</td>
-                                    <td><p>{{ __(':') }}</p></td>
-                                    <td><p>{{ __('0982099091') }}</p></td>
-                                </tr>
-                                <tr style="vertical-align:top;">
-                                    <td><p>{{ __('Mandiri') }}</td>
-                                    <td><p>{{ __(':') }}</p></td>
-                                    <td><p>{{ __('1400000250721') }}</p></td>
-                                </tr>
-                                <tr style="vertical-align:top;">
-                                    <td><p>{{ __('A/n') }}</td>
-                                    <td><p>{{ __(':') }}</p></td>
-                                    <td><p>{{ __('CV Prima Karya Otomotif / Muhammad Ryan Ramadhani') }}</p></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-sm-4 margintop">
-                            <table>
-                                <tr>
-                                    <td style="width:8rem;text-align:center;white-space: nowrap;">Hormat Kami,</td>
-                                    <td style="width:5rem;"></td>
-                                    <td style="width:8rem;text-align:center;white-space: nowrap;">Penerima</td>
-                                </tr>
-                                <tr>
-                                    <td style="height:5rem;border-bottom: 1pt solid black;"></td>
-                                    <td></td>
-                                    <td style="height:5rem;border-bottom: 1pt solid black;"></td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="col-sm-4 text-right pull-right invoice-total">
-                            <table style="float:right;text-align: right;">
-                                <tr>
-                                    <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('Payment') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp)</td>
-                                </tr>
-                                <tr>
-                                    <td>{{ __('Remaining Pay') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</td>
-                                </tr>
-                            </table>
-                        </div>
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td style="width:8rem;text-align:center;white-space: nowrap;">Hormat Kami,</td>
+                                            <td style="width:5rem;"></td>
+                                            <td style="width:8rem;text-align:center;white-space: nowrap;">Penerima</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                            <td></td>
+                                            <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td>
+                                    <table style="float:right;text-align: right;">
+                                        <tr>
+                                            <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ __('Payment') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ __('Remaining Pay') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table style="width:70%; margin-top: 2rem;">
+                            <tr>
+                                <td>
+                                    <table class="top-left">
+                                        <tr style="vertical-align:top;">
+                                            <td colspan="3"><p>{{ __('Pembayaran Mohon Ditunjukan Ke : ') }}</p></td>
+                                        </tr>
+                                        <tr style="vertical-align:top;">
+                                            <td style="width:10%;"><p>{{ __('BCA') }}</td>
+                                            <td style="width:5%;"><p>{{ __(':') }}</p></td>
+                                            <td style="width:85%;"><p>{{ __('5200999721') }}</p></td>
+                                        </tr>
+                                        <tr style="vertical-align:top;">
+                                            <td style="width:10%;"><p>{{ __('BNI') }}</td>
+                                            <td style="width:5%;"><p>{{ __(':') }}</p></td>
+                                            <td style="width:85%;"><p>{{ __('0982099091') }}</p></td>
+                                        </tr>
+                                        <tr style="vertical-align:top;">
+                                            <td style="width:10%;"><p>{{ __('Mandiri') }}</td>
+                                            <td style="width:5%;"><p>{{ __(':') }}</p></td>
+                                            <td style="width:85%;"><p>{{ __('1400000250721') }}</p></td>
+                                        </tr>
+                                        <tr style="vertical-align:top;">
+                                            <td style="width:10%;"><p>{{ __('A/n') }}</td>
+                                            <td style="width:5%;"><p>{{ __(':') }}</p></td>
+                                            <td style="width:85%;"><p>{{ __('CV Prima Karya Otomotif / Muhammad Ryan Ramadhani') }}</p></td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+
                     </div>
                 </div>
 
