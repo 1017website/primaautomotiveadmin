@@ -121,13 +121,6 @@ class InvoiceController extends Controller {
         $invoice = Invoice::findorfail($id);
         $setting = Setting::where('id', '1')->first();
         return view('invoice.print', compact('invoice', 'setting'));
-
-        $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
-        $pdf->setPaper('A4', 'landscape');
-        $pdf->render();
-        return $pdf->stream();
-
-        //return $pdf->download('Print-'.$invoice->code.'.pdf');
     }
 
     public function download($id) {

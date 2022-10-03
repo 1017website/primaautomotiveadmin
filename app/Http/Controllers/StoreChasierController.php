@@ -195,7 +195,7 @@ class StoreChasierController extends Controller {
         } elseif ($invoice->status_payment == 1) {
             $sisa = $invoice->total - $invoice->dp;
         }
-        
+
         $setting = Setting::where('id', '1')->first();
         return view('store.chasier.show', compact('invoice', 'sisa', 'date', 'setting'));
     }
@@ -246,13 +246,26 @@ class StoreChasierController extends Controller {
         $invoice = StoreChasier::findorfail($id);
         $setting = Setting::where('id', '1')->first();
         return view('store.chasier.print', compact('invoice', 'setting'));
+    }
 
-        $pdf = PDF::loadview('invoice.print', ['invoice' => $invoice]);
-        $pdf->setPaper('A5', 'landscape');
+    public function download($id) {
+        ini_set('max_execution_time', 300);
+        ini_set("memory_limit", "512M");
+
+        $invoice = StoreChasier::findorfail($id);
+        $setting = Setting::where('id', '1')->first();
+
+        //view html
+        //return view('invoice.download', compact('invoice', 'setting'));
+
+        $pdf = PDF::loadview('store.chasier.download', ['invoice' => $invoice, 'setting' => $setting]);
         $pdf->render();
+
+        //render
         return $pdf->stream();
 
-        //return $pdf->download('Print-'.$invoice->code.'.pdf');
+        //download
+        //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
     }
 
     public function workOrder() {

@@ -112,6 +112,7 @@ Route::controller(StoreChasierController::class)->group(function () {
     Route::post('store-chasier/price', 'price')->name('store-chasier.price')->middleware(['auth']);
     Route::get('store-chasier/customer', 'customer')->name('store-chasier.customer')->middleware(['auth']);
     Route::get('store-chasier/print/{id}', 'print')->name('store-chasier.print')->middleware(['auth']);
+    Route::get('store-chasier/download/{id}', 'download')->name('store-chasier.download')->middleware(['auth']);
     Route::post('store-chasier/payInvoice', 'payStore')->name('payStore')->middleware(['auth']);
     Route::post('store-chasier/deleteProduct', 'deleteProduct')->name('store-chasier.deleteProduct')->middleware(['auth']);
 });
