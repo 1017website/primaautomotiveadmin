@@ -40,6 +40,7 @@
                             <tr>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Estimated Costs') }}</th>
+                                <th>{{ __('Panel') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -52,6 +53,7 @@
                             <tr>
                                 <td>{{ $row->name }}</td>
                                 <td align="right" data-order="{{ $row->estimated_costs }}">{{ __('Rp. ') }}@price($row->estimated_costs)</td>
+                                <td align="right" data-order="{{ $row->panel }}">@price($row->panel)</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>

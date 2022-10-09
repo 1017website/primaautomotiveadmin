@@ -35,7 +35,8 @@ class StoreProductController extends Controller {
             'barcode' => 'required|unique:store_products,barcode,NULL,id,deleted_at,NULL',
             'type_product_id' => 'required',
             'image' => 'image|file|max:2048',
-            'document' => 'file|mimes:zip,rar,pdf,doc,docx,xls,xlsx|max:5120'
+            'document' => 'file|mimes:zip,rar,pdf,doc,docx,xls,xlsx|max:5120',
+            'um' => 'required|max:255',
         ]);
 
         try {
@@ -113,6 +114,7 @@ class StoreProductController extends Controller {
             'name' => 'required|max:255|unique:products,name,' . $storeProduct->id . ',id,deleted_at,NULL',
             'type_product_id' => 'required',
             'image' => 'image|file|max:2048',
+            'um' => 'required|max:255',
         ]);
 
         if ($request->file('image') && request('image') != '') {

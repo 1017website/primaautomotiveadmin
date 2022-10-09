@@ -54,6 +54,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="panel" class="col-sm-2 text-left control-label col-form-label">{{ __('Panel') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="panel" name="panel" required="" value="{{ old('panel') }}">
+                        </div>
+                    </div>
+
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -92,6 +99,24 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
+
+        $(function () {
+            $("input[id*='panel']").keydown(function (event) {
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+                } else {
+                    event.preventDefault();
+                }
+                if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
+                    event.preventDefault();
+                //if a decimal has been added, disable the "."-button
+            });
+        });
     </script>
 
 </x-app-layout>

@@ -107,6 +107,13 @@
                         <div class="col-sm-6">
 
                             <div class="form-group row">
+                                <label for="um" class="col-sm-2 text-left control-label col-form-label">{{ __('Unit') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="um" name="um" placeholder="Unit" value="{{ $storeProduct->um }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="hpp" name="hpp" placeholder="" value="{{ $storeProduct->hpp }}" required>

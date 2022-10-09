@@ -15,7 +15,7 @@ class StoreProduct extends Model {
 
     protected $table = 'store_products';
     protected $fillable = [
-        'name', 'type_product_id', 'image', 'barcode', 'hpp', 'margin_profit', 'price', 'document'
+        'name', 'type_product_id', 'image', 'barcode', 'hpp', 'margin_profit', 'price', 'document', 'um'
     ];
 
     public function typeProduct() {

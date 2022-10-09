@@ -40,6 +40,7 @@
                             <tr>
                                 <th>{{ __('Type Item') }}</th>
                                 <th>{{ __('Name') }}</th>
+                                <th>{{ __('Unit') }}</th>
                                 <th>{{ __('HPP') }}</th>
                                 <th>{{ __('Margin(%)') }}</th>
                                 <th>{{ __('Price') }}</th>
@@ -53,6 +54,7 @@
                             <tr>
                                 <td>{{ isset($row->typeProduct) ? $row->typeProduct->name : '-' }}</td>
                                 <td>{{ $row->name }}</td>
+                                <td>{{ $row->um }}</td>
                                 <td align="right" data-order="{{ $row->hpp }}">{{ __('Rp. ') }}@price($row->hpp)</td>
                                 <td align='center'>{{ number_format($row->margin_profit, 2, ',', '.') }}</td>
                                 <td align="right" data-order="{{ $row->price }}">{{ __('Rp. ') }}@price($row->price)</td>

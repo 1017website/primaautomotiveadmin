@@ -22,6 +22,7 @@ class ServiceController extends Controller {
         ]);
 
         $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);
+        $validateData['panel'] = str_replace(',', '.', $request->panel);
 
         Service::create($validateData);
 
@@ -43,6 +44,7 @@ class ServiceController extends Controller {
         ]);
 
         $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);
+        $validateData['panel'] = str_replace(',', '.', $request->panel);
 
         $service->update($validateData);
 
