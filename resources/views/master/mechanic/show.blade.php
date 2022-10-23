@@ -6,8 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Mechanic') }}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('HRM') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Employee') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -24,7 +24,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Detail Mechanic') }}</h5>
+                <h5 class="card-title">{{ __('Detail Employee') }}</h5>
                 <div class="border-top"></div>
 
                 <div class="row p-3">
@@ -55,6 +55,16 @@
                     </div>
                     <div class="col-sm-10">
                         {{ $mechanic->name }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
+                        <strong>{{ __('Position') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $mechanic->position }}
                     </div>
                 </div>
 

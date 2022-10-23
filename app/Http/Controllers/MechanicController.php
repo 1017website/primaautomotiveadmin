@@ -20,6 +20,7 @@ class MechanicController extends Controller {
     public function store(Request $request) {
         $validateData = $request->validate([
             'name' => 'required|max:255',
+            'position' => 'max:255',
             'id_card' => 'max:255',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',
@@ -51,6 +52,7 @@ class MechanicController extends Controller {
     public function update(Request $request, Mechanic $mechanic) {
         $validateData = $request->validate([
             'name' => 'required|max:255',
+            'position' => 'max:255',
             'id_card' => 'max:255',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',

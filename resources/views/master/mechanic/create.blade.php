@@ -6,8 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Mechanic') }}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('HRM') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Employee') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
                         </ol>
                     </nav>
@@ -24,7 +24,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Create Mechanic') }}</h5>
+                <h5 class="card-title">{{ __('Create Employee') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -53,7 +53,14 @@
                             <div class="form-group row">
                                 <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name Mechanic" required="true">
+                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name" required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="position" class="col-sm-2 text-left control-label col-form-label">{{ __('Position') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="position" name="position" value="{{ old('position') }}" placeholder="Position" required="true">
                                 </div>
                             </div>
 
@@ -85,7 +92,7 @@
 
                         <div class="col-sm-6">
                             <div class="form-group row">
-                                
+
                                 <div class="col-sm-12" style="text-align: center;">
                                     <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
                                         <!-- Profile Photo File Input -->

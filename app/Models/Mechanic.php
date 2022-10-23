@@ -15,7 +15,8 @@ class Mechanic extends Model {
 
     protected $table = 'mechanic';
     protected $fillable = [
-        'name', 'id_card', 'birth_date', 'phone', 'address', 'image', 'status'
+        'name', 'id_card', 'birth_date', 'phone', 'address', 'image', 'status', 'position', 'salary',
+        'positional_allowance', 'healthy_allowance', 'other_allowance'
     ];
 
     public function userCreated() {

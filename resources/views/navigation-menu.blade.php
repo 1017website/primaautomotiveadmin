@@ -62,7 +62,6 @@
                                 <li class="sidebar-item"><a href="/type-product" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Type Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/service" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service') }}</span></a></li>
-                                <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-clipboard-account"></i><span class="hide-menu">{{ __('Mechanic') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/customer" class="sidebar-link"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">{{ __('Customer') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car" class="sidebar-link"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Cars') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car-brand" class="sidebar-link"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Car Brands') }}</span></a></li>
@@ -93,9 +92,16 @@
                         </li>
                     </ul>
                 </li>
-                
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('HRM') }}</span></a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('Employee') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/attendance/manual" class="sidebar-link"><i class="mdi mdi-account-check"></i><span class="hide-menu">{{ __('Attendance Manual') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/attendance/permit" class="sidebar-link"><i class="mdi mdi-account-remove"></i><span class="hide-menu">{{ __('Attendance Permit') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/payroll" class="sidebar-link"><i class="mdi mdi-cash-multiple"></i><span class="hide-menu">{{ __('Payroll') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/cash-advance" class="sidebar-link"><i class="mdi mdi-account-minus"></i><span class="hide-menu">{{ __('Cash Advance') }}</span></a></li>
+                    </ul>
+                </li>
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
-                
             </ul>
         </nav>
     </div>

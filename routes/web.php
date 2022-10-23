@@ -29,6 +29,11 @@ use App\Http\Controllers\StoreCustomerController;
 use App\Http\Controllers\StoreSpendingController;
 use App\Http\Controllers\StoreInvestmentController;
 use App\Http\Controllers\ReportStoreController;
+//store
+//hrm
+use App\Http\Controllers\AttendanceController;
+
+//hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
@@ -137,6 +142,13 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
 });
 //store
+
+//hrm 
+Route::controller(AttendanceController::class)->group(function () {
+    Route::get('attendance/manual', 'manual')->name('attendance.manual')->middleware(['auth']);
+    Route::get('attendance/permit', 'permit')->name('attendance.permit')->middleware(['auth']);
+});
+//hrm 
 
 Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');

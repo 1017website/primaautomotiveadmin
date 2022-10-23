@@ -6,8 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Mechanic') }}</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('HRM') }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Employee') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -23,7 +23,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Mechanic') }}</h5>
+                <h5 class="card-title">{{ __('Employee') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -39,6 +39,7 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Name') }}</th>
+                                <th>{{ __('Position') }}</th>
                                 <th>{{ __('Phone') }}</th>
                                 <th>{{ __('Address') }}</th>
                                 <th>{{ __('Created By') }}</th>
@@ -50,6 +51,7 @@
                             @foreach ($mechanic as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
+                                <td>{{ $row->position }}</td>
                                 <td>{{ $row->phone }}</td>
                                 <td>{{ $row->address }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
