@@ -142,12 +142,12 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
 });
 //store
-
+//
 //hrm 
 Route::controller(AttendanceController::class)->group(function () {
-    Route::get('attendance/manual', 'manual')->name('attendance.manual')->middleware(['auth']);
-    Route::get('attendance/permit', 'permit')->name('attendance.permit')->middleware(['auth']);
+
 });
+Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 //hrm 
 
 Route::get('generate', function () {

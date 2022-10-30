@@ -89,6 +89,37 @@
                                 </div>
                             </div>
 
+                            <h5 class="card-title">{{ __('Wages') }}</h5>
+                            <div class="border-top"></div>
+
+                            <div class="form-group row">
+                                <label for="salary" class="col-sm-2 text-left control-label col-form-label">{{ __('Salary/Day') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="salary" name="salary" placeholder="" value="{{ $mechanic->salary }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="positional_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Position Allowance') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="positional_allowance" name="positional_allowance" value="{{ $mechanic->positional_allowance }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="healthy_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Healthy Allowance') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="healthy_allowance" name="healthy_allowance" value="{{ $mechanic->healthy_allowance }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="other_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Other Allowance') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="other_allowance" name="other_allowance" value="{{ $mechanic->other_allowance }}" required>
+                                </div>
+                            </div>
+
                         </div>
 
                         <div class="col-sm-6">
@@ -142,5 +173,61 @@
         </div>
 
     </div>
+
+    <script>
+
+        var salary = document.getElementById('salary');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#salary').val(), 'Rp. ');
+            salary.value = formated;
+        });
+        salary.addEventListener('keyup', function (e) {
+            salary.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var positional_allowance = document.getElementById('positional_allowance');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#positional_allowance').val(), 'Rp. ');
+            positional_allowance.value = formated;
+        });
+        positional_allowance.addEventListener('keyup', function (e) {
+            positional_allowance.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var healthy_allowance = document.getElementById('healthy_allowance');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#healthy_allowance').val(), 'Rp. ');
+            healthy_allowance.value = formated;
+        });
+        healthy_allowance.addEventListener('keyup', function (e) {
+            healthy_allowance.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var other_allowance = document.getElementById('other_allowance');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#other_allowance').val(), 'Rp. ');
+            other_allowance.value = formated;
+        });
+        other_allowance.addEventListener('keyup', function (e) {
+            other_allowance.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        function formatRupiah(angka, prefix) {
+            var number_string = angka.replace(/[^,\d]/g, '').toString(),
+                    split = number_string.split(','),
+                    sisa = split[0].length % 3,
+                    rupiah = split[0].substr(0, sisa),
+                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+            if (ribuan) {
+                separator = sisa ? '.' : '';
+                rupiah += separator + ribuan.join('.');
+            }
+
+            rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+            return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        }
+
+    </script>
 
 </x-app-layout>

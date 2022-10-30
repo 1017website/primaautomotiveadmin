@@ -31,7 +31,10 @@ class MechanicController extends Controller {
         if ($request->file('image')) {
             $validateData['image'] = $request->file('image')->storeAs('mechanic-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }
-
+        $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
+        $validateData['positional_allowance'] = substr(str_replace('.', '', $request->positional_allowance), 3);
+        $validateData['healthy_allowance'] = substr(str_replace('.', '', $request->healthy_allowance), 3);
+        $validateData['other_allowance'] = substr(str_replace('.', '', $request->other_allowance), 3);
         $validateData['status'] = '1';
         $validateData['birth_date'] = (!empty($request->birth_date) ? date('Y-m-d', strtotime($request->birth_date)) : NULL);
 
@@ -69,6 +72,10 @@ class MechanicController extends Controller {
             $validateData['image'] = $request->file('image')->storeAs('mechanic-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }
 
+        $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
+        $validateData['positional_allowance'] = substr(str_replace('.', '', $request->positional_allowance), 3);
+        $validateData['healthy_allowance'] = substr(str_replace('.', '', $request->healthy_allowance), 3);
+        $validateData['other_allowance'] = substr(str_replace('.', '', $request->other_allowance), 3);
         $validateData['birth_date'] = (!empty($request->birth_date) ? date('Y-m-d', strtotime($request->birth_date)) : NULL);
 
         $mechanic->update($validateData);

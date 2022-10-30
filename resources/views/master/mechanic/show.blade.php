@@ -27,117 +27,161 @@
                 <h5 class="card-title">{{ __('Detail Employee') }}</h5>
                 <div class="border-top"></div>
 
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Image') }}</strong>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Image') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                @if(!empty($mechanic->image))
+                                <img src="{{ asset('storage/'.$mechanic->image) }}" class="img-fluid img-view">
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Id Card') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->id_card }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Name') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->name }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Position') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->position }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Birth Date') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ date('d-m-Y', strtotime($mechanic->birth_date)) }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Phone') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->phone }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Address') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->address }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Created By') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ isset($mechanic->userCreated) ? $mechanic->userCreated->name : '-' }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Updated By') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ isset($mechanic->userUpdated) ? $mechanic->userUpdated->name : '-' }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Created At') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->created_at }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Updated At') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->updated_at }}
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-sm-10">
-                        @if(!empty($mechanic->image))
-                        <img src="{{ asset('storage/'.$mechanic->image) }}" class="img-fluid img-view">
-                        @endif
+                    <div class="col-sm-6">
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Salary/Day') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ __('Rp. ') }}@price($mechanic->salary)
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Position Allowance') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ __('Rp. ') }}@price($mechanic->positional_allowance)
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Healthy Allowance') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ __('Rp. ') }}@price($mechanic->healthy_allowance)
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
+                                <strong>{{ __('Other Allowance') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ __('Rp. ') }}@price($mechanic->other_allowance)
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Id Card') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->id_card }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Name') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->name }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Position') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->position }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Birth Date') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ date('d-m-Y', strtotime($mechanic->birth_date)) }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Phone') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->phone }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Address') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->address }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Created By') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ isset($mechanic->userCreated) ? $mechanic->userCreated->name : '-' }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Updated By') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ isset($mechanic->userUpdated) ? $mechanic->userUpdated->name : '-' }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Created At') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->created_at }}
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-2">
-                        <strong>{{ __('Updated At') }}</strong>
-                    </div>
-                    <div class="col-sm-10">
-                        {{ $mechanic->updated_at }}
-                    </div>
-                </div>
-
 
             </div>
         </div>

@@ -95,8 +95,8 @@
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('HRM') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('Employee') }}</span></a></li>
-                        <li class="sidebar-item"><a href="/attendance/manual" class="sidebar-link"><i class="mdi mdi-account-check"></i><span class="hide-menu">{{ __('Attendance Manual') }}</span></a></li>
-                        <li class="sidebar-item"><a href="/attendance/permit" class="sidebar-link"><i class="mdi mdi-account-remove"></i><span class="hide-menu">{{ __('Attendance Permit') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/attendance" class="sidebar-link"><i class="mdi mdi-account-check"></i><span class="hide-menu">{{ __('Attendance') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/attendance-permit" class="sidebar-link"><i class="mdi mdi-account-remove"></i><span class="hide-menu">{{ __('Attendance Permit') }}</span></a></li>
                         <li class="sidebar-item"><a href="/payroll" class="sidebar-link"><i class="mdi mdi-cash-multiple"></i><span class="hide-menu">{{ __('Payroll') }}</span></a></li>
                         <li class="sidebar-item"><a href="/cash-advance" class="sidebar-link"><i class="mdi mdi-account-minus"></i><span class="hide-menu">{{ __('Cash Advance') }}</span></a></li>
                     </ul>
