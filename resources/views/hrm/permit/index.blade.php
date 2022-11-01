@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Hrm') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Attendance') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Attendance Permit') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -18,12 +18,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('attendance.create') }}">{{ __('Manual') }}</a>
+            <a class="btn btn-default" href="{{ route('attendance-permit.create') }}">{{ __('Add') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Attendance') }}</h5>
+                <h5 class="card-title">{{ __('Attendance Permit') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -35,27 +35,23 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table id="attendance" class="table table-striped table-bordered">
+                    <table id="attendance_permit" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ __('Employee') }}</th>
                                 <th>{{ __('Date') }}</th>
-                                <th>{{ __('Time') }}</th>
-                                <th>{{ __('Status') }}</th>
                                 <th>{{ __('Type') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($attendance as $row)
+                            @foreach ($attendancePermit as $row)
                             <tr>
                                 <td>{{ isset($row->employee) ? $row->employee->name : '-' }}</td>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
-                                <td>{{ $row->time }}</td>
-                                <td>{{ ucfirst($row->status) }}</td>
-                                <td>{{ ucfirst($row->type) }}</td>
+                                <td>{{ $row->type }}</td>
                                 <td class="action-button">
-                                    <form action="{{ route('attendance.destroy',$row->id) }}" method="POST">
+                                    <form action="{{ route('attendance-permit.destroy',$row->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
@@ -73,7 +69,7 @@
     </div>
 
     <script>
-        $('#attendance').DataTable();
+        $('#attendance_permit').DataTable();
     </script>
 
 

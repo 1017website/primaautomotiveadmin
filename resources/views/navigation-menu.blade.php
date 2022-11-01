@@ -98,7 +98,7 @@
                         <li class="sidebar-item"><a href="/attendance" class="sidebar-link"><i class="mdi mdi-account-check"></i><span class="hide-menu">{{ __('Attendance') }}</span></a></li>
                         <li class="sidebar-item"><a href="/attendance-permit" class="sidebar-link"><i class="mdi mdi-account-remove"></i><span class="hide-menu">{{ __('Attendance Permit') }}</span></a></li>
                         <li class="sidebar-item"><a href="/payroll" class="sidebar-link"><i class="mdi mdi-cash-multiple"></i><span class="hide-menu">{{ __('Payroll') }}</span></a></li>
-                        <li class="sidebar-item"><a href="/cash-advance" class="sidebar-link"><i class="mdi mdi-account-minus"></i><span class="hide-menu">{{ __('Cash Advance') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/employee-credit" class="sidebar-link"><i class="mdi mdi-account-minus"></i><span class="hide-menu">{{ __('Credit') }}</span></a></li>
                     </ul>
                 </li>
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>

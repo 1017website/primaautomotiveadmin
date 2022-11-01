@@ -32,7 +32,8 @@ use App\Http\Controllers\ReportStoreController;
 //store
 //hrm
 use App\Http\Controllers\AttendanceController;
-
+use App\Http\Controllers\AttendancePermitController;
+use App\Http\Controllers\EmployeeCreditController;
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
@@ -142,12 +143,19 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
 });
 //store
-//
+
 //hrm 
 Route::controller(AttendanceController::class)->group(function () {
 
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
+
+Route::resource('attendance-permit', AttendancePermitController::class)->middleware(['auth']);
+
+Route::controller(EmployeeCreditController::class)->group(function () {
+    Route::post('employee-credit/paid', 'paid')->name('employee-credit.paid')->middleware(['auth']);
+});
+Route::resource('employee-credit', EmployeeCreditController::class)->middleware(['auth']);
 //hrm 
 
 Route::get('generate', function () {
