@@ -113,7 +113,7 @@
                                             <td align='center'>{{ date('F Y', strtotime($row->date)) }}</td>
                                             <td align='center'>{{ __('Rp. ') }}@price($row->total)</td> 
                                             <td align='center'>{{ ucfirst($row->status) }}</td>
-                                            <td align='center'>{{ $row->status == 'paid' ? ($row->description) : '' }}</td>
+                                            <td align='center'>{{ $row->status == 'paid' ? $row->description.' - '. date('d-m-Y', strtotime($row->paid_date))  : '' }}</td>
                                             @if ($row->status == 'unpaid')
                                             <td align='center'><button type="button" onclick="paid({{ $row->id }})" class="btn btn-success"><i class="fas fa-check"></i></button></td>
                                             @endif

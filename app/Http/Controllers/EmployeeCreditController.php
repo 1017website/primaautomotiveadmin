@@ -108,7 +108,15 @@ class EmployeeCreditController extends Controller {
             $employeeCreditDetail->status = 'paid';
             $employeeCreditDetail->paid_date = date('Y-m-d H:i:s');
             $employeeCreditDetail->description = 'Paid Manual';
-            $employeeCreditDetail->save();
+            $saved = $employeeCreditDetail->save();
+            if ($saved) {
+                $employeeCreditCheck = EmployeeCreditDetail::where(['employee_credit_id' => $employeeCreditDetail->employee_credit_id, 'status' => 'unpaid'])->first();
+                if (!isset($employeeCreditCheck)) {
+                    $employeeCredit = EmployeeCredit::where(['id' => $employeeCreditDetail->employee_credit_id])->first();
+                    $employeeCredit->status = 'paid';
+                    $employeeCredit->save();
+                }
+            }
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
