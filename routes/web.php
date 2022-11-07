@@ -34,6 +34,7 @@ use App\Http\Controllers\ReportStoreController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AttendancePermitController;
 use App\Http\Controllers\EmployeeCreditController;
+use App\Http\Controllers\PayrollController;
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
@@ -156,6 +157,11 @@ Route::controller(EmployeeCreditController::class)->group(function () {
     Route::post('employee-credit/paid', 'paid')->name('employee-credit.paid')->middleware(['auth']);
 });
 Route::resource('employee-credit', EmployeeCreditController::class)->middleware(['auth']);
+
+Route::controller(PayrollController::class)->group(function () {
+    Route::post('payroll/getAttendance', 'getAttendance')->name('payroll.getAttendance')->middleware(['auth']);
+});
+Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 //hrm 
 
 Route::get('generate', function () {
