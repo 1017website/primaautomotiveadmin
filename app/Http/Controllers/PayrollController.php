@@ -26,6 +26,68 @@ class PayrollController extends Controller {
         return view('hrm.payroll.create', compact('employee'));
     }
 
+    public function store(Request $request) {
+        $success = true;
+        $message = "";
+
+        $validateData = $request->validate([
+            'start_date' => 'required',
+            'employee_id' => 'required',
+        ]);
+
+        try {
+            $validateData['start_date'] = date('Y-m-d', strtotime($request['start_date']));
+            $validateData['end_date'] = date('Y-m-d');
+            $validateData['month'] = $request['month'];
+            $validateData['year'] = date('Y');
+            $validateData['attendance'] = $request['attendance'];
+            $validateData['employee_salary'] = substr(str_replace('.', '', $request['employee_salary']), 3);
+            $validateData['positional_allowance'] = substr(str_replace('.', '', $request['positional_allowance']), 3);
+            $validateData['healty_allowance'] = substr(str_replace('.', '', $request['healthy_allowance']), 3);
+            $validateData['other_allowance'] = substr(str_replace('.', '', $request['other_allowance']), 3);
+            $validateData['bonus'] = substr(str_replace('.', '', $request['bonus']), 3);
+            $validateData['total_other'] = substr(str_replace('.', '', $request['total_other']), 3);
+            $validateData['penalty'] = substr(str_replace('.', '', $request['penalty']), 3);
+            $validateData['credit'] = substr(str_replace('.', '', $request['credit']), 3);
+            $validateData['total_salary'] = substr(str_replace('.', '', $request['total_salary']), 3);
+            $validateData['description_other'] = $request['description_other'];
+            $validateData['status'] = 'paid';
+            Payroll::create($validateData);
+
+            if ($validateData['credit'] > 0) {
+                $credit = EmployeeCreditDetail::
+                        where("employee_id", "=", $request['employee_id'])
+                        ->whereRaw("status = 'unpaid'")
+                        ->orderByRaw('date ASC')
+                        ->first();
+                if (isset($credit)) {
+                    $credit->status = 'paid';
+                    $credit->description = 'Payroll';
+                    $credit->paid_date = date('Y-m-d H:i:s');
+                    $saved = $credit->save();
+                    if ($saved) {
+                        $employeeCreditCheck = EmployeeCreditDetail::where(['employee_credit_id' => $credit->employee_credit_id, 'status' => 'unpaid'])->first();
+                        if (!isset($employeeCreditCheck)) {
+                            $employeeCredit = EmployeeCredit::where(['id' => $credit->employee_credit_id])->first();
+                            $employeeCredit->status = 'paid';
+                            $employeeCredit->save();
+                        }
+                    }
+                }
+            }
+        } catch (Exception $e) {
+            DB::rollback();
+            $success = false;
+            $message = $e->getMessage();
+        }
+
+        if (!$success) {
+            return Redirect::back()->withErrors(['msg' => $message]);
+        }
+
+        return redirect()->route('payroll.index')->with('success', 'Payroll added successfully.');
+    }
+
     public function getAttendance() {
         $request = array_merge($_POST, $_GET);
         $success = true;

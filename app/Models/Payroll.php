@@ -14,7 +14,7 @@ class Payroll extends Model {
         Userstamps;
 
     protected $fillable = [
-        'employee_id', 'month', 'start_date', 'end_date', 'attendance', 'employee_salaray',
+        'employee_id', 'month', 'start_date', 'end_date', 'attendance', 'employee_salary',
         'positional_allowance', 'healty_allowance', 'other_allowance', 'bonus', 'year',
         'description_other', 'total_other', 'penalty', 'credit', 'total_salary', 'status'
     ];
