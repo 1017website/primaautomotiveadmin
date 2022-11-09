@@ -11,21 +11,27 @@ class SettingController extends Controller {
 
     public function index() {
 
-        $setting = Setting::where('id', '1')->first();
+        $setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
 
         return view('setting.index', compact('setting'));
     }
 
     public function store(Request $request) {
         $validateData = $request->validate([
+            'code' => 'required|max:255',
+            'backend_url' => 'max:255',
+            'frontend_url' => 'max:255',
             'name' => 'required|max:255',
-            'phone' => 'required|max:255', 
+            'phone' => 'required|max:255',
             'address' => 'required|max:255',
             'email' => 'required|max:255',
         ]);
 
-        $setting = Setting::where('id', '1')->first();
-
+        $validateData['target_panel'] = str_replace(',', '.', $request->target_panel);
+        $validateData['target_revenue'] = substr(str_replace('.', '', $request->target_revenue), 3);
+        $validateData['bonus_panel'] = substr(str_replace('.', '', $request->bonus_panel), 3);
+        
+        $setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
         if ($setting) {
             $setting->update($validateData);
         } else {

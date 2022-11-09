@@ -14,7 +14,8 @@ class Setting extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name', 'address', 'email', 'phone'
+        'code', 'backend_url', 'frontend_url', 'name', 'address', 'email', 'phone',
+        'target_panel', 'target_revenue', 'bonus_panel'
     ];
 
     public function userCreated() {

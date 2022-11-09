@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\DB;
 class OrderController extends Controller {
 
     public function index() {
-        $order = Order::all();
+        $order = Order::orderBy('code', 'DESC')->get();
         return view('order.index', compact('order'));
     }
 
@@ -98,6 +98,8 @@ class OrderController extends Controller {
                     $orderDetail->service_price = $row->service_price;
                     $orderDetail->service_qty = $row->service_qty;
                     $orderDetail->service_total = $row->service_total;
+                    $service = Service::where('id', $row->service_id)->first();
+                    $orderDetail->panel = isset($service) ? $service->panel : 0;
                     $saved = $orderDetail->save();
                     if (!$saved) {
                         $success = false;

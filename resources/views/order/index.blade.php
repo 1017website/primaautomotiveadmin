@@ -74,7 +74,9 @@
     </div>
 
     <script>
-        $('#order').DataTable();
+        $('#order').DataTable({
+            order: [[0, 'desc']],
+        });
     </script>
 
 

@@ -275,7 +275,7 @@
                             <div class="form-group row">
                                 <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
                                 <div class="col-sm-10 input-group">
-                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
+                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ date('d-m-Y') }}" placeholder="dd/mm/yyyy" autocomplete="off" required="true">
                                     <div class="input-group-append">
                                         <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                     </div>

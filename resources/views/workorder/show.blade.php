@@ -141,6 +141,10 @@
                                                     <th scope="col">Price</th>
                                                 </tr>
                                             </thead>
+                                            <?php
+                                            $grandQty = 0;
+                                            $grandTotal = 0;
+                                            ?>
                                             <tbody class="customtable">
                                                 @if (count($workorder->detail) > 0)
                                                 @foreach ($workorder->detail as $row)
@@ -148,12 +152,23 @@
                                                     <td align='center'>{{ $row->product_name }}</td>
                                                     <td align='center'>{{ number_format($row->qty, 2, ',', '.') }}</td>
                                                     <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td>
+                                                    <?php
+                                                    $grandQty += $row->qty;
+                                                    $grandTotal += $row->product_price;
+                                                    ?>
                                                 </tr>
                                                 @endforeach
                                                 @else
                                             <td colspan="3" class="text-muted text-center">List empty</td>
                                             @endif
                                             </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td align='center'><b>Grand Total</b></td>
+                                                    <td align='center'>{{ number_format($grandQty, 2, ',', '.') }}</td>
+                                                    <td align='center'>{{ __('Rp. ') }}@price($grandTotal)</td>
+                                                </tr>
+                                            </tfoot>
                                         </table>
                                     </div>
                                 </div>

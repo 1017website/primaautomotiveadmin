@@ -93,7 +93,7 @@ class WorkorderController extends Controller {
                 $temp->product_id = $stock->product_id;
                 $temp->type_product_id = $stock->type_product_id;
                 $temp->product_name = $stock->product->name;
-                $temp->product_price = $stock->product->hpp;
+                $temp->product_price = $stock->product->price;
                 $temp->qty = $request['qty'];
                 $temp->save();
             }
@@ -173,16 +173,17 @@ class WorkorderController extends Controller {
                     if (!$saved) {
                         $success = false;
                         $message = 'Failed save inventory product history';
-                    }
-
-                    //stock
-                    $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
-                    if (isset($inventory)) {
-                        $inventory->qty = $inventory->qty - $row->qty;
-                        $saved = $inventory->save();
-                        if (!$saved) {
-                            $success = false;
-                            $message = 'Failed save inventory product';
+                    } else {
+                        //stock
+                        $inventory = InventoryProduct::where(['product_id' => $row->product_id, 'price' => $row->product_price])->first();
+                        if (isset($inventory)) {
+                            $total = $inventory->qty - $row->qty;
+                            $inventory->qty = $total;
+                            $saved = $inventory->save();
+                            if (!$saved) {
+                                $success = false;
+                                $message = 'Failed save inventory product';
+                            }
                         }
                     }
                 }
