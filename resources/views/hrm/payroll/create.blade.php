@@ -236,6 +236,10 @@
                         var formated = formatRupiah($('#credit').val(), 'Rp. ');
                         $('#credit').val(formated);
 
+                        $('#bonus').val(resp.bonus);
+                        var formated = formatRupiah($('#bonus').val(), 'Rp. ');
+                        $('#bonus').val(formated);
+
                         totalSalary();
                     } else {
                         Command: toastr["error"](res.message);

@@ -9,6 +9,7 @@ use App\Models\AttendancePermit;
 use App\Models\PengaturanWorkday;
 use App\Models\EmployeeCredit;
 use App\Models\EmployeeCreditDetail;
+use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
@@ -144,6 +145,40 @@ class PayrollController extends Controller {
                 $response['credit'] = $credit->total;
             }
             //credit
+            //bonus
+            $setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
+            if ($setting->target_revenue > 0 && $setting->target_panel > 0) {
+                $revenue = DB::table('invoice')
+                        ->selectRaw("
+				concat(year(date),'-',lpad(month(date),2,0)) as month,
+					sum(dp) as revenue
+			")
+                        ->whereRaw("date > (LAST_DAY(NOW()) - INTERVAL 1 MONTH) and date <= (LAST_DAY(NOW()))")
+                        ->groupBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
+                        ->orderBy(DB::raw("concat(year(date),lpad(month(date),2,0))"))
+                        ->get();
+
+                foreach ($revenue as $v) {
+                    $revenue = $v->revenue;
+                }
+                if ($revenue > $setting->target_revenue) {
+                    $totalPanel = DB::table('order_detail')
+                            ->selectRaw('workorder.mechanic_id, sum(order_detail.panel) AS total_panel ')
+                            ->join('order', 'order.id', '=', 'order_detail.order_id')
+                            ->join('workorder', 'workorder.order_id', '=', 'order_detail.order_id')
+                            ->where('workorder.mechanic_id', $request['employee_id'])
+                            ->groupBy('workorder.mechanic_id')
+                            ->first();
+                    if(isset($totalPanel)){
+                        if($totalPanel->total_panel > $setting->target_panel){
+                            $totalPanelBonus = $totalPanel->total_panel - $setting->target_panel;
+                            $totalPanelRp = $totalPanelBonus * $setting->bonus_panel;
+                            $response['bonus'] = $totalPanelRp;
+                        }
+                    }
+                }
+            }
+            //bonus
         }
 
         return json_encode(['success' => $success, 'message' => $message, 'response' => $response]);
