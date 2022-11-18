@@ -1,40 +1,44 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-//workshop
+//general
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
-use App\Http\Controllers\TypeProductController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\MechanicController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\CarController;
-use App\Http\Controllers\CarBrandController;
-use App\Http\Controllers\CarTypeController;
-use App\Http\Controllers\StockController;
-use App\Http\Controllers\OrderController;
-use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\WorkorderController;
-use App\Http\Controllers\ExpenseSpendingController;
-use App\Http\Controllers\ExpenseInvestmentController;
-use App\Http\Controllers\ReportController;
+//general
+//workshop
+use App\Http\Controllers\Workshop\TypeProductController;
+use App\Http\Controllers\Workshop\ProductController;
+use App\Http\Controllers\Workshop\ServiceController;
+use App\Http\Controllers\Workshop\TypeServiceController;
+use App\Http\Controllers\Workshop\MechanicController;
+use App\Http\Controllers\Workshop\CustomerController;
+use App\Http\Controllers\Workshop\CarController;
+use App\Http\Controllers\Workshop\CarBrandController;
+use App\Http\Controllers\Workshop\CarTypeController;
+use App\Http\Controllers\Workshop\ColorController;
+use App\Http\Controllers\Workshop\StockController;
+use App\Http\Controllers\Workshop\OrderController;
+use App\Http\Controllers\Workshop\InvoiceController;
+use App\Http\Controllers\Workshop\WorkorderController;
+use App\Http\Controllers\Workshop\ExpenseSpendingController;
+use App\Http\Controllers\Workshop\ExpenseInvestmentController;
+use App\Http\Controllers\Workshop\ReportController;
 //workshop
 //store
-use App\Http\Controllers\StoreTypeProductController;
-use App\Http\Controllers\StoreProductController;
-use App\Http\Controllers\StoreStockController;
-use App\Http\Controllers\StoreChasierController;
-use App\Http\Controllers\StoreCustomerController;
-use App\Http\Controllers\StoreSpendingController;
-use App\Http\Controllers\StoreInvestmentController;
-use App\Http\Controllers\ReportStoreController;
+use App\Http\Controllers\Store\StoreTypeProductController;
+use App\Http\Controllers\Store\StoreProductController;
+use App\Http\Controllers\Store\StoreStockController;
+use App\Http\Controllers\Store\StoreChasierController;
+use App\Http\Controllers\Store\StoreCustomerController;
+use App\Http\Controllers\Store\StoreSpendingController;
+use App\Http\Controllers\Store\StoreInvestmentController;
+use App\Http\Controllers\Store\ReportStoreController;
 //store
 //hrm
-use App\Http\Controllers\AttendanceController;
-use App\Http\Controllers\AttendancePermitController;
-use App\Http\Controllers\EmployeeCreditController;
-use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\Hrm\AttendanceController;
+use App\Http\Controllers\Hrm\AttendancePermitController;
+use App\Http\Controllers\Hrm\EmployeeCreditController;
+use App\Http\Controllers\Hrm\PayrollController;
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
@@ -44,12 +48,14 @@ Route::resource('setting', SettingController::class)->middleware(['auth']);
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);
 Route::resource('product', ProductController::class)->middleware(['auth']);
+Route::resource('type-service', TypeServiceController::class)->middleware(['auth']);
 Route::resource('service', ServiceController::class)->middleware(['auth']);
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 Route::resource('customer', CustomerController::class)->middleware(['auth']);
 Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
 Route::resource('car-type', CarTypeController::class)->middleware(['auth']);
+Route::resource('color', ColorController::class)->middleware(['auth']);
 Route::controller(StockController::class)->group(function () {
     Route::get('stock/detailItem', 'detailItem')->name('detailItem')->middleware(['auth']);
     Route::post('stock/addItem', 'addItem')->name('addItem')->middleware(['auth']);
