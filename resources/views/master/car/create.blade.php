@@ -69,6 +69,45 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="year" class="col-sm-2 text-left control-label col-form-label">{{ __('Year') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="year" name="year" value="{{ old('year') }}" placeholder="Year Car" required="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group row increment" >
+                        <label for="images" class="col-sm-2 text-left control-label col-form-label">{{ __('Images') }}</label>
+                        <div class="col-sm-9 input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" name="images[]">
+                                <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose Image...') }}</label>
+                            </div>
+
+                            <div class="input-group-append" style="margin-left: 5px;">
+                                <button class="btn btn-default add-images" type="button" style="font-size:1.5rem;border-radius: 0.5rem;"><i class="mdi mdi-plus"></i></button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="clone hide">
+                        <div class="form-group row control-group">
+                            <label for="images" class="col-sm-2 text-left control-label col-form-label"></label>
+                            <div class="col-sm-9 input-group">
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" name="images[]">
+                                    <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose Image...') }}</label>
+                                </div>
+
+                                <div class="input-group-append" style="margin-left: 5px;">
+                                    <button class="btn btn-danger remove-images" type="button" style="font-size:1.5rem;border-radius: 0.5rem;"><i class="mdi mdi-delete"></i></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -77,5 +116,22 @@
         </div>
 
     </div>
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $(".add-images").click(function () {
+                var html = $(".clone").html();
+                $(".increment").after(html);
+            });
+
+            $("body").on("click", ".remove-images", function () {
+                $(this).parents(".control-group").remove();
+            });
+
+        });
+
+    </script>
 
 </x-app-layout>

@@ -24,6 +24,7 @@ class CarController extends Controller {
         $request->validate([
             'car_brand_id' => 'required',
             'car_type_id' => 'required',
+            'year' => 'required',
             'name' => 'required|max:255|unique:cars,name,NULL,id,deleted_at,NULL',
         ]);
 
@@ -47,6 +48,7 @@ class CarController extends Controller {
         $request->validate([
             'car_brand_id' => 'required',
             'car_type_id' => 'required',
+            'year' => 'required',
             'name' => 'required|max:255|unique:cars,name,' . $car->id . ',id,deleted_at,NULL',
         ]);
 

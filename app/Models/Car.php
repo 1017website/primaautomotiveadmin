@@ -14,7 +14,8 @@ class Car extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name', 'car_brand_id', 'car_type_id'
+        'name', 'car_brand_id', 'car_type_id', 'year', 'image_1', 'image_2',
+        'image_3', 'image_4', 'image_5'
     ];
 
     public function brand() {

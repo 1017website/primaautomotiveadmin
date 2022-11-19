@@ -37,7 +37,7 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('car.update', $car->id) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('car.update', $car->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -70,6 +70,22 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="year" class="col-sm-2 text-left control-label col-form-label">{{ __('Year') }}</label>
+                        <div class="col-sm-10">
+                            <input value="{{ $car->year }}" type="text" class="form-control" id="year" name="year" placeholder="Year Car" required="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="images" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
+                        <div class="col-sm-10">
+                            <input required type="file" class="form-control" name="images[]" placeholder="images" multiple>
+                        </div>
+                    </div>
+
+
+
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -78,10 +94,12 @@
         </div>
 
     </div>
-    
+
     <script>
         $('#car_type_id').val('{{ $car->car_type_id}}').change();
         $('#car_brand_id').val('{{ $car->car_brand_id}}').change();
+
+
     </script>
 
 </x-app-layout>
