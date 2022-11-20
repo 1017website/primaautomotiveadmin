@@ -215,6 +215,7 @@
                                             <th scope="col">Service</th>
                                             <th scope="col">Qty</th>
                                             <th scope="col">Cost Service</th>
+                                            <th scope="col">Disc</th>
                                             <th scope="col">Total</th>
                                         </tr>
                                     </thead>
@@ -228,6 +229,7 @@
                                             <td align='center'>{{ $row->service_name }}</td>
                                             <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td> 
+                                            <td align='center'>{{ __('Rp. ') }}@price($row->service_disc)</td> 
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td>
                                             <?php 
                                                 $grandTotal += $row->service_total;
@@ -240,7 +242,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td align='center' colspan="3"><b>Grand Total</b></td>
+                                            <td align='center' colspan="4"><b>Grand Total</b></td>
                                             <td align='center'>{{ __('Rp. ') }}@price($grandTotal)</td>
                                         </tr>
                                     </tfoot>

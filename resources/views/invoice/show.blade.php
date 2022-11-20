@@ -200,6 +200,7 @@
                                                 <th class="text-left" style="width:40%">{{ __('Service') }}</th>
                                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
+                                                <th class="text-left" style="width:10%">{{ __('Disc') }}</th>                                                
                                                 <th class="text-right" style="width:15%">{{ __('Total Price') }}</th>
                                             </tr>
                                         </thead>
@@ -210,6 +211,7 @@
                                                 <td class="text-left">{{ $value->service_name }}</td>                                               
                                                 <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
                                                 <td class="text-left">{{ $value->service_qty }}</td>
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
                                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                                             </tr>
                                             @endforeach
@@ -222,10 +224,10 @@
                                 <div class="row">
                                     <div class="col-sm-6 margintop">
                                         <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
-                                        
+
                                         <a class="btn btn-primary" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
                                         <a class="btn btn-primary" href="{{ route('invoice.download', $invoice->id) }}" target="_blank"><i class="fa fa-download"></i>{{ __('Download PDF') }}</a>
-                                        
+
                                     </div>
                                     <div class="col-sm-6 text-right pull-right invoice-total">
 

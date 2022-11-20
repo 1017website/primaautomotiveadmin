@@ -215,6 +215,13 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="service_disc" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="service_disc" name="service_disc" placeholder="">
+                                </div>
+                            </div>
+
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -259,18 +266,20 @@
                     data: {
                         'service_id': $('#service_id').val(),
                         'service_qty': $('#service_qty').val(),
+                        'service_disc': $('#service_disc').val()
                     },
                     success: function (res) {
                         if (res.success) {
                             $('#Modal2').modal('toggle');
                             get_detail();
+                            $('#service_disc').val('');
                         } else {
                             popup(res.message, 'error');
                         }
                     }
                 });
             });
-            
+
             $("#service_id").trigger("change");
 
         });
@@ -334,6 +343,16 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
+
+        var harga = document.getElementById('service_disc');
+        $(document).ready(function () {
+            console.log(harga.value);
+            var formated = formatRupiah($('#service_disc').val(), 'Rp. ');
+            harga.value = formated;
+        });
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
     </script>
 
 </x-app-layout>

@@ -97,6 +97,7 @@ class OrderController extends Controller {
                     $orderDetail->service_name = $row->service_name;
                     $orderDetail->service_price = $row->service_price;
                     $orderDetail->service_qty = $row->service_qty;
+                    $orderDetail->service_disc = $row->service_disc;
                     $orderDetail->service_total = $row->service_total;
                     $service = Service::where('id', $row->service_id)->first();
                     $orderDetail->panel = isset($service) ? $service->panel : 0;
@@ -167,7 +168,12 @@ class OrderController extends Controller {
                 $temp->service_name = $service->name;
                 $temp->service_price = $service->estimated_costs;
                 $temp->service_qty = str_replace('.', '', $request['service_qty']);
-                $temp->service_total = $service->estimated_costs * $request['service_qty'];
+                if (strlen($request['service_disc']) > 0) {
+                    $temp->service_disc = substr(str_replace('.', '', $request['service_disc']), 3);
+                } else {
+                    $temp->service_disc = 0;
+                }
+                $temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
                 $temp->save();
             } else {
                 $success = false;

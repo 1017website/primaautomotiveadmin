@@ -202,9 +202,10 @@
                                         <thead>
                                             <tr>
                                                 <th class="text-center" style="width:5%">#</th>
-                                                <th class="text-left" style="width:40%">{{ __('Product') }}</th>
+                                                <th class="text-left" style="width:30%">{{ __('Product') }}</th>
                                                 <th class="text-left" style="width:20%">{{ __('Price') }}</th>
                                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
+                                                <th class="text-left" style="width:20%">{{ __('Disc') }}</th>                                                
                                                 <th class="text-right" style="width:15%">{{ __('Total') }}</th>
                                             </tr>
                                         </thead>
@@ -215,7 +216,8 @@
                                                 <td class="text-left">{{ $value->product_name }}</td>                                               
                                                 <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
                                                 <td class="text-left">{{ $value->qty }}</td>
-                                                <td class="text-right">{{ __('Rp. ') }}@price($value->product_price * $value->qty)</td>
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
+                                                <td class="text-right">{{ __('Rp. ') }}@price(($value->product_price * $value->qty) - $value->disc)</td>
                                             </tr>
                                             @endforeach
                                             <tr class="last-row"></tr>

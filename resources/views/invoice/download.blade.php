@@ -184,9 +184,10 @@
                         <thead>
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
-                                <th class="text-left" style="width:35%">{{ __('Service') }}</th>
+                                <th class="text-left" style="width:25%">{{ __('Service') }}</th>
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
+                                <th class="text-left" style="width:20%">{{ __('Disc') }}</th>                                                
                                 <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
                         </thead>
@@ -197,6 +198,7 @@
                                 <td class="text-left">{{ $value->service_name }}</td>                                               
                                 <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
                                 <td class="text-left">{{ $value->service_qty }}</td>
+                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
                             @endforeach

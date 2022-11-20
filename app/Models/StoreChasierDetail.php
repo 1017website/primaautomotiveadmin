@@ -13,7 +13,8 @@ class StoreChasierDetail extends Model {
 
     protected $table = 'store_chasier_detail';
     protected $fillable = [
-        'workorder_id', 'stock_id', 'type_product_id' ,'product_id', 'product_name', 'product_price', 'qty'
+        'workorder_id', 'stock_id', 'type_product_id' ,'product_id', 
+        'product_name', 'product_price', 'qty', 'disc'
     ];
 
     public function userCreated() {

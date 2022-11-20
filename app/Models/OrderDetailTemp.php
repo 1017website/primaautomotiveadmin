@@ -14,7 +14,7 @@ class OrderDetailTemp extends Model {
     protected $table = 'order_detail_temp';
     protected $fillable = [
         'user_id', 'service_id', 'service_name', 'service_price', 'service_qty',
-        'service_total'
+        'service_total', 'service_disc'
     ];
 
     public function userCreated() {

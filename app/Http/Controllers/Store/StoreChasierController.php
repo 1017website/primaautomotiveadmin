@@ -50,7 +50,7 @@ class StoreChasierController extends Controller {
         }
         $validateData['total'] = 0;
         foreach ($temp as $row) {
-            $validateData['total'] += ($row->qty * $row->product_price);
+            $validateData['total'] += ($row->qty * $row->product_price) - $row->disc;
         }
         if ($request->dp < $validateData['total']) {
             $success = false;
@@ -97,6 +97,7 @@ class StoreChasierController extends Controller {
                     $orderDetail->product_name = $row->product_name;
                     $orderDetail->product_price = $row->product_price;
                     $orderDetail->qty = $row->qty;
+                    $orderDetail->disc = $row->disc;
                     $saved = $orderDetail->save();
                     if (!$saved) {
                         $success = false;
@@ -364,6 +365,11 @@ class StoreChasierController extends Controller {
                             'product_price' => substr(str_replace('.', '', $request['price']), 3)
                         ])->first();
                 if (isset($temp)) {
+                    if (strlen($request['disc']) > 0) {
+                        $temp->disc = substr(str_replace('.', '', $request['disc']), 3);
+                    } else {
+                        $temp->disc = 0;
+                    }
                     $temp->qty = $temp->qty + str_replace(',', '.', $request['qty']);
                     if ($stock->qty < $temp->qty) {
                         $success = false;
@@ -382,6 +388,11 @@ class StoreChasierController extends Controller {
                     $temp->product_name = $product->name;
                     $temp->qty = str_replace(',', '.', $request['qty']);
                     $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
+                    if (strlen($request['disc']) > 0) {
+                        $temp->disc = substr(str_replace('.', '', $request['disc']), 3);
+                    } else {
+                        $temp->disc = 0;
+                    }
                     $temp->save();
                 }
             }

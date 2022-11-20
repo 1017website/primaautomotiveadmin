@@ -186,6 +186,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="disc" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="disc" name="disc" placeholder="">
+                        </div>
+                    </div>
+
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -230,12 +237,13 @@
                         'stock_id': $('#product_id').val(),
                         'qty': $('#qty').val(),
                         'price': $('#price').val(),
+                        'disc': $('#disc').val()
                     },
                     success: function (res) {
                         if (res.success) {
                             $('#Modal2').modal('toggle');
                             get_detail();
-                        }else{
+                        } else {
                             Command: toastr["error"](res.message)
                         }
                     }
@@ -379,8 +387,25 @@
                 $('#barcode').val('');
                 $('#barcode').focus();
             }
-
         })
+
+        var harga = document.getElementById('disc');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#disc').val(), 'Rp. ');
+            harga.value = formated;
+        });
+        harga.addEventListener('keyup', function (e) {
+            harga.value = formatRupiah(this.value, 'Rp. ');
+        });
+
+        var harga2 = document.getElementById('dp');
+        $(document).ready(function () {
+            var formated = formatRupiah($('#dp').val(), 'Rp. ');
+            harga2.value = formated;
+        });
+        harga2.addEventListener('keyup', function (e) {
+            harga2.value = formatRupiah(this.value, 'Rp. ');
+        });
     </script>
 
 </x-app-layout>
