@@ -14,8 +14,12 @@ class Service extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name', 'estimated_costs', 'panel'
+        'name', 'estimated_costs', 'panel', 'type_service_id'
     ];
+
+    public function typeService() {
+        return $this->hasOne(TypeService::class, 'id', 'type_service_id');
+    }
 
     public function userCreated() {
         return $this->hasOne(User::class, 'id', 'created_by');

@@ -38,6 +38,7 @@
                     <table id="service" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>{{ __('Type Service') }}</th>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Estimated Costs') }}</th>
                                 <th>{{ __('Panel') }}</th>
@@ -51,6 +52,7 @@
                         <tbody>
                             @foreach ($service as $row)
                             <tr>
+                                <td>{{ isset($row->typeService) ? $row->typeService->name : 'Additional' }}</td>
                                 <td>{{ $row->name }}</td>
                                 <td align="right" data-order="{{ $row->estimated_costs }}">{{ __('Rp. ') }}@price($row->estimated_costs)</td>
                                 <td align="right" data-order="{{ $row->panel }}">@price($row->panel)</td>

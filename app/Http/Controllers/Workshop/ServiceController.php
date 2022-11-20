@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Workshop;
 
 use App\Models\Service;
+use App\Models\TypeService;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller {
@@ -13,12 +14,15 @@ class ServiceController extends Controller {
     }
 
     public function create() {
-        return view('master.service.create');
+        $typeService = TypeService::all();
+        return view('master.service.create', compact('typeService'));
     }
 
     public function store(Request $request) {
         $validateData = $request->validate([
-            'name' => 'required|max:255|unique:services,name,NULL,id,deleted_at,NULL',
+            //'name' => 'required|max:255|unique:services,name,NULL,id,deleted_at,NULL',
+            'name' => 'required|max:255',
+            'type_service_id' => ''
         ]);
 
         $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);
@@ -35,12 +39,15 @@ class ServiceController extends Controller {
     }
 
     public function edit(Service $service) {
-        return view('master.service.edit', compact('service'));
+        $typeService = TypeService::all();
+        return view('master.service.edit', compact('service', 'typeService'));
     }
 
     public function update(Request $request, Service $service) {
         $validateData = $request->validate([
-            'name' => 'required|max:255|unique:services,name,' . $service->id . ',id,deleted_at,NULL',
+            //'name' => 'required|max:255|unique:services,name,' . $service->id . ',id,deleted_at,NULL',
+            'name' => 'required|max:255',
+            'type_service_id' => ''
         ]);
 
         $validateData['estimated_costs'] = substr(str_replace('.', '', $request->estimated_costs), 3);

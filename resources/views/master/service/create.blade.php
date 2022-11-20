@@ -41,6 +41,18 @@
                     @csrf
 
                     <div class="form-group row">
+                        <label for="type_service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type Service') }}</label>
+                        <div class="col-sm-10">
+                            <select class="select2 form-control custom-select" id="type_service_id" name="type_service_id" style="width: 100%;">
+                                <option value="">Additional</option>
+                                @foreach($typeService as $row)                                
+                                <option value="{{$row->id}}">{{$row->name}}</option>    
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Name Service" required="true">
