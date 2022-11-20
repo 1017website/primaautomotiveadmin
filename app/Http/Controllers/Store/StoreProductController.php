@@ -118,15 +118,19 @@ class StoreProductController extends Controller {
         ]);
 
         if ($request->file('image') && request('image') != '') {
-            if (Storage::exists($storeProduct->image)) {
-                Storage::delete($storeProduct->image);
+            if (!empty($storeProduct->image)) {
+                if (Storage::exists($storeProduct->image)) {
+                    Storage::delete($storeProduct->image);
+                }
             }
             $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }
 
         if ($request->file('document') && request('document') != '') {
-            if (Storage::exists($storeProduct->document)) {
-                Storage::delete($storeProduct->document);
+            if (!empty($storeProduct->document)) {
+                if (Storage::exists($storeProduct->document)) {
+                    Storage::delete($storeProduct->document);
+                }
             }
             $validateData['document'] = $request->file('document')->storeAs('product-files', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }

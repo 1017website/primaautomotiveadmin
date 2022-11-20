@@ -37,6 +37,16 @@
                 </div>
                 @endif
 
+
+                <div class="form-group row">
+                    <label for="images" class="col-sm-2 control-label">Images</label>
+                    <div class="col-sm-10">
+                        <form method="post" action="{{url('/car/uploadImages')}}" enctype="multipart/form-data" class="dropzone" id="dropzoneImages">
+                            {{ csrf_field() }}
+                        </form>   
+                    </div>
+                </div>
+
                 <form class="form-horizontal" action="{{ route('car.store') }}" method="POST">
                     @csrf
 
@@ -76,38 +86,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group row increment" >
-                        <label for="images" class="col-sm-2 text-left control-label col-form-label">{{ __('Images') }}</label>
-                        <div class="col-sm-9 input-group">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input" name="images[]">
-                                <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose Image...') }}</label>
-                            </div>
-
-                            <div class="input-group-append" style="margin-left: 5px;">
-                                <button class="btn btn-default add-images" type="button" style="font-size:1.5rem;border-radius: 0.5rem;"><i class="mdi mdi-plus"></i></button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="clone hide">
-                        <div class="form-group row control-group">
-                            <label for="images" class="col-sm-2 text-left control-label col-form-label"></label>
-                            <div class="col-sm-9 input-group">
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" name="images[]">
-                                    <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose Image...') }}</label>
-                                </div>
-
-                                <div class="input-group-append" style="margin-left: 5px;">
-                                    <button class="btn btn-danger remove-images" type="button" style="font-size:1.5rem;border-radius: 0.5rem;"><i class="mdi mdi-delete"></i></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -119,18 +97,80 @@
 
     <script type="text/javascript">
 
-        $(document).ready(function () {
+        //process upload
+        Dropzone.options.dropzoneImages = {
+            thumbnailWidth: null,
+            thumbnailHeight: null,
+            uploadMultiple: true,
+            maxFilesize: 1,
+            maxFiles: 5,
+            parallelUploads: 1,
+            renameFile: function (file) {
+                var dt = new Date();
+                var time = dt.getTime();
+                let newName = time + '_' + file.name;
+                file.newName = newName;
+                return newName;
+            },
+            acceptedFiles: ".jpeg,.jpg,.png",
+            addRemoveLinks: true,
+            timeout: 50000,
+            init: function () {
+                var existingFiles = <?php echo json_encode($carImages); ?>;
+                myDropzone = this;
+                $.each(existingFiles, function (key, value) {
+                    var mockFile = {
+                        name: value.image,
+                        size: value.size,
+                        status: Dropzone.ADDED,
+                        url: value.image_url,
+                    };
+                    myDropzone.emit("addedfile", mockFile);
+                    myDropzone.emit("thumbnail", mockFile, value.image_url);
+                    myDropzone.emit("complete", mockFile);
+                    myDropzone.files.push(mockFile);
+                });
 
-            $(".add-images").click(function () {
-                var html = $(".clone").html();
-                $(".increment").after(html);
-            });
-
-            $("body").on("click", ".remove-images", function () {
-                $(this).parents(".control-group").remove();
-            });
-
-        });
+                this.on("sending", function (file, xhr, formData) {
+                    formData.append("filesize", file.size);
+                });
+            },
+            removedfile: function (file)
+            {
+                if (file.newName) {
+                    var name = file.newName;
+                } else {
+                    var name = file.name;
+                }
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    type: 'POST',
+                    url: '{{ url("car/deleteImages") }}',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        filename: name
+                    },
+                    success: function (data) {
+                        Command: toastr["success"]("File has been successfully removed")
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }});
+                var fileRef;
+                return (fileRef = file.previewElement) != null ?
+                        fileRef.parentNode.removeChild(file.previewElement) : void 0;
+            },
+            success: function (file, response)
+            {
+                Command: toastr["success"]("File has been successfully added")
+            },
+            error: function (file, response)
+            {
+                Command: toastr["error"](response)
+            }
+        };
 
     </script>
 

@@ -41,6 +41,7 @@
                                 <th>{{ __('Type') }}</th>
                                 <th>{{ __('Brand') }}</th>
                                 <th>{{ __('Name') }}</th>
+                                <th>{{ __('Year') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -54,6 +55,7 @@
                                 <td>{{ $row->type->name }}</td>
                                 <td>{{ $row->brand->name }}</td>
                                 <td>{{ $row->name }}</td>
+                                <td>{{ $row->year }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>

@@ -11,6 +11,7 @@
         <link href="{{asset('css/style.min.css')}}" rel="stylesheet">
         <link href="{{asset('css/custom.css')}}" rel="stylesheet">
         <link href="{{asset('css/toastr.min.css')}}" rel="stylesheet">
+        <link href="{{asset('css/dropzone.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/datatables.net-bs4/css/dataTables.bootstrap4.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/select2/dist/css/select2.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
@@ -43,6 +44,7 @@
         <script src="{{asset('plugins/libs/notification/notifications.js')}}"></script>
         <script src="{{asset('js/custom.min.js')}}"></script>
         <script src="{{asset('js/toastr.min.js')}}"></script>
+        <script src="{{asset('js/dropzone.js')}}"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
         @livewireScripts       
     </head>

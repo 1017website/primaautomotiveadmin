@@ -54,8 +54,10 @@ class ProductController extends Controller {
         ]);
 
         if ($request->file('image') && request('image') != '') {
-            if (Storage::exists($product->image)) {
-                Storage::delete($product->image);
+            if (!empty($product->image)) {
+                if (Storage::exists($product->image)) {
+                    Storage::delete($product->image);
+                }
             }
             $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
         }

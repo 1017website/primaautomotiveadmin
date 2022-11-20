@@ -37,6 +37,15 @@
                 </div>
                 @endif
 
+                <div class="form-group row">
+                    <label for="images" class="col-sm-2 control-label">Images</label>
+                    <div class="col-sm-10">
+                        <form method="post" action="{{url('/car/uploadImages')}}" enctype="multipart/form-data" class="dropzone" id="dropzoneImages">
+                            {{ csrf_field() }}
+                        </form>   
+                    </div>
+                </div>
+
                 <form class="form-horizontal" action="{{ route('car.update', $car->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
@@ -77,15 +86,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group row">
-                        <label for="images" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
-                        <div class="col-sm-10">
-                            <input required type="file" class="form-control" name="images[]" placeholder="images" multiple>
-                        </div>
-                    </div>
-
-
-
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -99,7 +99,80 @@
         $('#car_type_id').val('{{ $car->car_type_id}}').change();
         $('#car_brand_id').val('{{ $car->car_brand_id}}').change();
 
+        //process upload
+        Dropzone.options.dropzoneImages = {
+            thumbnailWidth: null,
+            thumbnailHeight: null,
+            uploadMultiple: true,
+            maxFilesize: 1,
+            maxFiles: 5,
+            parallelUploads: 1,
+            renameFile: function (file) {
+                var dt = new Date();
+                var time = dt.getTime();
+                let newName = time + '_' + file.name;
+                file.newName = newName;
+                return newName;
+            },
+            acceptedFiles: ".jpeg,.jpg,.png",
+            addRemoveLinks: true,
+            timeout: 50000,
+            init: function () {
+                var existingFiles = <?php echo json_encode($carImages); ?>;
+                myDropzone = this;
+                $.each(existingFiles, function (key, value) {
+                    var mockFile = {
+                        name: value.image,
+                        size: value.size,
+                        status: Dropzone.ADDED,
+                        url: value.image_url,
+                    };
+                    myDropzone.emit("addedfile", mockFile);
+                    myDropzone.emit("thumbnail", mockFile, value.image_url);
+                    myDropzone.emit("complete", mockFile);
+                    myDropzone.files.push(mockFile);
+                });
 
+                this.on("sending", function (file, xhr, formData) {
+                    formData.append("filesize", file.size);
+                });
+            },
+            removedfile: function (file)
+            {
+                if (file.newName) {
+                    var name = file.newName;
+                } else {
+                    var name = file.name;
+                }
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                    },
+                    type: 'POST',
+                    url: '{{ url("car/deleteImages") }}',
+                    data: {
+                        _token: "{{ csrf_token() }}",
+                        filename: name
+                    },
+                    success: function (data) {
+                        Command: toastr["success"]("File has been successfully removed")
+                    },
+                    error: function (e) {
+                        console.log(e);
+                    }});
+                var fileRef;
+                return (fileRef = file.previewElement) != null ?
+                        fileRef.parentNode.removeChild(file.previewElement) : void 0;
+            },
+            success: function (file, response)
+            {
+                Command: toastr["success"]("File has been successfully added")
+            },
+            error: function (file, response)
+            {
+                Command: toastr["error"](response)
+            }
+        };
     </script>
 
 </x-app-layout>

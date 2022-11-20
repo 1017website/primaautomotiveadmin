@@ -52,6 +52,10 @@ Route::resource('type-service', TypeServiceController::class)->middleware(['auth
 Route::resource('service', ServiceController::class)->middleware(['auth']);
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 Route::resource('customer', CustomerController::class)->middleware(['auth']);
+Route::controller(CarController::class)->group(function () {
+    Route::post('car/uploadImages', 'uploadImages')->name('uploadImages')->middleware(['auth']);
+    Route::post('car/deleteImages', 'deleteImages')->name('deleteImages')->middleware(['auth']);
+});
 Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
 Route::resource('car-type', CarTypeController::class)->middleware(['auth']);
