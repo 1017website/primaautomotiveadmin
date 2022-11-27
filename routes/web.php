@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 //general
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\EstimatorController;
 //general
 //workshop
 use App\Http\Controllers\Workshop\TypeProductController;
@@ -44,6 +45,7 @@ use App\Http\Controllers\Hrm\PayrollController;
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
 Route::resource('setting', SettingController::class)->middleware(['auth']);
+Route::resource('estimator', EstimatorController::class);
 
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);
