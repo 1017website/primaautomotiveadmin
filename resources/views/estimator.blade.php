@@ -20,7 +20,7 @@
 
         @livewireStyles
         <!-- Scripts -->
-        
+
         <script src="{{asset('plugins/libs/jquery/dist/jquery.min.js')}}"></script>
         <script src="{{asset('js/jquery-ui.js')}}"></script>
         <script src="{{asset('plugins/libs/popper.js/dist/umd/popper.min.js')}}"></script>
@@ -123,7 +123,7 @@
 
                 </div>
 
-                <footer class="footer text-center ml-auto mr-auto" style="position:absolute;bottom: 0;">
+                <footer class="footer text-center ml-auto mr-auto">
                     All Rights Reserved by <a href="#" target="_blank"><strong>{{ config('app.name') }}</strong></a>. Designed and Developed by <a target="_blank" href="https://1017studio.com"><strong>1017Studio</strong></a>.
                 </footer>
             </div>

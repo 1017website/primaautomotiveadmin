@@ -49,6 +49,10 @@ Route::resource('setting', SettingController::class)->middleware(['auth']);
 Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/changeColor', 'changeColor')->name('changeColor');
     Route::post('estimator/showEstimator', 'showEstimator')->name('showEstimator');
+    Route::post('estimator/detailEstimatorService', 'detailEstimatorService')->name('detailEstimatorService');
+    Route::post('estimator/addEstimatorService', 'addEstimatorService')->name('addEstimatorService');
+    Route::post('estimator/priceEstimatorService', 'priceEstimatorService')->name('priceEstimatorService');
+    Route::post('estimator/deleteEstimatorService', 'deleteEstimatorService')->name('deleteEstimatorService');
 });
 Route::resource('estimator', EstimatorController::class);
 
