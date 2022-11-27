@@ -15,11 +15,12 @@
         <link href="{{asset('plugins/libs/select2/dist/css/select2.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css')}}" rel="stylesheet">
         <link href="{{asset('plugins/libs/notification/notifications.css')}}" rel="stylesheet">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('plugins/images/favicon.png')}}">
-        <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.css">
+        <link href="{{asset('plugins/libs/magnific-popup/dist/magnific-popup.css')}}" rel="stylesheet">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{asset('plugins/images/favicon.png')}}">    
+
         @livewireStyles
         <!-- Scripts -->
-        <script src="{{asset('js/app.js') }}" defer></script>
+        
         <script src="{{asset('plugins/libs/jquery/dist/jquery.min.js')}}"></script>
         <script src="{{asset('js/jquery-ui.js')}}"></script>
         <script src="{{asset('plugins/libs/popper.js/dist/umd/popper.min.js')}}"></script>
@@ -43,7 +44,7 @@
         <script src="{{asset('plugins/libs/notification/notifications.js')}}"></script>
         <script src="{{asset('js/custom.min.js')}}"></script>
         <script src="{{asset('js/toastr.min.js')}}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/timepicker/1.3.5/jquery.timepicker.min.js"></script>
+
         @livewireScripts       
     </head>
     <body>
@@ -71,39 +72,50 @@
                         <h4 class="text-center" style="margin-bottom: 1.5rem;">Estimator</h4>
 
                         <div class="form-group row">
-                            <label for="cust_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Color') }}</label>
+                            <label for="color_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Color') }}</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="cust_name" name="cust_name" value="" required="true">
-                            </div>
-                        </div>
-
-
-                        <div class="form-group row">
-                            <label for="cust_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Service') }}</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" id="cust_name" name="cust_name" value="" required="true">
+                                <select class="select2 form-control custom-select" id="color_id" name="color_id" style="width: 100%;">
+                                    <option></option>
+                                    @foreach($colors as $row)                                
+                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
 
                         <div class="form-group row">
-                            <label for="cust_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Vehicle') }}</label>
+                            <label for="type_service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Service') }}</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" id="cust_name" name="cust_name" value="" required="true">
+                                <select class="select2 form-control custom-select" id="type_service_id" name="type_service_id" style="width: 100%;">
+                                    <option></option>
+                                    @foreach($services as $row)                                
+                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                    @endforeach
+                                </select>
                             </div>
-                        </div>     
+                        </div>
+
+                        <div class="form-group row">
+                            <label for="car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Car') }}</label>
+                            <div class="col-sm-10">
+                                <select class="select2 form-control custom-select" id="car_id" name="car_id" style="width: 100%;">
+                                    <option></option>
+                                    @foreach($cars as $row)                                
+                                    <option value="{{$row->id}}">{{$row->name}} {{$row->year}}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
 
                         <div class="form-group row">
                             <div class="col-sm-12 text-center">
-                                <a href="#" type="button" class="btn btn-default">Go</a>
+                                <a href="#" type="button" class="btn btn-default" id="btn-estimator">Go</a>
                             </div>
                         </div>  
 
                         <div class="border-top" style="margin-bottom: 1rem;"></div>
 
                         <div class="cars">
-                            <h4 class="text-center" style="margin-bottom: 1.5rem;">Car</h4>
-
-
 
                         </div>
 
@@ -122,34 +134,84 @@
         @stack('modals')        
 
         <script>
-$('[data-toggle="tooltip"]').tooltip();
-$(".preloader").fadeOut();
-$(".select2").select2();
-$('.mydatepicker').datepicker({
-    autoclose: true,
-    format: 'dd-mm-yyyy'
-});
-(function ($) {
-    $.fn.inputFilter = function (inputFilter) {
-        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
-            if (inputFilter(this.value)) {
-                this.oldValue = this.value;
-                this.oldSelectionStart = this.selectionStart;
-                this.oldSelectionEnd = this.selectionEnd;
-            } else if (this.hasOwnProperty("oldValue")) {
-                this.value = this.oldValue;
-                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-            } else {
-                this.value = "";
+$(document).ready(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    $('#color_id').select2({
+        placeholder: "Please select a color"
+    });
+    $('#type_service_id').select2({
+        placeholder: "Please select a service"
+    });
+    $('#car_id').select2({
+        placeholder: "Please select a car"
+    });
+
+    $('#color_id').on('change', function () {
+        $.ajax({
+            url: "{{ route('changeColor') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'color_id': this.value
+            },
+            success: function (res) {
+                if (res.success) {
+                    var $select = $("#type_service_id");
+                    $select.empty().trigger("change");
+                    var items = res.services;
+                    var data = [];
+                    $(items).each(function () {
+                        if (!$select.find("option[value='" + this.id + "']").length) {
+                            $select.append(new Option(this.text, this.id, true, true));
+                        }
+                        data.push(this.id);
+                    });
+                    $select.val(data).trigger('change');
+                    $select.prepend('<option selected=""></option>').select2({placeholder: "Please select a service"});
+                } else {
+                    popup(res.message, 'error');
+                }
             }
         });
-    };
-}(jQuery));
-$(document).ready(function () {
-    $(".phone").inputFilter(function (value) {
-        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+    });
+
+    $('#btn-estimator').on('click', function () {
+        if ($("#color_id").val() == '') {
+            popup('Color must be selected', 'error');
+            return false;
+        }
+
+        if ($("#type_service_id").val() == '') {
+            popup('Service must be selected', 'error');
+            return false;
+        }
+
+        if ($("#car_id").val() == '') {
+            popup('Car must be selected', 'error');
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('showEstimator') }}",
+            type: 'POST',
+            dataType: 'html',
+            data: {
+                'color_id': $("#color_id").val(),
+                'type_service_id': $("#type_service_id").val(),
+                'car_id': $("#car_id").val()
+            },
+            success: function (res) {
+                $('.cars').html(res);
+            }
+        });
     });
 });
+
         </script>
     </body>
 </html>

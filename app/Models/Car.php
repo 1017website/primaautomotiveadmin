@@ -25,6 +25,10 @@ class Car extends Model {
         return $this->hasOne(CarType::class, 'id', 'car_type_id');
     }
 
+    public function image() {
+        return $this->hasMany(CarImage::class, 'car_id', 'id');
+    }
+
     public function userCreated() {
         return $this->hasOne(User::class, 'id', 'created_by');
     }

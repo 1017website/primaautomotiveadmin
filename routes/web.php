@@ -40,11 +40,16 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
+
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
 Route::resource('setting', SettingController::class)->middleware(['auth']);
+Route::controller(EstimatorController::class)->group(function () {
+    Route::post('estimator/changeColor', 'changeColor')->name('changeColor');
+    Route::post('estimator/showEstimator', 'showEstimator')->name('showEstimator');
+});
 Route::resource('estimator', EstimatorController::class);
 
 //workshop
@@ -156,10 +161,9 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
 });
 //store
-
 //hrm 
 Route::controller(AttendanceController::class)->group(function () {
-
+    
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
