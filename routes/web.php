@@ -53,6 +53,7 @@ Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/addEstimatorService', 'addEstimatorService')->name('addEstimatorService');
     Route::post('estimator/priceEstimatorService', 'priceEstimatorService')->name('priceEstimatorService');
     Route::post('estimator/deleteEstimatorService', 'deleteEstimatorService')->name('deleteEstimatorService');
+    Route::post('estimator/order', 'order')->name('order');
 });
 Route::resource('estimator', EstimatorController::class);
 

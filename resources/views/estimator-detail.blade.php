@@ -131,12 +131,79 @@
         </div>
     </div>
     <!-- Modal -->
+
+    <!-- Modal -->
+    <div class="modal fade" id="Modal4" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group row">
+                        <label for="order_date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                        <div class="col-sm-10 input-group">
+                            <input type="text" class="form-control mydatepicker" id="order_date" name="order_date" value="" placeholder="Order Date" autocomplete="off">
+                            <div class="input-group-append">
+                                <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_name" name="order_name" required="true" placeholder="Customer Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Phone') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control phone" id="order_phone" name="order_phone" required="true" placeholder="Customer Phone">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_address" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_address" name="order_address" required="true" placeholder="Customer Address">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Plate') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_plate" name="order_plate" required="true" placeholder="Plate Number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_color" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Color') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_color" name="order_color" required="true" placeholder="Car Color">
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default order-now">Order Now</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
 </div>    
 
 <div class="form-group row" style="margin-top:1.5rem;">
     <div class="col-sm-12 text-center">
         <a href="#" type="button" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
-        <a href="#" type="button" class="btn btn-default" id="btn-order"><i class="mdi mdi-cart-plus"></i>Order</a>
+        <a href="#" type="button" class="btn btn-default" id="btn-order" data-toggle="modal" data-target="#Modal4"><i class="mdi mdi-cart-plus"></i>Order</a>
     </div>
 </div> 
 
@@ -216,6 +283,63 @@ $(document).ready(function ($) {
         });
     });
     $("#service_additional_id").trigger("change");
+
+    $(".order-now").click(function () {
+
+        if ($('#order_date').val() === '') {
+            popup('Order date required', 'error');
+            return false;
+        }
+
+        if ($('#order_name').val() === '') {
+            popup('Name required', 'error');
+            return false;
+        }
+
+        if ($('#order_phone').val() === '') {
+            popup('Phone required', 'error');
+            return false;
+        }
+
+        if ($('#order_address').val() === '') {
+            popup('Address required', 'error');
+            return false;
+        }
+
+        if ($('#order_plate').val() === '') {
+            popup('Plate required', 'error');
+            return false;
+        }
+
+        if ($('#order_color').val() === '') {
+            popup('Color required', 'error');
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('order') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'session_id': $('#session_id').val(),
+                'car_id': $('#car_id').val(),
+                'order_date': $('#order_date').val(),
+                'order_name': $('#order_name').val(),
+                'order_phone': $('#order_phone').val(),
+                'order_address': $('#order_address').val(),
+                'order_plate': $('#order_plate').val(),
+                'order_color': $('#order_color').val()
+            },
+            success: function (res) {
+                if (res.success) {
+                    $('#Modal4').modal('hide');
+                    popup('Order Successfully', 'success');
+                } else {
+                    popup(res.message, 'error');
+                }
+            }
+        });
+    });
 });
 
 $(function () {
@@ -266,8 +390,8 @@ $('#service_additional_id').on('change', function () {
             },
             success: function (res) {
                 $('#price_additional').val(res.price);
-                var price = document.getElementById('price');
-                var formated = formatRupiah($('#price').val(), 'Rp. ');
+                var price = document.getElementById('price_additional');
+                var formated = formatRupiah($('#price_additional').val(), 'Rp. ');
                 price.value = formated;
             }
         });
@@ -289,4 +413,32 @@ function formatRupiah(angka, prefix) {
     rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
     return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
 }
+
+(function ($) {
+    $.fn.inputFilter = function (inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
+            if (inputFilter(this.value)) {
+                this.oldValue = this.value;
+                this.oldSelectionStart = this.selectionStart;
+                this.oldSelectionEnd = this.selectionEnd;
+            } else if (this.hasOwnProperty("oldValue")) {
+                this.value = this.oldValue;
+                this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+            } else {
+                this.value = "";
+            }
+        });
+    };
+}(jQuery));
+$(document).ready(function () {
+    $(".phone").inputFilter(function (value) {
+        return /^\d*$/.test(value);    // Allow digits only, using a RegExp
+    });
+});
+
+$('.mydatepicker').datepicker({
+    autoclose: true,
+    format: 'dd-mm-yyyy',
+    startDate: "today"
+});
 </script>

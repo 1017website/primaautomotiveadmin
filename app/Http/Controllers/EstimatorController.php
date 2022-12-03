@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Color;
@@ -10,6 +11,9 @@ use App\Models\TypeService;
 use App\Models\Car;
 use App\Models\Service;
 use App\Models\EstimatorTemp;
+use App\Models\Order;
+use App\Models\OrderDetail;
+use App\Models\Customer;
 use Session;
 
 class EstimatorController extends Controller {
@@ -146,6 +150,117 @@ class EstimatorController extends Controller {
         }
 
         return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public function order() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $temp = EstimatorTemp::where('session_id', $request['session_id'])->get();
+        if (count($temp) == 0) {
+            $success = false;
+            return Redirect::back()->withErrors(['msg' => 'Service not found']);
+        }
+
+        if ($success) {
+            DB::beginTransaction();
+            try {
+                //save header
+                $order = new Order();
+                $order->date = (!empty($request['order_date']) ? date('Y-m-d', strtotime($request['order_date'])) : NULL);
+                $order->code = $this->generateCode(date('Ymd'));
+                $order->cust_name = $request['order_name'];
+                $order->cust_address = $request['order_address'];
+                $order->cust_phone = $request['order_phone'];
+                $order->cars_id = $request['car_id'];
+                $car = Car::findOrFail($request['car_id']);
+                $order->vehicle_name = $car->name;
+                $order->vehicle_brand = $car->brand->name;
+                $order->vehicle_type = $car->type->name;
+                $order->vehicle_year = $car->year;
+                $saved = $order->save();
+                if (!$saved) {
+                    $success = false;
+                    $message = 'Failed save order';
+                }
+
+                //save customer if not exist
+                if ($order) {
+                    $checkCustomer = Customer::where([
+                                'cars_id' => $order->cars_id,
+                                'car_plate' => $this->clean($order->vehicle_plate),
+                            ])->first();
+                    if (!isset($checkCustomer)) {
+                        $checkCustomer = new Customer();
+                        $checkCustomer->name = $order->cust_name;
+                        $checkCustomer->cars_id = $order->cars_id;
+                        $checkCustomer->phone = $order->cust_phone;
+                        $checkCustomer->address = $order->cust_address;
+                        $checkCustomer->car_year = $order->vehicle_year;
+                        $checkCustomer->car_color = $order->vehicle_color;
+                        $checkCustomer->car_plate = $this->clean($order->vehicle_plate);
+                        $checkCustomer->status = '1';
+                        $saved = $checkCustomer->save();
+                        if (!$saved) {
+                            $success = false;
+                            $message = 'Failed save customer';
+                        }
+                    }
+                }
+
+                foreach ($temp as $row) {
+                    //detail
+                    $orderDetail = new OrderDetail();
+                    $orderDetail->order_id = $order->id;
+                    $orderDetail->service_id = $row->service_id;
+                    $orderDetail->service_name = $row->service_name;
+                    $orderDetail->service_price = $row->service_price;
+                    $orderDetail->service_qty = $row->service_qty;
+                    $orderDetail->service_disc = $row->service_disc;
+                    $orderDetail->service_total = $row->service_total;
+                    $service = Service::where('id', $row->service_id)->first();
+                    $orderDetail->panel = isset($service) ? $service->panel : 0;
+                    $saved = $orderDetail->save();
+                    if (!$saved) {
+                        $success = false;
+                        $message = 'Failed save order detail';
+                    }
+                }
+
+                $deleted = EstimatorTemp::where('session_id', $request['session_id'])->delete();
+                if (!$deleted) {
+                    $success = false;
+                    $message = 'Failed delete temp';
+                }
+
+                if ($success) {
+                    DB::commit();
+                }
+            } catch (\Exception $e) {
+                DB::rollback();
+                $success = false;
+                $message = $e->getMessage();
+            }
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public static function generateCode($date) {
+        $count = Order::where('code', 'LIKE', '%ORD' . $date . '%')->count();
+        $n = 0;
+        if ($count > 0) {
+            $order = Order::where('code', 'LIKE', '%ORD' . $date . '%')->orderBy('code', 'DESC')->first();
+            $n = (int) substr($order->code, -4);
+        }
+        return (string) 'ORD' . $date . sprintf('%04s', ($n + 1));
+    }
+
+    private function clean($string) {
+        $string = str_replace(' ', '', $string);
+
+        return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
 }
