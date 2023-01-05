@@ -184,4 +184,12 @@ class PayrollController extends Controller {
         return json_encode(['success' => $success, 'message' => $message, 'response' => $response]);
     }
 
+    public function show($id) {
+        $payroll = Payroll::findorfail($id);
+        $mechanic = Mechanic::findorfail($payroll->employee_id);
+        $setting = Setting::where('code', 'primaautomotive')->first();
+        
+        return view('hrm.payroll.show', compact('payroll', 'setting', 'mechanic'));
+    }
+    
 }
