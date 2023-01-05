@@ -115,7 +115,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('invoice.index') }}">{{ __('Invoice') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('payroll.index') }}">{{ __('Payroll') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Detail') }}</li>
                         </ol>
                     </nav>
@@ -126,22 +126,9 @@
 
     <div class="container-fluid">
 
-        <div class="div-top">
-            @if($invoice->status == 1 && $invoice->status_payment == 0)
-            <a class="btn btn-danger" data-toggle="modal" data-target="#Modal1"><i class="fas fa-trash"></i>{{ __('Void') }}</a>
-            @endif
-            @if($invoice->status == 1)
-            <a class="btn btn-primary" data-toggle="modal" data-target="#Modal3"><i class="fas fa-wrench"></i>{{ __('Work On') }}</a>
-            @endif
-            @if($invoice->status_payment == 0 || $invoice->status_payment == 1)
-            <a class="btn btn-success" data-toggle="modal" data-target="#Modal2"><i class="fas fa-dollar-sign"></i>{{ __('Pay') }}</a>
-            @endif
-            <a class="btn btn-default" href="{{ route('invoice.index') }}">{{ __('Back') }}</a>
-        </div>
-
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Detail Invoice') }}</h5>
+                <h5 class="card-title">{{ __('Detail Payroll') }}</h5>
                 <div class="border-top"></div>
 
 
@@ -160,34 +147,16 @@
                                         <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
                                     </div>
 
-                                    <div class="col-sm-6 top-right">
-                                        <h3 class="marginright">{{ $invoice->code }}</h3>
-                                        <span class="marginright">{{ date('d M Y', strtotime($invoice->date)) }}</span>
-                                    </div>
-
                                 </div>
                                 <hr>
                                 <div class="row">
 
-                                    <div class="col-sm-4 from">
-                                        <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
-                                        <p>{{ isset($setting) ? $setting->address : '' }}</p>
-                                        <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
-                                        <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
-                                    </div>
+                                    <div class="col-sm-12 from">
+                                        <p class="lead marginbottom">{{ __('Nama') }} : {{ $mechanic->name }}</p>
+                                        <p class="lead marginbottom">{{ __('Position') }} : {{ $mechanic->position }}</p>
+                                        <p class="lead marginbottom">{{ __('Phone') }} : {{ $mechanic->phone }}</p>
+                                        <p class="lead marginbottom">{{ __('Address') }} : {{ $mechanic->address }}</p>
 
-                                    <div class="col-sm-4 to">
-                                        <p class="lead marginbottom">To : {{ $invoice->order->cust_name }}</p>
-                                        <p>{{ $invoice->order->cust_address }}<p>
-                                        <p>{{ __('Car') }}: {{ $invoice->order->vehicle_brand }} - {{ $invoice->order->vehicle_name }} {{ $invoice->order->vehicle_plate }}<p>
-                                        <p>{{ __('Phone') }}: {{ $invoice->order->cust_phone }}</p>
-                                    </div>
-
-                                    <div class="col-sm-4 text-right payment-details">
-                                        <p class="lead marginbottom payment-info">Payment details</p>
-                                        <p>{{ __('Date') }}: {{ date('d M Y', strtotime($invoice->date)) }}</p>
-                                        <p>{{ __('Order') }}: {{ $invoice->order->code }} </p>
-                                        <p>{{ __('Total Amount') }}: {{ __('Rp. ') }}@price($invoice->total)</p>
                                     </div>
 
                                 </div>
@@ -196,26 +165,28 @@
                                     <table class="table table-striped">
                                         <thead>
                                             <tr>
-                                                <th class="text-center" style="width:5%">#</th>
-                                                <th class="text-left" style="width:40%">{{ __('Service') }}</th>
-                                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
-                                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                                <th class="text-left" style="width:10%">{{ __('Disc') }}</th>                                                
-                                                <th class="text-right" style="width:15%">{{ __('Total Price') }}</th>
+                                                <th colspan="3" class="text-left" style="width:50%">PENERIMAAN</th>
+                                                <th colspan="3" class="text-left" style="width:50%">POTONGAN</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($invoice->order->detail as $row => $value)
                                             <tr>
-                                                <td class="text-center">{{ ($row+1) }}</td>
-                                                <td class="text-left">{{ $value->service_name }}</td>                                               
-                                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
-                                                <td class="text-left">{{ $value->service_qty }}</td>
-                                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
-                                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
+                                                <td>Kehadiran</td>
+                                                <td>:</td>
+                                                <td></td>
                                             </tr>
-                                            @endforeach
-                                            <tr class="last-row"></tr>
+                                            <tr>
+                                                <td>Gaji Pokok</td>
+                                                <td>:</td>
+                                                <td></td>
+                                            </tr>
+                                            <?php if ($payroll->positional_allowance > 0) { ?>
+                                                <tr>
+                                                    <td>Tunjangan Jabatan</td>
+                                                    <td>:</td>
+                                                    <td></td>
+                                                </tr>
+                                            <?php } ?>
                                         </tbody>
                                     </table>
 
