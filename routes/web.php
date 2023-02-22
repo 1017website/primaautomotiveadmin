@@ -40,7 +40,6 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
-
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
