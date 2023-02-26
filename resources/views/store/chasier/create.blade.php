@@ -127,6 +127,20 @@
                                 <div class="detail">
 
                                 </div>
+								<div class="form-group row">
+									<div class="col-sm-8"></div>
+									<label for="disc_persen_header" class="col-sm-1 text-left control-label col-form-label">{{ __('Disc') }}</label>
+									<div class="col-sm-1">
+										<input type="text" class="form-control" id="disc_persen_header" name="disc_persen_header" placeholder="">
+									</div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-8"></div>
+									<label for="grand_total" class="col-sm-1 text-left control-label col-form-label">{{ __('Grand Total') }}</label>
+									<div class="col-sm-3">
+										<input type="text" class="form-control" id="grand_total" readonly name="grand_total" placeholder="">
+									</div>
+								</div>
                                 <div class="form-group row">
                                     <div class="col-sm-8"></div>
                                     <label for="pay" class="col-sm-1 text-left control-label col-form-label">Payment</label>
@@ -187,6 +201,13 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="disc_persen" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                        <div class="col-sm-5">
+                            <input type="text" class="form-control" id="disc_persen" name="disc_persen" placeholder="">
+                        </div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+                    </div>
+					
+                    <div class="form-group row" style="display:none">
                         <label for="disc" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
                         <div class="col-sm-10">
                             <input type="text" class="form-control" id="disc" name="disc" placeholder="">
@@ -221,9 +242,10 @@
                 $.ajax({
                     url: "{{ route('store-chasier.detail') }}",
                     type: 'GET',
-                    dataType: 'html',
+                    dataType: 'HTML',
                     success: function (res) {
                         $('.detail').html(res);
+						get_total()
                     }
                 });
             }
@@ -237,7 +259,8 @@
                         'stock_id': $('#product_id').val(),
                         'qty': $('#qty').val(),
                         'price': $('#price').val(),
-                        'disc': $('#disc').val()
+                        'disc': $('#disc').val(),
+						'disc_persen': $('#disc_persen').val(),
                     },
                     success: function (res) {
                         if (res.success) {
@@ -251,6 +274,14 @@
             });
         });
 
+		function get_total(){
+			$('.sub').data('total')
+			total = Math.round($('.sub').data('total') - ($('.sub').data('total') * (($('#disc_persen_header').val()).replace(",", ".")) / 100));
+			$('#grand_total').val(total);
+            var formated = formatRupiah($('#grand_total').val(), 'Rp. ');
+            grand_total.value = formated;
+		}
+		
         $(function () {
             $("input[id*='qty']").keydown(function (event) {
                 if (event.shiftKey == true) {
@@ -332,6 +363,7 @@
         };
 
         var harga = document.getElementById('dp');
+		var grand_total = document.getElementById('grand_total');
         $(document).ready(function () {
             var formated = formatRupiah($('#dp').val(), 'Rp. ');
             harga.value = formated;
@@ -397,6 +429,10 @@
         harga.addEventListener('keyup', function (e) {
             harga.value = formatRupiah(this.value, 'Rp. ');
         });
+
+		$( "#disc_persen_header" ).keyup(function() {
+			get_total()
+		});
 
         var harga2 = document.getElementById('dp');
         $(document).ready(function () {

@@ -15,7 +15,7 @@ class StoreChasier extends Model {
 
     protected $table = 'store_chasier';
     protected $fillable = [
-        'code', 'date', 'total', 'dp', 'status', 'status_payment', 'date_dp', 'date_done', 'cust_id', 'description', 'type'
+        'code', 'disc_header', 'disc_persen_header', 'date', 'total', 'dp', 'status', 'status_payment', 'date_dp', 'date_done', 'cust_id', 'description', 'type'
     ];
 
     public function customer() {

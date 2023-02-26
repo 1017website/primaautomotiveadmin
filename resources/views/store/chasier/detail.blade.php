@@ -5,6 +5,7 @@
                 <th scope="col">Item</th>
                 <th scope="col">Price</th>
                 <th scope="col">Qty</th>
+				<th scope="col">Disc Persen</th>
                 <th scope="col">Disc</th>
                 <th scope="col">Total</th>
                 <th scope="col">Action</th>
@@ -20,6 +21,7 @@
                         <td align='center'>{{ $row->product_name }}</td>
                         <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td>
                         <td align='center' class="editable">{{ number_format($row->qty, 2, ',', '.') }}</td>
+						<td align='center'>{{ number_format($row->disc_persen, 2, ',', '.') }}</td>
                         <td align='center'>{{ __('Rp. ') }}@price($row->disc)</td>
                         <td align='right'>{{ __('Rp. ') }} @price(($row->product_price * $row->qty) - $row->disc)</td>
                         <td align='center'><button type="button" onclick="deleteTemp({{ $row->id }})" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
@@ -37,7 +39,7 @@
         <tfoot class="customtable">
             <tr>
                 <td colspan="4" class="text-muted text-right">Sub Total :</td>
-                <td class="text-muted text-right">{{ __('Rp. ') }} <?= number_format($sub) ?></td>
+                <td class="text-muted text-right sub" data-total="<?= $sub ?>">{{ __('Rp. ') }} <?= number_format($sub) ?></td>
                 <td class="text-muted text-right"></td>
             </tr>
         </tfoot>

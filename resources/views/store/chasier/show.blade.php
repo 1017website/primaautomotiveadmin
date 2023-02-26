@@ -210,16 +210,19 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($invoice->detail as $row => $value)
+                                            <?php $sub = 0; 
+											foreach ($invoice->detail as $row => $value){ ?>
                                             <tr>
                                                 <td class="text-center">{{ ($row+1) }}</td>
                                                 <td class="text-left">{{ $value->product_name }}</td>                                               
                                                 <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
                                                 <td class="text-left">{{ $value->qty }}</td>
-                                                <td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
+                                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
                                                 <td class="text-right">{{ __('Rp. ') }}@price(($value->product_price * $value->qty) - $value->disc)</td>
                                             </tr>
-                                            @endforeach
+                                            <?php $sub += (($value->product_price * $value->qty) - $value->disc);  
+											}
+											?>
                                             <tr class="last-row"></tr>
                                         </tbody>
                                     </table>
@@ -234,7 +237,11 @@
                                     </div>
                                     <div class="col-sm-6 text-right pull-right invoice-total">
 
-                                        <p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
+										<p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($sub)</p>
+										
+										<p>{{ __('Disc') }} : {{ number_format($invoice->disc_persen_header,2) . ' %'}}</p>
+										
+                                        <p>{{ __('Grand Total') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
 
                                         <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
 
