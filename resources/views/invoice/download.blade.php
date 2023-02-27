@@ -4,6 +4,17 @@
     <link href="{{asset('css/style.min.css')}}" rel="stylesheet" type="text/css" media="all">
     <link href="{{asset('css/custom.css')}}" rel="stylesheet" type="text/css" media="all">
 </head>
+
+<?php
+$disc = false;
+$sub = 0;
+foreach ($invoice->order->detail as $index => $value){
+	if(!empty($value->disc_persen)){
+		$disc = true;
+	}
+	$sub += $value->service_total;
+}
+?>
 <style>
     .body{
         font-family: 'Nunito Sans';
@@ -187,7 +198,9 @@
                                 <th class="text-left" style="width:25%">{{ __('Service') }}</th>
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                <th class="text-left" style="width:20%">{{ __('Disc') }}</th>                                                
+								<?php if($disc){
+									echo '<th class="text-left" style="width:20%">Disc</th>';
+								} ?>                                     
                                 <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
                         </thead>
@@ -198,7 +211,9 @@
                                 <td class="text-left">{{ $value->service_name }}</td>                                               
                                 <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
                                 <td class="text-left">{{ $value->service_qty }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+								<?php if($disc){ ?>
+									<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+								<?php } ?>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
                             @endforeach
@@ -233,6 +248,14 @@
 
                                 <td>
                                     <table style="float:right;text-align: right;">
+										<?php if(!empty($invoice->order->disc_persen_header)){ ?>
+										<tr>
+											<td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub)</td>
+										</tr>
+										<tr>
+											<td>{{ __('Disc') }}</td><td>:</td><td>{{ number_format($invoice->order->disc_persen_header,2) . ' %' }}</td>
+										</tr>
+										<?php } ?>
                                         <tr>
                                             <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
                                         </tr>

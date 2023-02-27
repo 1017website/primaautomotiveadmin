@@ -229,7 +229,7 @@
                                             <td align='center'>{{ $row->service_name }}</td>
                                             <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td> 
-                                            <td align='center'>{{ __('Rp. ') }}@price($row->service_disc)</td> 
+                                            <td align='center'>{{ number_format($row->disc_persen).' %'}}</td> 
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td>
                                             <?php 
                                                 $grandTotal += $row->service_total;
@@ -242,8 +242,16 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <td align='center' colspan="4"><b>Grand Total</b></td>
+                                            <td align='right' colspan="4"><b>Sub Total</b></td>
                                             <td align='center'>{{ __('Rp. ') }}@price($grandTotal)</td>
+                                        </tr>
+                                        <tr>
+                                            <td align='right' colspan="4"><b>Disc</b></td>
+                                            <td align='center'>{{ number_format($order->disc_persen_header) .' %'}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td align='right' colspan="4"><b>Grand Total</b></td>
+                                            <td align='center'>{{ __('Rp. ') }}@price($grandTotal - $order->disc_header)</td>
                                         </tr>
                                     </tfoot>
                                 </table>
@@ -287,7 +295,7 @@
                             <div class="form-group row">
                                 <label for="total" class="col-sm-2 text-left control-label col-form-label">{{ __('Total') }}</label>
                                 <div class="col-sm-10">
-                                    <input value="{{ $total }}" type="text" class="form-control" id="total" name="total" required="true" readonly="">
+                                    <input value="{{ $total - $order->disc_header }}" type="text" class="form-control" id="total" name="total" required="true" readonly="">
                                 </div>
                             </div>
 

@@ -152,7 +152,7 @@
                                         <div class="form-group row">
                                             <label for="vehicle_color" class="col-sm-2 text-left control-label col-form-label">{{ __('Color') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="vehicle_color" name="vehicle_color" value="{{ old('vehicle_color') }}"">
+                                                <input type="text" class="form-control" id="vehicle_color" name="vehicle_color" value="{{ old('vehicle_color') }}">
                                             </div>
                                         </div>
 
@@ -168,7 +168,20 @@
 
                                 </div>
                             </fieldset>
-
+							<div class="form-group row">
+								<div class="col-sm-8"></div>
+								<label for="disc_persen_header" class="col-sm-1 text-left control-label col-form-label">{{ __('Disc') }}</label>
+								<div class="col-sm-1">
+									<input type="text" class="form-control" id="disc_persen_header" name="disc_persen_header" placeholder="">
+								</div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-8"></div>
+								<label for="grand_total" class="col-sm-1 text-left control-label col-form-label">{{ __('Grand Total') }}</label>
+								<div class="col-sm-3">
+									<input type="text" class="form-control" id="grand_total" readonly name="grand_total" placeholder="">
+								</div>
+							</div>
                             <div class="border-top"></div>
                             <button type="submit" class="btn btn-default btn-action">Save</button>
                             </form>
@@ -215,7 +228,14 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
+							<div class="form-group row">
+								<label for="disc_persen" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" id="disc_persen" name="disc_persen" placeholder="">
+								</div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+							</div>
+							
+                            <div class="form-group row" style="display:none;">
                                 <label for="service_disc" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="service_disc" name="service_disc" placeholder="">
@@ -266,13 +286,16 @@
                     data: {
                         'service_id': $('#service_id').val(),
                         'service_qty': $('#service_qty').val(),
-                        'service_disc': $('#service_disc').val()
+                        'service_disc': $('#service_disc').val(),
+						'disc_persen': $('#disc_persen').val()
                     },
                     success: function (res) {
                         if (res.success) {
                             $('#Modal2').modal('toggle');
                             get_detail();
                             $('#service_disc').val('');
+							$('#disc_persen').val('');
+							get_total()
                         } else {
                             popup(res.message, 'error');
                         }
@@ -290,6 +313,14 @@
             nextSibling.innerText = fileName
         });
 
+		function get_total(){
+			$('.sub').data('total')
+			total = Math.round($('.sub').data('total') - ($('.sub').data('total') * (($('#disc_persen_header').val()).replace(",", ".")) / 100));
+			$('#grand_total').val(total);
+            var formated = formatRupiah($('#grand_total').val(), 'Rp. ');
+            grand_total.value = formated;
+		}
+		
         $(function () {
             $("input[id*='service_qty']").keydown(function (event) {
                 if (event.shiftKey == true) {
@@ -345,6 +376,7 @@
         }
 
         var harga = document.getElementById('service_disc');
+		var grand_total = document.getElementById('grand_total');
         $(document).ready(function () {
             console.log(harga.value);
             var formated = formatRupiah($('#service_disc').val(), 'Rp. ');
@@ -353,6 +385,10 @@
         harga.addEventListener('keyup', function (e) {
             harga.value = formatRupiah(this.value, 'Rp. ');
         });
+		
+		$( "#disc_persen_header" ).keyup(function() {
+			get_total()
+		});
     </script>
 
 </x-app-layout>

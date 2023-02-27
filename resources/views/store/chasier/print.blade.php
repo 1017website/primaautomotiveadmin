@@ -181,8 +181,8 @@ $sub = 0;
 foreach ($invoice->detail as $index => $value){
 	if(!empty($value->disc)){
 		$disc = true;
-		$sub += (($value->product_price * $value->qty) - $value->disc);
 	}
+	$sub += (($value->product_price * $value->qty) - $value->disc);
 }
 ?>
 
