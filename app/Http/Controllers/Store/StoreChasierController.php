@@ -52,8 +52,8 @@ class StoreChasierController extends Controller {
         foreach ($temp as $row) {
             $validateData['total'] += ($row->qty * $row->product_price) - $row->disc;
         }
-		$disc_header = str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
-		$validateData['total'] -= $disc_header;
+        $disc_header = (float)str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
+        $validateData['total'] -= $disc_header;
         if ($request->dp < $validateData['total']) {
             $success = false;
             return Redirect::back()->withErrors(['msg' => 'Payment must greater or equal to sub Total'])->withInput();
@@ -68,8 +68,8 @@ class StoreChasierController extends Controller {
                 $validateData['type'] = $request->type;
                 $validateData['status'] = 1;
                 $validateData['status_payment'] = 2;
-				$validateData['disc_persen_header'] = str_replace(',', '.', $request->disc_persen_header);
-				$validateData['disc_header'] = $disc_header;
+                $validateData['disc_persen_header'] = str_replace(',', '.', $request->disc_persen_header);
+                $validateData['disc_header'] = $disc_header;
                 $validateData['dp'] = substr(str_replace('.', '', $request->dp), 3);
 
                 if (strlen($validateData['cust_phone']) > 0) {
@@ -101,7 +101,7 @@ class StoreChasierController extends Controller {
                     $orderDetail->product_name = $row->product_name;
                     $orderDetail->product_price = $row->product_price;
                     $orderDetail->qty = $row->qty;
-					$orderDetail->disc_persen = $row->disc_persen;
+                    $orderDetail->disc_persen = $row->disc_persen;
                     $orderDetail->disc = $row->disc;
                     $saved = $orderDetail->save();
                     if (!$saved) {
@@ -372,11 +372,11 @@ class StoreChasierController extends Controller {
                 if (isset($temp)) {
                     $temp->qty = $temp->qty + str_replace(',', '.', $request['qty']);
                     if (strlen($request['disc_persen']) > 0) {
-						$temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
+                        $temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
                         $temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
-						$temp->disc_persen = 0;
+                        $temp->disc_persen = 0;
                     }
                     if ($stock->qty < $temp->qty) {
                         $success = false;
@@ -396,11 +396,11 @@ class StoreChasierController extends Controller {
                     $temp->qty = str_replace(',', '.', $request['qty']);
                     $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
                     if (strlen($request['disc_persen']) > 0) {
-						$temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
+                        $temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
                         $temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
-						$temp->disc_persen = 0;
+                        $temp->disc_persen = 0;
                     }
                     $temp->save();
                 }
@@ -471,9 +471,9 @@ class StoreChasierController extends Controller {
             } else {
                 $temp = StoreChasierDetailTemp::findOrFail($request['id']);
                 if (isset($temp)) {
-					$temp->qty = str_replace(',', '.', $request['qty']);
-					$temp->disc = round(($temp->product_price * $temp->qty) * $temp->disc_persen / 100);
-                    
+                    $temp->qty = str_replace(',', '.', $request['qty']);
+                    $temp->disc = round(($temp->product_price * $temp->qty) * $temp->disc_persen / 100);
+
                     $temp->save();
                 } else {
                     $success = false;
