@@ -5,7 +5,7 @@
                 <th scope="col">Service</th>
                 <th scope="col">Qty</th>
                 <th scope="col">Cost Service</th>
-				<th scope="col">Disc Persen</th>
+				<th scope="col" colspan=2>Disc</th>
                 <th scope="col">Total</th>
                 <th scope="col">Action</th>
             </tr>
@@ -18,9 +18,10 @@
             @foreach ($detailOrder as $row)
             <tr>
                 <td align='center'>{{ $row->service_name }}</td>
-                <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
+                <td align='center'>{{ number_format($row->service_qty, 2) }}</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td> 
-				<td align='center'>{{ number_format($row->disc_persen,2).' %' }}</td> 
+				<td align='center'>{{ number_format($row->disc_persen, 2, ',', '.') }}</td>
+				<td align='center'>{{ __('Rp. ') }}@price($row->service_disc)</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td> 
                 <?php
                 $grandTotal += $row->service_total;
@@ -29,12 +30,12 @@
             </tr>
             @endforeach
             @else
-        <td colspan="7" class="text-muted text-center">Service is empty</td>
+        <td colspan="8" class="text-muted text-center">Service is empty</td>
         @endif
         </tbody>
         <tfoot>
             <tr>
-                <td align='center' colspan="4"><b>Sub Total</b></td>
+                <td align='center' colspan="5"><b>Sub Total</b></td>
                 <td align='center' class="sub" data-total="<?= $grandTotal ?>">{{ __('Rp. ') }}@price($grandTotal)</td>
                 <td></td>
             </tr>

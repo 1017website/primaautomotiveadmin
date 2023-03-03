@@ -107,7 +107,16 @@
                 height:800px;
             }
         }
-
+<?php
+$disc = false;
+$sub = 0;
+foreach ($invoice->detail as $index => $value){
+	if(!empty($value->disc)){
+		$disc = true;
+	}
+	$sub += (($value->product_price * $value->qty) - $value->disc);
+}
+?>
     </style>
     <div class="page-breadcrumb">
         <div class="row">
@@ -205,7 +214,9 @@
                                                 <th class="text-left" style="width:30%">{{ __('Product') }}</th>
                                                 <th class="text-left" style="width:20%">{{ __('Price') }}</th>
                                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                                <th class="text-left" style="width:20%">{{ __('Disc') }}</th>                                                
+												<?php if($disc){
+													echo '<th class="text-left" colspan=2 style="width:20%;text-align:center !important;">Disc</th>';
+												} ?>                                         
                                                 <th class="text-right" style="width:15%">{{ __('Total') }}</th>
                                             </tr>
                                         </thead>
@@ -217,7 +228,10 @@
                                                 <td class="text-left">{{ $value->product_name }}</td>                                               
                                                 <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
                                                 <td class="text-left">{{ $value->qty }}</td>
-                                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+												<?php if($disc){ ?>
+													<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+													<td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
+												<?php } ?>
                                                 <td class="text-right">{{ __('Rp. ') }}@price(($value->product_price * $value->qty) - $value->disc)</td>
                                             </tr>
                                             <?php $sub += (($value->product_price * $value->qty) - $value->disc);  
@@ -238,8 +252,12 @@
                                     <div class="col-sm-6 text-right pull-right invoice-total">
 
 										<p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($sub)</p>
-										
-										<p>{{ __('Disc') }} : {{ number_format($invoice->disc_persen_header,2) . ' %'}}</p>
+										<?php if(!empty($invoice->disc_persen_header)){ ?>
+											<p>{{ __('Disc ') }} {{ number_format($invoice->disc_persen_header,2) . ' %'}} : {{ __('Rp. ') }}@price($invoice->disc_header)</p>
+										<?php } ?>
+										<?php if(!empty($invoice->ppn_persen_header)){ ?>
+											<p>{{ __('PPn ') }} {{ number_format($invoice->ppn_persen_header,2) . ' %'}} : {{ __('Rp. ') }}@price($invoice->ppn_header)</p>
+										<?php } ?>
 										
                                         <p>{{ __('Grand Total') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
 

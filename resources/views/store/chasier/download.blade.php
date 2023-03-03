@@ -209,7 +209,7 @@ foreach ($invoice->detail as $index => $value){
                                 <th class="text-left" style="width:20%">{{ __('Price') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
 								<?php if($disc){
-									echo '<th class="text-left" style="width:20%">Disc</th>';
+									echo '<th class="text-left" colspan = 2 style="width:20%">Disc</th>';
 								} ?>                                             
                                 <th class="text-right" style="width:25%">{{ __('Total') }}</th>
                             </tr>
@@ -223,6 +223,7 @@ foreach ($invoice->detail as $index => $value){
                                 <td class="text-left">{{ $value->qty }}</td>
 								<?php if($disc){ ?>
 									<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+									<td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
 								<?php } ?>
                                 <td class="text-right">{{ __('Rp. ') }}@price(($value->product_price * $value->qty) - $value->disc)</td>
                             </tr>
@@ -258,12 +259,17 @@ foreach ($invoice->detail as $index => $value){
 
                                 <td>
                                     <table style="float:right;text-align: right;">
-										<?php if(!empty($invoice->disc_persen_header)){ ?>
 										<tr>
 											<td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub)</td>
 										</tr>
+										<?php if(!empty($invoice->disc_persen_header)){ ?>
 										<tr>
-											<td>{{ __('Disc') }}</td><td>:</td><td>{{ number_format($invoice->disc_persen_header,2) . ' %' }}</td>
+											<td>{{ __('Disc') }} {{ number_format($invoice->disc_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->disc_header)</td>
+										</tr>
+										<?php } ?>
+										<?php if(!empty($invoice->ppn_persen_header)){ ?>
+										<tr>
+											<td>{{ __('PPn') }} {{ number_format($invoice->ppn_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->ppn_header)</td>
 										</tr>
 										<?php } ?>
                                         <tr>

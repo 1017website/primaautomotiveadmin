@@ -199,7 +199,7 @@ foreach ($invoice->order->detail as $index => $value){
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
 								<?php if($disc){
-									echo '<th class="text-left" style="width:20%">Disc</th>';
+									echo '<th class="text-left" style="width:20%" colspan=2>Disc</th>';
 								} ?>                                     
                                 <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
@@ -213,6 +213,7 @@ foreach ($invoice->order->detail as $index => $value){
                                 <td class="text-left">{{ $value->service_qty }}</td>
 								<?php if($disc){ ?>
 									<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+									<td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
 								<?php } ?>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
@@ -248,16 +249,21 @@ foreach ($invoice->order->detail as $index => $value){
 
                                 <td>
                                     <table style="float:right;text-align: right;">
-										<?php if(!empty($invoice->order->disc_persen_header)){ ?>
 										<tr>
 											<td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub)</td>
 										</tr>
+										<?php if(!empty($invoice->order->disc_persen_header)){ ?>
 										<tr>
-											<td>{{ __('Disc') }}</td><td>:</td><td>{{ number_format($invoice->order->disc_persen_header,2) . ' %' }}</td>
+											<td>{{ __('Disc') }} {{ number_format($invoice->order->disc_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->order->disc_header)</td>
+										</tr>
+										<?php } ?>
+										<?php if(!empty($invoice->order->ppn_persen_header)){ ?>
+										<tr>
+											<td>{{ __('PPn') }} {{ number_format($invoice->order->ppn_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->order->ppn_header)</td>
 										</tr>
 										<?php } ?>
                                         <tr>
-                                            <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
+                                            <td>{{ __('Grandtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
                                         </tr>
                                         <tr>
                                             <td>{{ __('Payment') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp)</td>

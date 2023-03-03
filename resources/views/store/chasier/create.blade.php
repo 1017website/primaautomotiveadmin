@@ -131,8 +131,21 @@
 									<div class="col-sm-8"></div>
 									<label for="disc_persen_header" class="col-sm-1 text-left control-label col-form-label">{{ __('Disc') }}</label>
 									<div class="col-sm-1">
-										<input type="text" class="form-control" id="disc_persen_header" name="disc_persen_header" placeholder="">
-									</div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+										<input type="text" class="form-control" id="disc_persen_header" name="disc_persen_header" value="{{ old('disc_persen_header') }}" style="align:right" placeholder="%">
+									</div>
+									<div class="col-sm-2">
+										<input type="text" class="form-control" id="disc_header" readonly name="disc_header" placeholder="">
+									</div>
+								</div>
+								<div class="form-group row">
+									<div class="col-sm-8"></div>
+									<label for="disc_persen_header" class="col-sm-1 text-left control-label col-form-label">{{ __('PPn') }}</label>
+									<div class="col-sm-1">
+										<input type="text" class="form-control" id="ppn_persen_header" name="ppn_persen_header" value="{{ old('ppn_persen_header') }}" style="align:right" placeholder="%">
+									</div>
+									<div class="col-sm-2">
+										<input type="text" class="form-control" id="ppn_header" readonly name="ppn_header" placeholder="" >
+									</div>
 								</div>
 								<div class="form-group row">
 									<div class="col-sm-8"></div>
@@ -276,7 +289,19 @@
 
 		function get_total(){
 			$('.sub').data('total')
-			total = Math.round($('.sub').data('total') - ($('.sub').data('total') * (($('#disc_persen_header').val()).replace(",", ".")) / 100));
+			disc = Math.round($('.sub').data('total') * (($('#disc_persen_header').val()).replace(",", ".")) / 100);
+			total = Math.round($('.sub').data('total') - disc);
+			ppn = Math.round(total * (($('#ppn_persen_header').val()).replace(",", ".")) / 100);
+			
+			$('#disc_header').val(disc)
+			var formated = formatRupiah($('#disc_header').val(), 'Rp. ');
+			$('#disc_header').val(formated)
+
+			$('#ppn_header').val(ppn)
+			var formated = formatRupiah($('#ppn_header').val(), 'Rp. ');
+			$('#ppn_header').val(formated)
+			
+			total = total + ppn;
 			$('#grand_total').val(total);
             var formated = formatRupiah($('#grand_total').val(), 'Rp. ');
             grand_total.value = formated;
@@ -433,11 +458,24 @@
 		$( "#disc_persen_header" ).keyup(function() {
 			get_total()
 		});
+        $(document).ready(function () {
+            var formated = formatRupiah($('#disc_header').val(), 'Rp. ');
+			$('#disc_header').val(formated)
+        });
 
+		$( "#ppn_persen_header" ).keyup(function() {
+			get_total()
+		});
+        $(document).ready(function () {
+            var formated = formatRupiah($('#ppn_header').val(), 'Rp. ');
+			$('#ppn_header').val(formated)
+        });
+		
         var harga2 = document.getElementById('dp');
         $(document).ready(function () {
             var formated = formatRupiah($('#dp').val(), 'Rp. ');
             harga2.value = formated;
+			get_total()
         });
         harga2.addEventListener('keyup', function (e) {
             harga2.value = formatRupiah(this.value, 'Rp. ');

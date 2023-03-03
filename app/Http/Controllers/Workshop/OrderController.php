@@ -45,15 +45,15 @@ class OrderController extends Controller {
         ]);
 
         $temp = OrderDetailTemp::where('user_id', Auth::id())->get();
-        $validateData['total'] = 0;
+		$validateData['total'] = 0;
         if (count($temp) == 0) {
             $success = false;
             return Redirect::back()->withErrors(['msg' => 'Service not found']);
-        } else {
-            foreach ($temp as $row) {
-                $validateData['total'] += (($row->service_qty * $row->service_price) - $row->service_disc);
-            }
-        }
+        }else{
+			foreach ($temp as $row) {
+				$validateData['total'] += (($row->service_qty * $row->service_price) - $row->service_disc);
+			}
+		}
 
         if ($success) {
             DB::beginTransaction();
@@ -68,10 +68,15 @@ class OrderController extends Controller {
                 $validateData['vehicle_name'] = $car->name;
                 $validateData['vehicle_brand'] = $car->brand->name;
                 $validateData['vehicle_type'] = $car->type->name;
-                $disc_header = str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
-                $validateData['total'] -= $disc_header;
-                $validateData['disc_header'] = $disc_header;
-
+				$disc_header = str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
+				$validateData['disc_persen_header'] = str_replace(',', '.', $request->disc_persen_header);
+				$validateData['ppn_persen_header'] = str_replace(',', '.', $request->ppn_persen_header);
+				$validateData['total'] -= $disc_header;
+				$validateData['disc_header'] = $disc_header;
+				$ppn_header = str_replace(',', '.', $request->ppn_persen_header) * $validateData['total'] / 100;
+				$validateData['total'] += $ppn_header;
+				$validateData['ppn_header'] = $ppn_header;
+				
                 $order = Order::create($validateData);
 
                 //save customer if not exist
@@ -107,7 +112,7 @@ class OrderController extends Controller {
                     $orderDetail->service_price = $row->service_price;
                     $orderDetail->service_qty = $row->service_qty;
                     $orderDetail->service_disc = $row->service_disc;
-                    $orderDetail->disc_persen = $row->disc_persen;
+					$orderDetail->disc_persen = $row->disc_persen;
                     $orderDetail->service_total = $row->service_total;
                     $service = Service::where('id', $row->service_id)->first();
                     $orderDetail->panel = isset($service) ? $service->panel : 0;
@@ -178,13 +183,13 @@ class OrderController extends Controller {
                 $temp->service_name = $service->name;
                 $temp->service_price = $service->estimated_costs;
                 $temp->service_qty = str_replace('.', '', $request['service_qty']);
-                if (strlen($request['disc_persen']) > 0) {
-                    $temp->service_disc = round(($service->estimated_costs * $temp->service_qty) * str_replace(',', '.', $request['disc_persen']) / 100);
-                    $temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
-                } else {
-                    $temp->service_disc = 0;
-                    $temp->disc_persen = 0;
-                }
+				if (strlen($request['disc_persen']) > 0) {
+					$temp->service_disc = round(($service->estimated_costs * $temp->service_qty) * str_replace(',', '.', $request['disc_persen']) / 100);
+					$temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
+				} else {
+					$temp->service_disc = 0;
+					$temp->disc_persen = 0;
+				}
 
                 $temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
                 $temp->save();

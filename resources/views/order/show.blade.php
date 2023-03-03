@@ -1,4 +1,13 @@
 <x-app-layout>
+<?php
+$disc = false;
+$sub = 0;
+foreach ($order->detail as $index => $value){
+	if(!empty($value->service_disc)){
+		$disc = true;
+	}
+}
+?>
 
     <div class="page-breadcrumb">
         <div class="row">
@@ -215,7 +224,9 @@
                                             <th scope="col">Service</th>
                                             <th scope="col">Qty</th>
                                             <th scope="col">Cost Service</th>
-                                            <th scope="col">Disc</th>
+											<?php if($disc){ ?>
+												<th scope="col" colspan=2>Disc</th>
+											<?php } ?>
                                             <th scope="col">Total</th>
                                         </tr>
                                     </thead>
@@ -229,7 +240,10 @@
                                             <td align='center'>{{ $row->service_name }}</td>
                                             <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td> 
-                                            <td align='center'>{{ number_format($row->disc_persen).' %'}}</td> 
+											<?php if($disc){ ?>
+												<td class="text-left">{{ number_format($row->disc_persen,2).' %' }}</td>
+												<td class="text-left">{{ __('Rp. ') }}@price($row->service_disc)</td>
+											<?php } ?>
                                             <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td>
                                             <?php 
                                                 $grandTotal += $row->service_total;
@@ -240,20 +254,6 @@
                                     <td colspan="7" class="text-muted text-center">Service is empty</td>
                                     @endif
                                     </tbody>
-                                    <tfoot>
-                                        <tr>
-                                            <td align='right' colspan="4"><b>Sub Total</b></td>
-                                            <td align='center'>{{ __('Rp. ') }}@price($grandTotal)</td>
-                                        </tr>
-                                        <tr>
-                                            <td align='right' colspan="4"><b>Disc</b></td>
-                                            <td align='center'>{{ number_format($order->disc_persen_header) .' %'}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td align='right' colspan="4"><b>Grand Total</b></td>
-                                            <td align='center'>{{ __('Rp. ') }}@price($grandTotal - $order->disc_header)</td>
-                                        </tr>
-                                    </tfoot>
                                 </table>
                             </div>
                         </div>
@@ -261,6 +261,22 @@
                     </div>
                 </div>
 
+				<div class="row">
+					<div class="col-sm-6 margintop"></div>
+					<div class="col-sm-6 text-right pull-right invoice-total">
+
+						<p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($grandTotal)</p>
+						<?php if(!empty($order->disc_persen_header)){ ?>
+							<p>{{ __('Disc ') }} {{ number_format($order->disc_persen_header,2) . ' %'}} : {{ __('Rp. ') }}@price($order->disc_header)</p>
+						<?php } ?>
+						<?php if(!empty($order->ppn_persen_header)){ ?>
+							<p>{{ __('PPn ') }} {{ number_format($order->ppn_persen_header,2) . ' %'}} : {{ __('Rp. ') }}@price($order->ppn_header)</p>
+						<?php } ?>
+						
+						<p>{{ __('Grand Total') }} : {{ __('Rp. ') }}@price($grandTotal - $order->disc_header + $order->ppn_header)</p>
+					</div>
+				</div>
+				
                 <div class="border-top"></div>
                 @if($order->status == '1')
                 <div class="div-top">

@@ -32,13 +32,13 @@
             } else {
                 ?>
                 <tr>
-                    <td colspan="6" class="text-muted text-center">Item is empty</td>
+                    <td colspan="7" class="text-muted text-center">Item is empty</td>
                 </tr>
             <?php } ?>
         </tbody>
         <tfoot class="customtable">
             <tr>
-                <td colspan="4" class="text-muted text-right">Sub Total :</td>
+                <td colspan="5" class="text-muted text-right">Sub Total :</td>
                 <td class="text-muted text-right sub" data-total="<?= $sub ?>">{{ __('Rp. ') }} <?= number_format($sub) ?></td>
                 <td class="text-muted text-right"></td>
             </tr>
