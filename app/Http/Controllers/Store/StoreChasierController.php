@@ -52,13 +52,13 @@ class StoreChasierController extends Controller {
         foreach ($temp as $row) {
             $validateData['total'] += ($row->qty * $row->product_price) - $row->disc;
         }
-		$disc_header = str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
-		$validateData['total'] -= $disc_header;
-		$ppn_header = str_replace(',', '.', $request->ppn_persen_header) * $validateData['total'] / 100;
-		$validateData['total'] += $ppn_header;
-        $validateData['dp'] = substr(str_replace('.', '', $request->dp), 3);
+        $disc_header = (float) str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
+        $validateData['total'] -= $disc_header;
+        $ppn_header = (float) str_replace(',', '.', $request->ppn_persen_header) * $validateData['total'] / 100;
+        $validateData['total'] += $ppn_header;
+        $validateData['dp'] = (float) substr(str_replace('.', '', $request->dp), 3);
 
-		if ($validateData['dp'] < $validateData['total']) {
+        if ($validateData['dp'] < $validateData['total']) {
             $success = false;
             return Redirect::back()->withErrors(['msg' => 'Payment must greater or equal to sub Total'])->withInput();
         }
@@ -72,11 +72,10 @@ class StoreChasierController extends Controller {
                 $validateData['type'] = $request->type;
                 $validateData['status'] = 1;
                 $validateData['status_payment'] = 2;
-				$validateData['disc_persen_header'] = str_replace(',', '.', $request->disc_persen_header);
-				$validateData['disc_header'] = $disc_header;
-				$validateData['ppn_persen_header'] = str_replace(',', '.', $request->ppn_persen_header);
-				$validateData['ppn_header'] = $ppn_header;
-                
+                $validateData['disc_persen_header'] = (float)str_replace(',', '.', $request->disc_persen_header);
+                $validateData['disc_header'] = $disc_header;
+                $validateData['ppn_persen_header'] = (float)str_replace(',', '.', $request->ppn_persen_header);
+                $validateData['ppn_header'] = $ppn_header;
 
                 if (strlen($validateData['cust_phone']) > 0) {
                     $cust = StoreCustomer::where('phone', $validateData['cust_phone'])->first();
@@ -107,7 +106,7 @@ class StoreChasierController extends Controller {
                     $orderDetail->product_name = $row->product_name;
                     $orderDetail->product_price = $row->product_price;
                     $orderDetail->qty = $row->qty;
-					$orderDetail->disc_persen = $row->disc_persen;
+                    $orderDetail->disc_persen = $row->disc_persen;
                     $orderDetail->disc = $row->disc;
                     $saved = $orderDetail->save();
                     if (!$saved) {
@@ -227,7 +226,7 @@ class StoreChasierController extends Controller {
         $request = array_merge($_POST, $_GET);
         try {
             $invoice = StoreChasier::findorfail($request['invoice_id']);
-            $dp = substr(str_replace('.', '', $request['dp']), 3);
+            $dp = substr((float)str_replace('.', '', $request['dp']), 3);
             if (!empty($invoice->dp)) {
                 $dp += $invoice->dp;
             }
@@ -366,23 +365,23 @@ class StoreChasierController extends Controller {
 
         try {
             $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
-            if ($stock->qty < str_replace(',', '.', $request['qty'])) {
+            if ($stock->qty < (float)str_replace(',', '.', $request['qty'])) {
                 $success = false;
                 $message = 'Insufficient Stock.';
             } else {
                 $temp = StoreChasierDetailTemp::where([
                             'user_id' => Auth::id(),
                             'stock_id' => $request['stock_id'],
-                            'product_price' => substr(str_replace('.', '', $request['price']), 3)
+                            'product_price' => substr((float)str_replace('.', '', $request['price']), 3)
                         ])->first();
                 if (isset($temp)) {
-                    $temp->qty = $temp->qty + str_replace(',', '.', $request['qty']);
+                    $temp->qty = $temp->qty + (float)str_replace(',', '.', $request['qty']);
                     if (strlen($request['disc_persen']) > 0) {
-						$temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
-                        $temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
+                        $temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
+                        $temp->disc_persen = (float)str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
-						$temp->disc_persen = 0;
+                        $temp->disc_persen = 0;
                     }
                     if ($stock->qty < $temp->qty) {
                         $success = false;
@@ -399,14 +398,14 @@ class StoreChasierController extends Controller {
 
                     $temp->type_product_id = $product->type_product_id;
                     $temp->product_name = $product->name;
-                    $temp->qty = str_replace(',', '.', $request['qty']);
-                    $temp->product_price = substr(str_replace('.', '', $request['price']), 3);
+                    $temp->qty = (float)str_replace(',', '.', $request['qty']);
+                    $temp->product_price = substr((float)str_replace('.', '', $request['price']), 3);
                     if (strlen($request['disc_persen']) > 0) {
-						$temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
-                        $temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
+                        $temp->disc = round(($temp->product_price * $temp->qty) * (float)str_replace(',', '.', $request['disc_persen']) / 100);
+                        $temp->disc_persen = (float)str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
-						$temp->disc_persen = 0;
+                        $temp->disc_persen = 0;
                     }
                     $temp->save();
                 }
@@ -471,15 +470,15 @@ class StoreChasierController extends Controller {
 
         try {
             $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
-            if ($stock->qty < str_replace(',', '.', $request['qty'])) {
+            if ($stock->qty < (float)str_replace(',', '.', $request['qty'])) {
                 $success = false;
                 $message = 'Insufficient Stock.';
             } else {
                 $temp = StoreChasierDetailTemp::findOrFail($request['id']);
                 if (isset($temp)) {
-					$temp->qty = str_replace(',', '.', $request['qty']);
-					$temp->disc = round(($temp->product_price * $temp->qty) * $temp->disc_persen / 100);
-                    
+                    $temp->qty = (float)str_replace(',', '.', $request['qty']);
+                    $temp->disc = round(($temp->product_price * $temp->qty) * $temp->disc_persen / 100);
+
                     $temp->save();
                 } else {
                     $success = false;
