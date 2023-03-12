@@ -104,7 +104,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
-            </ul>
+				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/estimator-internal" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Estimator Internal') }}</span></a></li>
+			</ul>
         </nav>
     </div>
 </aside>

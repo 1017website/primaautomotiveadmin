@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EstimatorController;
+use App\Http\Controllers\EstimatorInternalController;
+
 //general
 //workshop
 use App\Http\Controllers\Workshop\TypeProductController;
@@ -56,6 +58,16 @@ Route::controller(EstimatorController::class)->group(function () {
 });
 Route::resource('estimator', EstimatorController::class);
 
+Route::controller(EstimatorInternalController::class)->group(function () {
+    Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor');
+    Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator');
+    Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService');
+    Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService');
+    Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService');
+    Route::post('estimator-internal/deleteEstimatorService', 'deleteEstimatorService')->name('internal.deleteEstimatorService');
+    Route::post('estimator-internal/order', 'order')->name('internal.order');
+});
+Route::resource('estimator-internal', EstimatorInternalController::class);
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);
 Route::resource('product', ProductController::class)->middleware(['auth']);
