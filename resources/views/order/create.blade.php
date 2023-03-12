@@ -110,13 +110,16 @@
 
                                         <div class="form-group row">
                                             <label for="cars_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
-                                            <div class="col-sm-10">
+                                            <div class="col-sm-8">
                                                 <select class="select2 form-control custom-select" id="cars_id" name="cars_id" style="width: 100%;">                              
                                                     @foreach($car as $row)                                
                                                     <option value="{{$row->id}}">{{ $row->type->name }} - {{ $row->brand->name }} - {{$row->name}}</option>    
                                                     @endforeach
                                                 </select>
                                             </div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_car" >New Car</button>
+											</div>
                                         </div>
 
                                         <div class="form-group row">
@@ -168,6 +171,15 @@
 
                                 </div>
                             </fieldset>
+							
+                            <fieldset class="border p-2">
+                                <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Product') }}</legend>
+                                <button type="button" class="btn btn-default btn-action mt-2 mb-2" data-toggle="modal" data-target="#Modal3">{{ __('Add Product') }}</button>
+                                <div class="detail_product">
+
+                                </div>
+                            </fieldset>
+							
 							<div class="form-group row">
 								<div class="col-sm-8"></div>
 								<label for="disc_persen_header" class="col-sm-1 text-left control-label col-form-label">{{ __('Disc') }}</label>
@@ -265,6 +277,116 @@
             </div>
             <!-- Modal -->
 
+            <!-- Modal -->
+            <div class="modal fade" id="Modal3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Product</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Product') }}</label>
+                                <div class="col-sm-10">
+                                    <select class="select2 form-control custom-select" id="product_id" name="product_id" style="width: 100%;">                              
+                                        @foreach($product as $row)                                
+                                        <option data-price='<?= $row->price ?>' value="{{$row->id}}">{{$row->name}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>                                
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="product_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="product_qty" name="product_qty" required="true" value="1">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="price_product" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="price_product" name="price_product" required="" readonly="">
+                                </div>
+                            </div>
+
+							<div class="form-group row">
+								<label for="disc_persen_product" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
+								<div class="col-sm-5">
+									<input type="text" class="form-control" id="disc_persen_product" name="disc_persen_product" placeholder="">
+								</div><div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+							</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="addProduct">Add</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
+			
+            <!-- Modal -->
+            <div class="modal fade" id="modal_car" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Add Car</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+
+                            <div class="form-group row">
+                                <label for="type_car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                <div class="col-sm-10">
+                                    <select class="select2 form-control custom-select" id="type_car_id" name="type_car_id" style="width: 100%;">                              
+                                        @foreach($carType as $row)                                
+                                        <option value="{{$row->id}}">{{$row->name}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="brand_car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                <div class="col-sm-10">
+                                    <select class="select2 form-control custom-select" id="brand_car_id" name="type_car_id" style="width: 100%;">                              
+                                        @foreach($carBrand as $row)                                
+                                        <option value="{{$row->id}}">{{$row->name}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+							
+                            <div class="form-group row">
+                                <label for="name_car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name_car_id" name="name_car_id" required="true" value="">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="year_car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Year') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="year_car_id" name="year_car_id" required="true" value="">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-default" id="addCar">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal -->
         </div>
 
     </div>
@@ -274,24 +396,14 @@
 
             get_detail();
 
+			get_product();
+			
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-
-            function get_detail() {
-                $.ajax({
-                    url: "{{ route('detailOrder') }}",
-                    type: 'GET',
-                    dataType: 'html',
-                    success: function (res) {
-                        $('.detail').html(res);
-						get_total()
-                    }
-                });
-            }
-
+			
             $("#addService").click(function () {
                 $.ajax({
                     url: "{{ route('addOrder') }}",
@@ -316,10 +428,84 @@
                 });
             });
 
-            $("#service_id").trigger("change");
+			$("#service_id").trigger("change");
+			
+            $("#addProduct").click(function () {
+                $.ajax({
+                    url: "{{ route('addOrderProduct') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'product_id': $('#product_id').val(),
+                        'product_qty': $('#product_qty').val(),
+						'disc_persen_product': $('#disc_persen_product').val()
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            $('#Modal3').modal('toggle');
+                            get_product();
+                            $('#disc_persen_product').val('');
+                        } else {
+                            popup(res.message, 'error');
+                        }
+                    }
+                });
+            });
+			$("#product_id").trigger("change");
+            
 
         });
 
+		function get_detail() {
+			$.ajax({
+				url: "{{ route('detailOrder') }}",
+				type: 'GET',
+				dataType: 'html',
+				success: function (res) {
+					$('.detail').html(res);
+					setTimeout(function(){
+						get_total()
+					}, 5000);
+				}
+			});
+		}
+
+		function get_product() {
+			$.ajax({
+				url: "{{ route('detailProduct') }}",
+				type: 'GET',
+				dataType: 'html',
+				success: function (res) {
+					$('.detail_product').html(res);
+					setTimeout(function(){
+						get_total()
+					}, 5000);
+				}
+			});
+		}
+		
+		 $('#addCar').on('click', function () {
+			if($('#name_car_id').val() == ''){
+				alert("Car Name must not empty");
+				return;
+			}
+			$.ajax({
+				url: "{{ route('addCar') }}",
+				type: 'POST',
+				data: {
+					'car_brand_id': $('#brand_car_id').val(),
+					'car_type_id': $('#type_car_id').val(),
+					'name': $('#name_car_id').val(),
+					'year': $('#year_car_id').val()
+				},
+				dataType: 'html',
+				success: function (res) {
+					$('#modal_car').modal('hide');
+					$('#cars_id').html(res);
+				}
+			});
+		});
+		
         document.querySelector('.custom-file-input').addEventListener('change', function (e) {
             var fileName = document.getElementById("vehicle_document").files[0].name;
             var nextSibling = e.target.nextElementSibling
@@ -327,11 +513,11 @@
         });
 
 		function get_total(){
-			$('.sub').data('total')
-			disc = Math.round($('.sub').data('total') * (($('#disc_persen_header').val()).replace(",", ".")) / 100);
-			total = Math.round($('.sub').data('total') - disc);
+			sub = $('.sub').data('total') + $('.sub_product').data('total')
+			disc = Math.round(sub * (($('#disc_persen_header').val()).replace(",", ".")) / 100);
+			total = Math.round(sub - disc);
 			ppn = Math.round(total * (($('#ppn_persen_header').val()).replace(",", ".")) / 100);
-			
+			console.log(total)
 			$('#disc_header').val(disc)
 			var formated = formatRupiah($('#disc_header').val(), 'Rp. ');
 			$('#disc_header').val(formated)
@@ -362,6 +548,23 @@
                     event.preventDefault();
                 //if a decimal has been added, disable the "."-button
             });
+			
+            $("input[id*='product_qty']").keydown(function (event) {
+                if (event.shiftKey == true) {
+                    event.preventDefault();
+                }
+                if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                        (event.keyCode >= 96 && event.keyCode <= 105) ||
+                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                        event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+                } else {
+                    event.preventDefault();
+                }
+                if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
+                    event.preventDefault();
+                //if a decimal has been added, disable the "."-button
+            });
+			
         });
 
         $('#cars_id').val("{{ old('cars_id') }}").change();
@@ -383,6 +586,41 @@
             });
         });
 
+        $('#product_id').on('change', function () {
+			$('#price_product').val($(this).find(':selected').data('price'));
+			var price = document.getElementById('price_product');
+			var formated = formatRupiah($('#price_product').val(), 'Rp. ');
+			$('#price_product').val(formated)
+        });
+		
+		function deleteTemp(id) {
+			$.ajax({
+				url: "{{ route('deleteOrder') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+					'id': id
+					},
+					success: function (res) {
+					get_detail();
+					}
+			});
+		}
+		
+		function deleteTempProduct(id) {
+			$.ajax({
+				url: "{{ route('deleteOrderProduct') }}",
+					type: 'POST',
+					dataType: 'json',
+					data: {
+					'id': id
+					},
+					success: function (res) {
+					get_product();
+					}
+			});
+		}
+		
         function formatRupiah(angka, prefix)
         {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),

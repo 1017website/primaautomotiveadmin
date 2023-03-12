@@ -92,56 +92,6 @@
                     <div class="col-sm-6">
                         <div class="row">
                             <div class="col-sm-2">
-                                <strong>{{ __('Car') }}</strong>
-                            </div>
-                            <div class="col-sm-4">
-                                {{ $customer->carBrand->name . ' ' . $customer->car->name .' '. $customer->car_plate }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <strong>{{ __('Car Type') }}</strong>
-                            </div>
-                            <div class="col-sm-10">
-                                {{ $customer->carType->name }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <strong>{{ __('Car Color') }}</strong>
-                            </div>
-                            <div class="col-sm-4">
-                                {{ $customer->car_color }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <strong>{{ __('Car Year') }}</strong>
-                            </div>
-                            <div class="col-sm-10">
-                                {{ $customer->car_year }}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="border-top"></div>
-                <div class="row p-3">
-                    <div class="col-sm-6">
-                        <div class="row">
-                            <div class="col-sm-2">
                                 <strong>{{ __('Created By') }}</strong>
                             </div>
                             <div class="col-sm-4">
@@ -186,11 +136,41 @@
                         </div>
                     </div>
                 </div>
+				<fieldset class="border p-2">
+					<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
 
+					<div class="detail">
+						
+					</div>
+				</fieldset>
 
             </div>
         </div>
 
     </div>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+			get_detail();
+		});
 
+		function get_detail() {
+			$.ajax({
+				url: "{{ route('customerDetail') }}",
+				type: 'GET',
+				dataType: 'html',
+				data:{
+					'view':1,
+					'id':'<?= $customer->id ?>'
+				},
+				success: function (res) {
+					$('.detail').html(res);
+				}
+			});
+		}
+	</script>
 </x-app-layout>

@@ -27,6 +27,10 @@ class Customer extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
+    public function detail() {
+        return $this->hasMany(CustomerDetail::class, 'customer_id', 'id');
+    }
+	
     public function car() {
         return $this->hasOne(Car::class, 'id', 'cars_id');
     }

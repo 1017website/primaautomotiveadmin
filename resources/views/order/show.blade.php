@@ -1,9 +1,16 @@
 <x-app-layout>
 <?php
 $disc = false;
+$discP = false;
 $sub = 0;
+$grandTotal = 0;
 foreach ($order->detail as $index => $value){
 	if(!empty($value->service_disc)){
+		$disc = true;
+	}
+}
+foreach ($order->product as $index => $value){
+	if(!empty($value->disc)){
 		$disc = true;
 	}
 }
@@ -230,9 +237,6 @@ foreach ($order->detail as $index => $value){
                                             <th scope="col">Total</th>
                                         </tr>
                                     </thead>
-                                    <?php 
-                                        $grandTotal = 0;
-                                    ?>
                                     <tbody class="customtable">
                                         @if (count($order->detail) > 0)
                                         @foreach ($order->detail as $row)
@@ -261,6 +265,53 @@ foreach ($order->detail as $index => $value){
                     </div>
                 </div>
 
+                <div class="border-top"></div>
+                <div class="row pt-3">
+                    <div class="col-sm-12">
+                        <h5 class="card-title">{{ __('List Product') }}</h5>
+                        <div class="border-top"></div>
+                        <div class="detail">
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th scope="col">Product</th>
+                                            <th scope="col">Qty</th>
+                                            <th scope="col">Price</th>
+											<?php if($discP){ ?>
+												<th scope="col" colspan=2>Disc</th>
+											<?php } ?>
+                                            <th scope="col">Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="customtable">
+                                        @if (count($order->product) > 0)
+                                        @foreach ($order->product as $row)
+                                        <tr>
+                                            <td align='center'>{{ $row->product_name }}</td>
+                                            <td align='center'>{{ number_format($row->product_qty, 0, ',', '.') }}</td>
+                                            <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td> 
+											<?php if($discP){ ?>
+												<td class="text-left">{{ number_format($row->disc_persen,2).' %' }}</td>
+												<td class="text-left">{{ __('Rp. ') }}@price($row->disc)</td>
+											<?php } ?>
+                                            <td align='center'>{{ __('Rp. ') }}@price($row->total)</td>
+                                            <?php 
+                                                $grandTotal += $row->total;
+                                            ?>
+                                        </tr>
+                                        @endforeach
+                                        @else
+                                    <td colspan="7" class="text-muted text-center">Service is empty</td>
+                                    @endif
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+				
 				<div class="row">
 					<div class="col-sm-6 margintop"></div>
 					<div class="col-sm-6 text-right pull-right invoice-total">

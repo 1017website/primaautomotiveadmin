@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Item') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Product') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -23,7 +23,7 @@
         
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Item') }}</h5>
+                <h5 class="card-title">{{ __('Product') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -38,7 +38,7 @@
                     <table id="product" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>{{ __('Type Item') }}</th>
+                                <th>{{ __('Type Product') }}</th>
                                 <th>{{ __('Name') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>

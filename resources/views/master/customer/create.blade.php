@@ -140,26 +140,11 @@
                                                 </select>
                                             </div>
                                         </div>
-
+										
                                         <div class="form-group row">
-                                            <label for="car_types_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                                            <label for="car_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Plate') }}</label>
                                             <div class="col-sm-10">
-                                                <select class="select2 form-control custom-select" id="car_types_id" name="car_types_id" style="width: 100%;">                              
-                                                    @foreach($carType as $row)                                
-                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="car_brands_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand') }}</label>
-                                            <div class="col-sm-10">
-                                                <select class="select2 form-control custom-select" id="car_brands_id" name="car_brands_id" style="width: 100%;">                              
-                                                    @foreach($carBrand as $row)                                
-                                                    <option value="{{$row->id}}">{{$row->name}}</option>    
-                                                    @endforeach
-                                                </select>
+                                                <input type="text" class="form-control" id="car_plate" name="car_plate" value="{{ old('car_plate') }}">
                                             </div>
                                         </div>
 
@@ -176,16 +161,10 @@
                                         <div class="form-group row">
                                             <label for="car_color" class="col-sm-2 text-left control-label col-form-label">{{ __('Color') }}</label>
                                             <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="car_color" name="car_color" value="{{ old('car_color') }}"">
+                                                <input type="text" class="form-control" id="car_color" name="car_color" value="{{ old('car_color') }}">
                                             </div>
                                         </div>
-
-                                        <div class="form-group row">
-                                            <label for="car_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Plate') }}</label>
-                                            <div class="col-sm-10">
-                                                <input type="text" class="form-control" id="car_plate" name="car_plate" value="{{ old('car_plate') }}">
-                                            </div>
-                                        </div>
+										<button type="button" class="btn btn-default btn-add float-right">Add Car</button>
                                     </div>
 
                                 </div>
@@ -193,7 +172,13 @@
                         </div>
 
                     </div>
+					<fieldset class="border p-2">
+						<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
 
+						<div class="detail">
+							
+						</div>
+					</fieldset>
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -202,5 +187,64 @@
         </div>
 
     </div>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+			get_detail();
+		});
 
+		function get_detail() {
+			$.ajax({
+				url: "{{ route('customerDetail') }}",
+				type: 'GET',
+				dataType: 'html',
+				success: function (res) {
+					$('.detail').html(res);
+				}
+			});
+		}
+		
+		function deleteCar(id) {
+			$.ajax({
+				url: "{{ route('deleteCustomerCar') }}",
+				type: 'POST',
+				dataType: 'html',
+				data: {
+					'id': id
+				},
+				success: function (res) {
+					$('.detail').html(res);
+				}
+			});
+		}
+		
+		$(".btn-add").click(function () {
+			if($('#car_plate').val() == ''){
+				alert("Car Plate Cant be empty");
+				return
+			}
+			$.ajax({
+				url: "{{ route('addCarCustomer') }}",
+				type: 'POST',
+				dataType: 'JSON',
+				data: {
+					'cars_id': $('#cars_id').val(),
+					'car_year': $('#car_year').val(),
+					'car_color': $('#car_color').val(),
+					'car_plate': $('#car_plate').val(),
+				},
+				success: function (res) {
+					if (res.success) {
+						get_detail();
+					} else {
+						alert('Failed Add Car')
+					}
+				}
+			});
+		});
+	</script>
 </x-app-layout>

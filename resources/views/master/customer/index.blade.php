@@ -53,7 +53,13 @@
                                 <td>{{ $row->name }}</td>
                                 <td>{{ $row->phone }}</td>
                                 <td>{{ $row->address }}</td>
-                                <td>{{ $row->carBrand->name . ' ' . $row->car->name .' '. $row->car_plate }}</td>
+                                <td>
+									<?php $detail = $row->detail; foreach($detail as $i => $v){
+										echo (isset($v->car->brand->name)?($v->car->brand->name. ' '. $v->car->name):'') .' '. $v->car_plate;
+										if($i+1 != count($detail))
+											echo '<BR>';
+									}?>
+								</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">

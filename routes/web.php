@@ -62,7 +62,14 @@ Route::resource('product', ProductController::class)->middleware(['auth']);
 Route::resource('type-service', TypeServiceController::class)->middleware(['auth']);
 Route::resource('service', ServiceController::class)->middleware(['auth']);
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
+
+Route::controller(CustomerController::class)->group(function () {
+	Route::get('customer/customerDetail', 'customerDetail')->name('customerDetail')->middleware(['auth']);
+	Route::post('customer/deleteCustomerCar', 'deleteCustomerCar')->name('deleteCustomerCar')->middleware(['auth']);
+	Route::post('customer/addCarCustomer', 'addCarCustomer')->name('addCarCustomer')->middleware(['auth']);
+});
 Route::resource('customer', CustomerController::class)->middleware(['auth']);
+
 Route::controller(CarController::class)->group(function () {
     Route::post('car/uploadImages', 'uploadImages')->name('uploadImages')->middleware(['auth']);
     Route::post('car/deleteImages', 'deleteImages')->name('deleteImages')->middleware(['auth']);
@@ -80,8 +87,14 @@ Route::controller(StockController::class)->group(function () {
 Route::resource('stock', StockController::class)->middleware(['auth']);
 Route::controller(OrderController::class)->group(function () {
     Route::get('order/detailOrder', 'detailOrder')->name('detailOrder')->middleware(['auth']);
+	Route::get('order/detailProduct', 'detailProduct')->name('detailProduct')->middleware(['auth']);
     Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
+	Route::post('order/updateOrder', 'updateOrder')->name('updateOrder')->middleware(['auth']);
+	Route::get('order/allDetail', 'allDetail')->name('allDetail')->middleware(['auth']);
+	Route::post('order/addOrderProduct', 'addOrderProduct')->name('addOrderProduct')->middleware(['auth']);
+	Route::post('order/addCar', 'addCar')->name('addCar')->middleware(['auth']);
     Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
+	Route::post('order/deleteOrderProduct', 'deleteOrderProduct')->name('deleteOrderProduct')->middleware(['auth']);
     Route::post('order/addInvoice', 'addInvoice')->name('addInvoice')->middleware(['auth']);
     Route::post('order/price', 'price')->name('order.price')->middleware(['auth']);
 });
@@ -91,6 +104,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::post('invoice/workOrder', 'workOrder')->name('workOrder')->middleware(['auth']);
     Route::post('invoice/voidInvoice', 'voidInvoice')->name('voidInvoice')->middleware(['auth']);
     Route::get('invoice/print/{id}', 'print')->name('invoice.print')->middleware(['auth']);
+	Route::get('invoice/printProduct/{id}', 'printProduct')->name('invoice.printProduct')->middleware(['auth']);
     Route::get('invoice/download/{id}', 'download')->name('invoice.download')->middleware(['auth']);
 });
 Route::resource('invoice', InvoiceController::class)->middleware(['auth']);

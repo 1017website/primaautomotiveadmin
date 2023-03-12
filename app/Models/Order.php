@@ -45,6 +45,10 @@ class Order extends Model {
         return $this->hasMany(OrderDetail::class, 'order_id', 'id');
     }
 
+    public function product() {
+        return $this->hasMany(OrderProduct::class, 'order_id', 'id');
+    }
+	
     public function getStatus() {
         if ($this->status == '0') {
             return 'Deleted';

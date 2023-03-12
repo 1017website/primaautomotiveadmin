@@ -123,6 +123,12 @@ class InvoiceController extends Controller {
         return view('invoice.print', compact('invoice', 'setting'));
     }
 
+    public function printProduct($id) {
+        $invoice = Invoice::findorfail($id);
+        $setting = Setting::where('id', '1')->first();
+        return view('invoice.printProduct', compact('invoice', 'setting'));
+    }
+	
     public function download($id) {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");

@@ -111,12 +111,17 @@
     </style>
 <?php
 $disc = false;
+$discP = false;
 $sub = 0;
 foreach ($invoice->order->detail as $index => $value){
 	if(!empty($value->disc_persen)){
 		$disc = true;
 	}
-	$sub += $value->service_total;
+}
+foreach ($invoice->order->product as $index => $value){
+	if(!empty($value->disc_persen)){
+		$discP = true;
+	}
 }
 ?>
     <div class="page-breadcrumb">
@@ -217,7 +222,7 @@ foreach ($invoice->order->detail as $index => $value){
                                             </tr>
                                         </thead>
                                         <tbody>
-											<?php $sub = 0;
+											<?php
                                             foreach ($invoice->order->detail as $row => $value){ ?>
                                             <tr>
                                                 <td class="text-center">{{ ($row+1) }}</td>
@@ -235,13 +240,44 @@ foreach ($invoice->order->detail as $index => $value){
                                             <tr class="last-row"></tr>
                                         </tbody>
                                     </table>
-
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" style="width:5%">#</th>
+                                                <th class="text-left" style="width:30%">{{ __('Product') }}</th>
+                                                <th class="text-left" style="width:20%">{{ __('Price') }}</th>
+                                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>
+												<?php if($discP){ ?>
+													<th class="text-left" style="width:20%" colspan=2>{{ __('Disc') }}</th>
+												<?php } ?>
+                                                <th class="text-right" style="width:15%">{{ __('Total') }}</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+											<?php
+                                            foreach ($invoice->order->product as $row => $value){ ?>
+                                            <tr>
+                                                <td class="text-center">{{ ($row+1) }}</td>
+                                                <td class="text-left">{{ $value->product_name }}</td>                                               
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
+                                                <td class="text-left">{{ $value->product_qty }}</td>
+												<?php if($discP){ ?>
+													<td class="text-left">{{ number_format($value->disc_persen,2) . ' %' }}</td>
+													<td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
+												<?php } ?>
+                                                <td class="text-right">{{ __('Rp. ') }}@price($value->total)</td>
+                                            </tr>
+											<?php $sub += $value->total;
+                                            } ?>
+                                            <tr class="last-row"></tr>
+                                        </tbody>
+                                    </table>
                                 </div>
 
                                 <div class="row">
                                     <div class="col-sm-6 margintop">
                                         <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
-
+										<a class="btn btn-primary" href="{{ route('invoice.printProduct', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print Product') }}</a>
                                         <a class="btn btn-primary" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
                                         <a class="btn btn-primary" href="{{ route('invoice.download', $invoice->id) }}" target="_blank"><i class="fa fa-download"></i>{{ __('Download PDF') }}</a>
 
