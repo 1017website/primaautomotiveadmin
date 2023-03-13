@@ -192,4 +192,10 @@ class PayrollController extends Controller {
         return view('hrm.payroll.show', compact('payroll', 'setting', 'mechanic'));
     }
     
+    public function print($id) {
+        $invoice = Payroll::findorfail($id);
+		$mechanic = Mechanic::findorfail($invoice->employee_id);
+        $setting = Setting::where('id', '1')->first();
+        return view('hrm.payroll.print', compact('invoice', 'setting','mechanic'));
+    }
 }

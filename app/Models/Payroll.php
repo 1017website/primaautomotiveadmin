@@ -30,5 +30,24 @@ class Payroll extends Model {
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
+	
+    public function getStatusPayment() {
+        if ($this->status_payment == '0') {
+            return 'Unpaid';
+        } elseif ($this->status_payment == '1') {
+            return 'Dp';
+        } elseif ($this->status_payment == '2') {
+            return 'Paid';
+        }
+    }
 
+    public function getColorPayment() {
+        if ($this->status_payment == '0') {
+            return 'btn-danger';
+        } elseif ($this->status_payment == '1') {
+            return 'btn-warning';
+        } elseif ($this->status_payment == '2') {
+            return 'btn-success';
+        }
+    }
 }

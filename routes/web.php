@@ -206,6 +206,7 @@ Route::resource('employee-credit', EmployeeCreditController::class)->middleware(
 
 Route::controller(PayrollController::class)->group(function () {
     Route::post('payroll/getAttendance', 'getAttendance')->name('payroll.getAttendance')->middleware(['auth']);
+	Route::get('payroll/print/{id}', 'print')->name('payroll.print')->middleware(['auth']);
 });
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 //hrm 
