@@ -10,12 +10,14 @@ use App\Models\Color;
 use App\Models\TypeService;
 use App\Models\Car;
 use App\Models\Service;
-use App\Models\EstimatorTemp;
+use App\Models\Estimator;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Customer;
 use App\Models\CustomerDetail;
 use Session;
+use App\Models\Setting;
+use PDF;
 
 class EstimatorInternalController extends Controller {
 
@@ -68,8 +70,9 @@ class EstimatorInternalController extends Controller {
     public function detailEstimatorService() {
         $request = array_merge($_POST, $_GET);
         $estimateTime = '';
-        $detailOrder = EstimatorTemp::where('session_id', $request['session_id'])->get();
+        $detailOrder = Estimator::where('session_id', $request['session_id'])->get();
 
+		$estimator = Estimator::where('session_id', $request['session_id'])->first();
         $totalPanel = 0;
         foreach ($detailOrder as $row) {
             $service = Service::findOrFail($row->service_id);
@@ -110,12 +113,12 @@ class EstimatorInternalController extends Controller {
         try {
             $service = (!empty($request['service_id']) ? $request['service_id'] : $request['service_additional_id']);
 
-            $temp = EstimatorTemp::where([
+            $temp = Estimator::where([
                         'session_id' => $request['session_id'],
                         'service_id' => $service,
                     ])->first();
             if (!isset($temp)) {
-                $temp = new EstimatorTemp();
+                $temp = new Estimator();
                 $temp->session_id = $request['session_id'];
                 $temp->service_id = $service;
                 $service = Service::findOrFail($service);
@@ -144,7 +147,7 @@ class EstimatorInternalController extends Controller {
         $request = array_merge($_POST, $_GET);
 
         try {
-            $temp = EstimatorTemp::findOrFail($request['id']);
+            $temp = Estimator::findOrFail($request['id']);
             $temp->delete();
         } catch (\Exception $e) {
             $success = false;
@@ -159,7 +162,7 @@ class EstimatorInternalController extends Controller {
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $temp = EstimatorTemp::where('session_id', $request['session_id'])->get();
+        $temp = Estimator::where('session_id', $request['session_id'])->get();
         if (count($temp) == 0) {
             $success = false;
             return Redirect::back()->withErrors(['msg' => 'Service not found']);
@@ -246,11 +249,11 @@ class EstimatorInternalController extends Controller {
                     }
                 }
 
-                $deleted = EstimatorTemp::where('session_id', $request['session_id'])->delete();
-                if (!$deleted) {
-                    $success = false;
-                    $message = 'Failed delete temp';
-                }
+                // $deleted = Estimator::where('session_id', $request['session_id'])->delete();
+                // if (!$deleted) {
+                    // $success = false;
+                    // $message = 'Failed delete temp';
+                // }
 
                 if ($success) {
                     DB::commit();
@@ -281,4 +284,23 @@ class EstimatorInternalController extends Controller {
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
+    public function download($id) {
+        ini_set('max_execution_time', 300);
+        ini_set("memory_limit", "512M");
+
+        $invoice = Estimator::where('session_id', $id)->get();
+        $setting = Setting::where('id', '1')->first();
+        
+        //view html
+        //return view('invoice.download', compact('invoice', 'setting'));
+
+        $pdf = PDF::loadview('estimator.download', ['invoice' => $invoice, 'setting' => $setting]);
+        $pdf->render();
+
+        //render
+        return $pdf->stream();
+
+        //download
+        //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
+    }
 }

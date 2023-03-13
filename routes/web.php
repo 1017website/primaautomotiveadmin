@@ -61,6 +61,7 @@ Route::resource('estimator', EstimatorController::class);
 Route::controller(EstimatorInternalController::class)->group(function () {
     Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor');
     Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator');
+	Route::get('estimator-internal/download/{id}', 'download')->name('internal.download');
     Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService');
     Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService');
     Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService');

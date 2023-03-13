@@ -212,7 +212,7 @@
 
 <div class="form-group row" style="margin-top:1.5rem;">
     <div class="col-sm-12 text-center">
-        <a href="#" type="button" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
+        <a href="{{ route('internal.download', $session) }}" type="button" target="_blank" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
         <a href="#" type="button" class="btn btn-default" id="btn-order" data-toggle="modal" data-target="#Modal4"><i class="mdi mdi-cart-plus"></i>Order</a>
     </div>
 </div> 
