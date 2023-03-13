@@ -121,8 +121,8 @@ class EstimatorInternalController extends Controller {
                 $service = Service::findOrFail($service);
                 $temp->service_name = $service->name;
                 $temp->service_price = $service->estimated_costs;
-                $temp->service_qty = str_replace('.', '', $request['service_qty']);
-				$temp->disc_persen = str_replace(',', '.', $request['disc_persen']);
+                $temp->service_qty = (float) str_replace('.', '', $request['service_qty']);
+				$temp->disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
                 $temp->service_disc = ($temp->service_price * $temp->service_qty) * $temp->disc_persen / 100;
                 $temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
                 $temp->save();
