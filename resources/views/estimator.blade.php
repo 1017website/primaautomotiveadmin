@@ -122,7 +122,14 @@
                     </div>
 
                 </div>
-
+				<div class="row">
+                    <div class="col-sm-12">
+						{{ __('Disclaimer') }}
+						<div class="col-sm-12">
+							<i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
+						</div>
+					</div>
+				</div>
                 <footer class="footer text-center ml-auto mr-auto">
                     All Rights Reserved by <a href="#" target="_blank"><strong>{{ config('app.name') }}</strong></a>. Designed and Developed by <a target="_blank" href="https://1017studio.com"><strong>1017Studio</strong></a>.
                 </footer>

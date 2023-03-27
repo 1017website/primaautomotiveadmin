@@ -19,6 +19,7 @@ use App\Http\Controllers\Workshop\CarController;
 use App\Http\Controllers\Workshop\CarBrandController;
 use App\Http\Controllers\Workshop\CarTypeController;
 use App\Http\Controllers\Workshop\ColorController;
+use App\Http\Controllers\Workshop\PrimerColorController;
 use App\Http\Controllers\Workshop\StockController;
 use App\Http\Controllers\Workshop\OrderController;
 use App\Http\Controllers\Workshop\InvoiceController;
@@ -66,6 +67,7 @@ Route::controller(EstimatorInternalController::class)->group(function () {
     Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService');
     Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService');
     Route::post('estimator-internal/deleteEstimatorService', 'deleteEstimatorService')->name('internal.deleteEstimatorService');
+	Route::post('estimator-internal/saveMaster', 'saveMaster')->name('internal.saveMaster');
     Route::post('estimator-internal/order', 'order')->name('internal.order');
 });
 Route::resource('estimator-internal', EstimatorInternalController::class);
@@ -91,6 +93,8 @@ Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
 Route::resource('car-type', CarTypeController::class)->middleware(['auth']);
 Route::resource('color', ColorController::class)->middleware(['auth']);
+Route::resource('primer-color', PrimerColorController::class)->middleware(['auth']);
+
 Route::controller(StockController::class)->group(function () {
     Route::get('stock/detailItem', 'detailItem')->name('detailItem')->middleware(['auth']);
     Route::post('stock/addItem', 'addItem')->name('addItem')->middleware(['auth']);

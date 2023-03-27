@@ -15,6 +15,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Customer;
 use Session;
+use App\Models\Setting;
 
 class EstimatorController extends Controller {
 
@@ -22,8 +23,8 @@ class EstimatorController extends Controller {
         $colors = Color::all();
         $services = TypeService::all();
         $cars = Car::all();
-
-        return view('estimator', compact('colors', 'services', 'cars'));
+		$setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
+        return view('estimator', compact('colors', 'services', 'cars', 'setting'));
     }
 
     public function changeColor() {

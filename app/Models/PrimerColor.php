@@ -7,15 +7,16 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Setting extends Model {
+class PrimerColor extends Model {
 
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
+	protected $table = 'primer_color';
+	
     protected $fillable = [
-        'code', 'backend_url', 'frontend_url', 'name', 'address', 'email', 'phone','disclaimer',
-        'target_panel', 'target_revenue', 'bonus_panel'
+        'name',
     ];
 
     public function userCreated() {

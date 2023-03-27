@@ -7,8 +7,11 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Color;
+use App\Models\PrimerColor;
 use App\Models\TypeService;
 use App\Models\Car;
+use App\Models\CarBrand;
+use App\Models\CarType;
 use App\Models\Service;
 use App\Models\Estimator;
 use App\Models\Order;
@@ -25,8 +28,13 @@ class EstimatorInternalController extends Controller {
         $colors = Color::all();
         $services = TypeService::all();
         $cars = Car::all();
+		$colorPrimers = PrimerColor::all();
+        $carBrand = CarBrand::all();
+        $carType = CarType::all();
 
-        return view('estimator.estimator', compact('colors', 'services', 'cars'));
+		$setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
+		
+        return view('estimator.estimator', compact('colors', 'services', 'cars','colorPrimers', 'carBrand', 'carType', 'setting'));
     }
 
     public function changeColor() {
@@ -52,6 +60,88 @@ class EstimatorInternalController extends Controller {
         return json_encode(['success' => $success, 'message' => $message, 'services' => $services]);
     }
 
+    public function saveMaster() {
+        $success = true;
+        $message = '';
+        $html = '';
+
+        if (isset($_POST['value'])) {
+			if($_POST['type'] == 'primer_color'){
+				$check = PrimerColor::where(['name' => $_POST['value']])->first();
+				if(!isset($check)){
+					$model = new PrimerColor();
+					$model->name = $_POST['value'];
+					if(!$model->save()){
+						$success = false;
+						$message = "Save Failed";
+					}else{
+						$html = "<option value='".$model->id."'>".$model->name."</option>";
+					}
+				}else{
+					$success = false;
+					$message = "Color sudah ada";
+				}
+			}
+			if($_POST['type'] == 'color'){
+				$check = Color::where(['name' => $_POST['value']])->first();
+				if(!isset($check)){
+					$model = new Color();
+					$model->name = $_POST['value'];
+					if(!$model->save()){
+						$success = false;
+						$message = "Save Failed";
+					}else{
+						$html = "<option value='".$model->id."'>".$model->name."</option>";
+					}
+				}else{
+					$success = false;
+					$message = "Color sudah ada";
+				}
+			}
+			if($_POST['type'] == 'service'){
+				$check = TypeService::where(['name' => $_POST['value']])->first();
+				if(!isset($check)){
+					$model = new TypeService();
+					$model->name = $_POST['value'];
+					$model->color_id = implode(",",$_POST['color']);
+					if(!$model->save()){
+						$success = false;
+						$message = "Save Failed";
+					}else{
+						$html = "<option value='".$model->id."'>".$model->name."</option>";
+					}
+				}else{
+					$success = false;
+					$message = "Service sudah ada";
+				}
+			}
+			if($_POST['type'] == 'cars'){
+				$check = Car::where(['name' => $_POST['value'], 'year' => $_POST['year']])->first();
+				if(!isset($check)){
+					$model = new Car();
+					$model->name = $_POST['value'];
+					$model->car_brand_id = $_POST['brand'];
+					$model->car_type_id = $_POST['type_car'];
+					$model->year = $_POST['year'];
+					if(!$model->save()){
+						$success = false;
+						$message = "Save Failed";
+					}else{
+						$html = "<option value='".$model->id."'>".$model->name.' '. $model->year ."</option>";
+					}
+				}else{
+					$success = false;
+					$message = "Cars sudah ada";
+				}
+			}
+        } else {
+            $success = false;
+            $message = 'Invalid value color';
+        }
+
+        return json_encode(['success' => $success, 'message' => $message, 'html' => $html]);
+    }
+	
     public function showEstimator() {
         $success = true;
         $message = '';

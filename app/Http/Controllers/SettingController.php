@@ -25,6 +25,7 @@ class SettingController extends Controller {
             'phone' => 'required|max:255',
             'address' => 'required|max:255',
             'email' => 'required|max:255',
+			'disclaimer' => 'max:255',
         ]);
 
         $validateData['target_panel'] = str_replace(',', '.', $request->target_panel);

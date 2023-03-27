@@ -95,6 +95,13 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="disclaimer" class="col-sm-2 text-left control-label col-form-label">{{ __('Disclaimer') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="disclaimer" name="disclaimer" value="{{ isset($setting) ? $setting->disclaimer : '' }}" placeholder="Disclaimer">
+                        </div>
+                    </div>
+					
                     <h5 class="card-title">{{ __('Setting Bonus') }}</h5>
                     <div class="border-top"></div>
 
