@@ -14,6 +14,7 @@ use App\Models\EstimatorTemp;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Customer;
+use App\Models\PrimerColor;
 use Session;
 use App\Models\Setting;
 
@@ -24,7 +25,8 @@ class EstimatorController extends Controller {
         $services = TypeService::all();
         $cars = Car::all();
 		$setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
-        return view('estimator', compact('colors', 'services', 'cars', 'setting'));
+		$colorPrimers = PrimerColor::all();
+        return view('estimator', compact('colors', 'services', 'cars', 'setting','colorPrimers'));
     }
 
     public function changeColor() {
@@ -264,4 +266,23 @@ class EstimatorController extends Controller {
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
+    public function download($id) {
+        ini_set('max_execution_time', 300);
+        ini_set("memory_limit", "512M");
+
+        $invoice = Estimator::where('session_id', $id)->get();
+        $setting = Setting::where('id', '1')->first();
+        
+        //view html
+        //return view('invoice.download', compact('invoice', 'setting'));
+
+        $pdf = PDF::loadview('estimator.download', ['invoice' => $invoice, 'setting' => $setting]);
+        $pdf->render();
+
+        //render
+        return $pdf->stream();
+
+        //download
+        //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
+    }
 }

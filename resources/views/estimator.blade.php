@@ -82,7 +82,17 @@
                                 </select>
                             </div>
                         </div>
-
+                        <div class="form-group row">
+                            <label for="color" class="col-sm-2 text-left control-label col-form-label">{{ __('') }}</label>
+                            <div class="col-sm-10">
+                                <select class="select2 form-control custom-select" id="color" name="color" style="width: 100%;">
+                                    <option></option>
+                                    @foreach($colorPrimers as $row)                                
+                                    <option value="{{$row->id}}">{{$row->name}}</option>    
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="type_service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Service') }}</label>
                             <div class="col-sm-10">
@@ -149,6 +159,9 @@ $(document).ready(function () {
     });
 
     $('#color_id').select2({
+        placeholder: "Please select a color"
+    });
+    $('#color').select2({
         placeholder: "Please select a color"
     });
     $('#type_service_id').select2({

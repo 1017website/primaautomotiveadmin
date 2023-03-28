@@ -147,12 +147,13 @@ class EstimatorInternalController extends Controller {
         $message = '';
         $view = '';
 
+		
         if (isset($_POST['color_id']) && isset($_POST['type_service_id']) && isset($_POST['car_id'])) {
             $car = Car::where(['id' => $_POST['car_id']])->first();
             $services = Service::where(['type_service_id' => $_POST['type_service_id']])->get();
             $additionalServices = Service::whereRaw('type_service_id is null')->get();
             $session = Session()->getid();
-
+			Estimator::where('session_id', $session)->delete();
             return view('estimator.estimator-detail', compact('car', 'services', 'session', 'additionalServices'));
         }
     }
