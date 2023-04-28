@@ -14,11 +14,14 @@ class Estimator extends Model {
     protected $table = 'estimator';
     protected $fillable = [
         'session_id', 'service_id', 'service_name', 'service_price', 'service_qty',
-        'service_total', 'service_disc'
+        'service_total', 'service_disc', 'service_desc'
     ];
 
     public function service() {
         return $this->hasOne(Service::class, 'id', 'service_id');
     }
-	
+
+    public function car() {
+        return $this->hasOne(Car::class, 'id', 'cars_id');
+    }
 }

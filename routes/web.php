@@ -51,6 +51,7 @@ Route::resource('setting', SettingController::class)->middleware(['auth']);
 Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/changeColor', 'changeColor')->name('changeColor');
     Route::post('estimator/showEstimator', 'showEstimator')->name('showEstimator');
+	Route::get('estimator/download/{id}', 'download')->name('estimator.download');
     Route::post('estimator/detailEstimatorService', 'detailEstimatorService')->name('detailEstimatorService');
     Route::post('estimator/addEstimatorService', 'addEstimatorService')->name('addEstimatorService');
     Route::post('estimator/priceEstimatorService', 'priceEstimatorService')->name('priceEstimatorService');
@@ -60,17 +61,18 @@ Route::controller(EstimatorController::class)->group(function () {
 Route::resource('estimator', EstimatorController::class);
 
 Route::controller(EstimatorInternalController::class)->group(function () {
-    Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor')->middleware(['auth']);;
+    Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor')->middleware(['auth']);
     Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator')->middleware(['auth']);;
-	Route::get('estimator-internal/download/{id}', 'download')->name('internal.download')->middleware(['auth']);;
+	Route::get('estimator-internal/download/{id}', 'download')->name('internal.download')->middleware(['auth']);
     Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService')->middleware(['auth']);;
     Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService')->middleware(['auth']);;
     Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService')->middleware(['auth']);;
     Route::post('estimator-internal/deleteEstimatorService', 'deleteEstimatorService')->name('internal.deleteEstimatorService')->middleware(['auth']);;
-	Route::post('estimator-internal/saveMaster', 'saveMaster')->name('internal.saveMaster')->middleware(['auth']);;
+	Route::post('estimator-internal/saveMaster', 'saveMaster')->name('internal.saveMaster')->middleware(['auth']);
+	Route::post('estimator-internal/headersave', 'headersave')->name('internal.headersave')->middleware(['auth']);
     Route::post('estimator-internal/order', 'order')->name('internal.order')->middleware(['auth']);;
 });
-Route::resource('estimator-internal', EstimatorInternalController::class)->middleware(['auth']);;
+Route::resource('estimator-internal', EstimatorInternalController::class)->middleware(['auth']);
 //workshop
 Route::resource('type-product', TypeProductController::class)->middleware(['auth']);
 Route::resource('product', ProductController::class)->middleware(['auth']);

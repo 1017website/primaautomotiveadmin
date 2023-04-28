@@ -51,8 +51,8 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
-                        <label for="service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Service') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Service') }}</label>
+                        <div class="col-sm-9">
                             <select class="select2 form-control custom-select" id="service_id" name="service_id" style="width: 100%;">                              
                                 @foreach($services as $row)                                
                                 <option value="{{$row->id}}">{{$row->name}}</option>    
@@ -62,15 +62,22 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_desc" class="col-sm-3 text-left control-label col-form-label">{{ __('Description') }}</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" rows=3 class="form-control" id="service_desc" name="service_desc" required="" />
+                        </div>
+                    </div>
+					
+                    <div class="form-group row">
+                        <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="service_qty" name="service_qty" required="true" value="1">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-                        <div class="col-sm-10">
+                        <label for="qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Price') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="price" name="price" required="" readonly="">
                         </div>
                     </div>
@@ -98,8 +105,8 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
-                        <label for="service_additional_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Additional Service') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_additional_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Additional Service') }}</label>
+                        <div class="col-sm-9">
                             <select class="select2 form-control custom-select" id="service_additional_id" name="service_additional_id" style="width: 100%;">                              
                                 @foreach($additionalServices as $row)                                
                                 <option value="{{$row->id}}">{{$row->name}}</option>    
@@ -109,15 +116,22 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
-                        <div class="col-sm-10">
+                        <label for="add_desc" class="col-sm-3 text-left control-label col-form-label">{{ __('Description') }}</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" rows=3 class="form-control" id="add_desc" name="add_desc" required="" />
+                        </div>
+                    </div>
+					
+                    <div class="form-group row">
+                        <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="service_qty" name="service_qty" required="true" value="1">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="price_additional" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-                        <div class="col-sm-10">
+                        <label for="price_additional" class="col-sm-3 text-left control-label col-form-label">{{ __('Price') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="price_additional" name="price_additional" required="" readonly="">
                         </div>
                     </div>
@@ -202,7 +216,7 @@
 
 <div class="form-group row" style="margin-top:1.5rem;">
     <div class="col-sm-12 text-center">
-        <a href="#" type="button" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
+		<a href="{{ route('estimator.download', $session) }}" type="button" target="_blank" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
         <a href="#" type="button" class="btn btn-default" id="btn-order" data-toggle="modal" data-target="#Modal4"><i class="mdi mdi-cart-plus"></i>Order</a>
     </div>
 </div> 
@@ -246,6 +260,7 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_id': $('#service_id').val(),
+				'service_desc': $('#service_desc').val(),
                 'service_qty': $('#service_qty').val(),
             },
             success: function (res) {
@@ -269,6 +284,7 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_additional_id': $('#service_additional_id').val(),
+				'service_desc': $('#add_desc').val(),
                 'service_qty': $('#service_qty').val(),
             },
             success: function (res) {

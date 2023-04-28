@@ -30,12 +30,13 @@
             <div class="card-body">
 			<div class="row">
 				<div class="col-sm-12">
-
-					<h4 class="text-center" style="margin-bottom: 1.5rem;">Estimator Internal</h4>
+				<h4 class="text-center" style="margin-bottom: 1.5rem;">Estimator Internal</h4>
+				</div>
+				<div class="col-sm-6">
 
 					<div class="form-group row">
-						<label for="color_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Color') }}</label>
-						<div class="col-sm-4">
+						<label for="color_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Choose Your Color') }}</label>
+						<div class="col-sm-7">
 							<select class="select2 form-control custom-select" id="color_id" name="color_id" style="width: 100%;">
 								<option></option>
 								@foreach($colors as $row)                                
@@ -43,14 +44,14 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="col-sm-1">
+						<div class="col-sm-2">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_color" >New</button>
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label for="color_primer" class="col-sm-2 text-left control-label col-form-label"></label>
-						<div class="col-sm-4">
+						<label for="color_primer" class="col-sm-3 text-left control-label col-form-label"></label>
+						<div class="col-sm-7">
 							<select class="select2 form-control custom-select" id="color_primer" name="color_primer" style="width: 100%;">
 								<option></option>
 								@foreach($colorPrimers as $row)                                
@@ -58,14 +59,14 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="col-sm-1">
+						<div class="col-sm-2">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_color_primer" >New</button>
 						</div>
 					</div>
 					
 					<div class="form-group row">
-						<label for="type_service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Service') }}</label>
-						<div class="col-sm-4">
+						<label for="type_service_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Choose Your Service') }}</label>
+						<div class="col-sm-7">
 							<select class="select2 form-control custom-select" id="type_service_id" name="type_service_id" style="width: 100%;">
 								<option></option>
 								@foreach($services as $row)                                
@@ -73,14 +74,14 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="col-sm-1">
+						<div class="col-sm-2">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_service" >New</button>
 						</div>
 					</div>
 
 					<div class="form-group row">
-						<label for="car_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Choose Your Car') }}</label>
-						<div class="col-sm-4">
+						<label for="car_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Choose Your Car') }}</label>
+						<div class="col-sm-7">
 							<select class="select2 form-control custom-select" id="car_id" name="car_id" style="width: 100%;">
 								<option></option>
 								@foreach($cars as $row)                                
@@ -88,26 +89,80 @@
 								@endforeach
 							</select>
 						</div>
-						<div class="col-sm-1">
+						<div class="col-sm-2">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_car" >New</button>
 						</div>
 					</div>
 
-					<div class="form-group row">
-						<div class="col-sm-12 text-center">
-							<a href="#" type="button" class="btn btn-default" id="btn-estimator">Go</a>
-						</div>
-					</div>  
-
-					<div class="border-top" style="margin-bottom: 1rem;"></div>
-
-					<div class="cars">
-
-					</div>
-
+                    <div class="form-group row">
+                        <label for="disc_header" class="col-sm-3 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                        <div class="col-sm-2">
+                            <input type="text" autocomplete="off" class="form-control" id="disc_header" name="disc_header" placeholder="Disc">
+                        </div>
+						<div class="col-sm-1" style="line-height: 35px;"><span class="align-middle">%</span></div>
+                    </div>
 				</div>
+				<div class="col-sm-6">
+                    <div class="form-group row">
+                        <label for="order_date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                        <div class="col-sm-10 input-group">
+                            <input type="text" class="form-control mydatepicker" id="order_date" name="order_date" value="" placeholder="Order Date" autocomplete="off">
+                            <div class="input-group-append">
+                                <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_name" name="order_name" required="true" placeholder="Customer Name">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Phone') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control phone" id="order_phone" name="order_phone" required="true" placeholder="Customer Phone">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_address" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_address" name="order_address" required="true" placeholder="Customer Address">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Plate') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_plate" name="order_plate" required="true" placeholder="Plate Number">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="order_color" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Color') }}</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="order_color" name="order_color" required="true" placeholder="Car Color">
+                        </div>
+                    </div>
+				</div>
+				
+			</div>
+			<div class="form-group row">
+				<div class="col-sm-12 text-center">
+					<a href="#" type="button" class="btn btn-default" id="btn-estimator">Go</a>
+				</div>
+			</div>  
+
+			<div class="border-top" style="margin-bottom: 1rem;"></div>
+
+			<div class="cars">
 
 			</div>
+
+
 			</div>
 			<div class="card-footer">
 				<div class="form-group row">
@@ -349,6 +404,7 @@ $('.add').on('click', function () {
 				if(data.type == 'cars'){
 					$('#car_id').append(res.html)
 				}
+				$(".modal:visible").modal('toggle');
 			} else {
 				popup(res.message, 'error');
 			}

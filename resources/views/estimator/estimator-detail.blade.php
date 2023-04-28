@@ -51,8 +51,8 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
-                        <label for="service_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Service') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Service') }}</label>
+                        <div class="col-sm-9">
                             <select class="select2 form-control custom-select" id="service_id" name="service_id" style="width: 100%;">                              
                                 @foreach($services as $row)                                
                                 <option value="{{$row->id}}">{{$row->name}}</option>    
@@ -62,21 +62,28 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_desc" class="col-sm-3 text-left control-label col-form-label">{{ __('Description') }}</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" rows=3 class="form-control" id="service_desc" name="service_desc" required="" />
+                        </div>
+                    </div>
+					
+                    <div class="form-group row">
+                        <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="service_qty" name="service_qty" required="true" value="1">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-                        <div class="col-sm-10">
+                        <label for="qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Price') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="price" name="price" required="" readonly="">
                         </div>
                     </div>
 					<div class="form-group row">
-						<label for="disc_persen" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
-						<div class="col-sm-8">
+						<label for="disc_persen" class="col-sm-3 text-left control-label col-form-label">{{ __('Disc') }}</label>
+						<div class="col-sm-7">
 							<input type="text" class="form-control" id="disc_persen" name="disc_persen" placeholder="">
 						</div><div class="col-sm-2" style="line-height: 35px;"><span class="align-middle">%</span></div>
 					</div>
@@ -113,6 +120,13 @@
                         </div>                                
                     </div>
 
+                    <div class="form-group row">
+                        <label for="add_desc" class="col-sm-3 text-left control-label col-form-label">{{ __('Description') }}</label>
+                        <div class="col-sm-9">
+                            <textarea type="text" rows=3 class="form-control" id="add_desc" name="add_desc" required="" />
+                        </div>
+                    </div>
+					
                     <div class="form-group row">
                         <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
                         <div class="col-sm-10">
@@ -154,50 +168,7 @@
                 </div>
                 <div class="modal-body">
 
-                    <div class="form-group row">
-                        <label for="order_date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
-                        <div class="col-sm-10 input-group">
-                            <input type="text" class="form-control mydatepicker" id="order_date" name="order_date" value="" placeholder="Order Date" autocomplete="off">
-                            <div class="input-group-append">
-                                <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div>
-                    </div>
 
-                    <div class="form-group row">
-                        <label for="order_name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="order_name" name="order_name" required="true" placeholder="Customer Name">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="order_phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Phone') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control phone" id="order_phone" name="order_phone" required="true" placeholder="Customer Phone">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="order_address" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="order_address" name="order_address" required="true" placeholder="Customer Address">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="order_plate" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Plate') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="order_plate" name="order_plate" required="true" placeholder="Plate Number">
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label for="order_color" class="col-sm-2 text-left control-label col-form-label">{{ __('Car Color') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="order_color" name="order_color" required="true" placeholder="Car Color">
-                        </div>
-                    </div>
 
                 </div>
                 <div class="modal-footer">
@@ -212,8 +183,8 @@
 
 <div class="form-group row" style="margin-top:1.5rem;">
     <div class="col-sm-12 text-center">
-        <a href="{{ route('internal.download', $session) }}" type="button" target="_blank" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
-        <a href="#" type="button" class="btn btn-default" id="btn-order" data-toggle="modal" data-target="#Modal4"><i class="mdi mdi-cart-plus"></i>Order</a>
+        <a href="#" type="button" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
+        <a href="#" type="button" class="btn btn-default" id="btn-order"><i class="mdi mdi-cart-plus"></i>Order</a>
     </div>
 </div> 
 
@@ -256,6 +227,7 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_id': $('#service_id').val(),
+				'service_desc': $('#service_desc').val(),
                 'service_qty': $('#service_qty').val(),
 				'disc_persen': $('#disc_persen').val()
             },
@@ -280,6 +252,7 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_additional_id': $('#service_additional_id').val(),
+				'service_desc': $('#add_desc').val(),
                 'service_qty': $('#service_qty').val(),
 				'service_qty': $('#service_qty').val(),
 				'disc_persen': $('#disc_persen_add').val()
@@ -297,7 +270,7 @@ $(document).ready(function ($) {
     });
     $("#service_additional_id").trigger("change");
 
-    $(".order-now").click(function () {
+    $("#btn-order").click(function () {
 
         if ($('#order_date').val() === '') {
             popup('Order date required', 'error');
@@ -341,12 +314,73 @@ $(document).ready(function ($) {
                 'order_phone': $('#order_phone').val(),
                 'order_address': $('#order_address').val(),
                 'order_plate': $('#order_plate').val(),
-                'order_color': $('#order_color').val()
+                'order_color': $('#order_color').val(),
+				'disc': $('#disc_header').val()
             },
             success: function (res) {
                 if (res.success) {
                     $('#Modal4').modal('hide');
                     popup('Order Successfully', 'success');
+					location.reload();
+                } else {
+                    popup(res.message, 'error');
+                }
+            }
+        });
+    });
+	
+    $("#btn-download").click(function () {
+
+        if ($('#order_date').val() === '') {
+            popup('Order date required', 'error');
+            return false;
+        }
+
+        if ($('#order_name').val() === '') {
+            popup('Name required', 'error');
+            return false;
+        }
+
+        if ($('#order_phone').val() === '') {
+            popup('Phone required', 'error');
+            return false;
+        }
+
+        if ($('#order_address').val() === '') {
+            popup('Address required', 'error');
+            return false;
+        }
+
+        if ($('#order_plate').val() === '') {
+            popup('Plate required', 'error');
+            return false;
+        }
+
+        if ($('#order_color').val() === '') {
+            popup('Color required', 'error');
+            return false;
+        }
+
+        $.ajax({
+            url: "{{ route('internal.headersave') }}",
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'session_id': $('#session_id').val(),
+                'car_id': $('#car_id').val(),
+                'order_date': $('#order_date').val(),
+                'order_name': $('#order_name').val(),
+                'order_phone': $('#order_phone').val(),
+                'order_address': $('#order_address').val(),
+                'order_plate': $('#order_plate').val(),
+                'order_color': $('#order_color').val(),
+				'disc': $('#disc_header').val(),
+				'url':'<?= route('internal.download', $session) ?>'
+            },
+            success: function (res) {
+                if (res.success) {
+					url = '<?= route('internal.download', $session) ?>'
+					window.open(url, "_blank");
                 } else {
                     popup(res.message, 'error');
                 }

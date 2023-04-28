@@ -204,26 +204,42 @@ class EstimatorInternalController extends Controller {
         try {
             $service = (!empty($request['service_id']) ? $request['service_id'] : $request['service_additional_id']);
 
-            $temp = Estimator::where([
-                        'session_id' => $request['session_id'],
-                        'service_id' => $service,
-                    ])->first();
-            if (!isset($temp)) {
-                $temp = new Estimator();
-                $temp->session_id = $request['session_id'];
-                $temp->service_id = $service;
-                $service = Service::findOrFail($service);
-                $temp->service_name = $service->name;
-                $temp->service_price = $service->estimated_costs;
-                $temp->service_qty = (float) str_replace('.', '', $request['service_qty']);
-				$temp->disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
-                $temp->service_disc = ($temp->service_price * $temp->service_qty) * $temp->disc_persen / 100;
-                $temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
-                $temp->save();
-            } else {
-                $success = false;
-                $message = 'Service already added';
-            }
+			if(empty($request['service_id'])){
+				$sql = "
+					SELECT * FROM estimator a
+					inner join services b on a.service_id = b.id and b.type_service_id is not null
+					where a.session_id = '".$request['session_id']."'
+				";
+				$cek = DB::select($sql);
+			}else{
+				$cek = [1];
+			}
+			if(!empty($cek)){
+				$temp = Estimator::where([
+							'session_id' => $request['session_id'],
+							'service_id' => $service,
+						])->first();
+				if (!isset($temp)) {
+					$temp = new Estimator();
+					$temp->session_id = $request['session_id'];
+					$temp->service_id = $service;
+					$service = Service::findOrFail($service);
+					$temp->service_name = $service->name;
+					$temp->service_price = $service->estimated_costs;
+					$temp->service_desc = isset($request['service_desc'])?$request['service_desc']:'';
+					$temp->service_qty = (float) str_replace('.', '', $request['service_qty']);
+					$temp->disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
+					$temp->service_disc = ($temp->service_price * $temp->service_qty) * $temp->disc_persen / 100;
+					$temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
+					$temp->save();
+				} else {
+					$success = false;
+					$message = 'Service already added';
+				}
+			}else{
+				$success = false;
+				$message = 'Main Service must added first';
+			}
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -239,7 +255,17 @@ class EstimatorInternalController extends Controller {
 
         try {
             $temp = Estimator::findOrFail($request['id']);
-            $temp->delete();
+			$temp->delete();
+			$sql = "
+				SELECT * FROM estimator a
+				inner join services b on a.service_id = b.id and b.type_service_id is not null
+				where a.session_id = '".$temp->session_id."'
+			";
+			$cek = DB::select($sql);
+            
+			if(empty($cek)){
+				Estimator::where('session_id', $temp->session_id)->delete();
+			}
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -256,7 +282,8 @@ class EstimatorInternalController extends Controller {
         $temp = Estimator::where('session_id', $request['session_id'])->get();
         if (count($temp) == 0) {
             $success = false;
-            return Redirect::back()->withErrors(['msg' => 'Service not found']);
+			$message = 'Service not found';
+            // return Redirect::back()->withErrors(['msg' => 'Service not found']);
         }
 
         if ($success) {
@@ -272,6 +299,8 @@ class EstimatorInternalController extends Controller {
                 $order->cars_id = $request['car_id'];
                 $car = Car::findOrFail($request['car_id']);
                 $order->vehicle_name = $car->name;
+				$order->vehicle_plate = $request['order_plate'];
+				$order->vehicle_color = $request['order_color'];
                 $order->vehicle_brand = $car->brand->name;
                 $order->vehicle_type = $car->type->name;
                 $order->vehicle_year = $car->year;
@@ -321,16 +350,19 @@ class EstimatorInternalController extends Controller {
                     }
                 }
 
+				$total = 0;
                 foreach ($temp as $row) {
                     //detail
                     $orderDetail = new OrderDetail();
                     $orderDetail->order_id = $order->id;
                     $orderDetail->service_id = $row->service_id;
                     $orderDetail->service_name = $row->service_name;
+					$orderDetail->service_desc = $row->service_desc;
                     $orderDetail->service_price = $row->service_price;
                     $orderDetail->service_qty = $row->service_qty;
                     $orderDetail->service_disc = $row->service_disc;
                     $orderDetail->service_total = $row->service_total;
+					$total += $orderDetail->service_total;
                     $service = Service::where('id', $row->service_id)->first();
                     $orderDetail->panel = isset($service) ? $service->panel : 0;
                     $saved = $orderDetail->save();
@@ -339,12 +371,20 @@ class EstimatorInternalController extends Controller {
                         $message = 'Failed save order detail';
                     }
                 }
-
-                // $deleted = Estimator::where('session_id', $request['session_id'])->delete();
-                // if (!$deleted) {
-                    // $success = false;
-                    // $message = 'Failed delete temp';
-                // }
+                $disc_header = (float) str_replace(',', '.', $request['disc']) * $total / 100;
+                $order->disc_persen_header = (float) str_replace(',', '.', $request['disc']);
+				$order->disc_header = $disc_header;
+                $order->total = $total - $disc_header;
+                $saved = $order->save();
+                if (!$saved) {
+                    $success = false;
+                    $message = 'Failed save order';
+                }
+                $deleted = Estimator::where('session_id', $request['session_id'])->delete();
+                if (!$deleted) {
+                    $success = false;
+                    $message = 'Failed delete temp';
+                }
 
                 if ($success) {
                     DB::commit();
@@ -359,6 +399,19 @@ class EstimatorInternalController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
+    public function headersave() {
+        $post = array_merge($_POST, $_GET);
+
+		$sql = "update estimator set disc_header = '".$post['disc']."', cars_id = '".$post['car_id']."',
+			vehicle_plate = '".$post['order_plate']."', vehicle_color = '".$post['order_color']."', 
+			cust_phone = '".$post['order_phone']."', cust_address = '".$post['order_address']."', cust_name = '".$post['order_name']."'
+			where session_id = '".$post['session_id']."'
+		";
+		DB::statement($sql);
+
+        return json_encode(['success' => true, 'message' => '']);
+    }
+	
     public static function generateCode($date) {
         $count = Order::where('code', 'LIKE', '%ORD' . $date . '%')->count();
         $n = 0;
@@ -379,13 +432,17 @@ class EstimatorInternalController extends Controller {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");
 
-        $invoice = Estimator::where('session_id', $id)->get();
+        $invoice = Estimator::where('session_id', $id)->whereRaw('coalesce(services.type_service_id,0) <> 0')
+			->join('services','services.id','=', 'estimator.service_id')
+			->get();
+        $add = Estimator::where('session_id', $id)->whereRaw('coalesce(services.type_service_id,0) = 0')
+			->join('services','services.id','=', 'estimator.service_id')
+			->get();
         $setting = Setting::where('id', '1')->first();
         
         //view html
-        //return view('invoice.download', compact('invoice', 'setting'));
-
-        $pdf = PDF::loadview('estimator.download', ['invoice' => $invoice, 'setting' => $setting]);
+		// return view('estimator.download', compact('invoice', 'setting','add'));
+        $pdf = PDF::loadview('estimator.download', ['invoice' => $invoice, 'setting' => $setting, 'add' => $add]);
         $pdf->render();
 
         //render

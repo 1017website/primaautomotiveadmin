@@ -3,6 +3,7 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">Service</th>
+				<th scope="col">Desc</th>
                 <th scope="col">Qty</th>
                 <th scope="col">Cost Service</th>
 				<th scope="col" colspan=2>Disc</th>
@@ -18,6 +19,7 @@
             @foreach ($detailOrder as $row)
             <tr>
                 <td align='center'>{{ $row->service_name }}</td>
+				<td align='center'>{{ $row->service_desc }}</td>
                 <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td>
 				<td align='center'>{{ number_format($row->disc_persen) }}</td>
@@ -30,12 +32,12 @@
             </tr>
             @endforeach
             @else
-        <td colspan="5" class="text-muted text-center">Service is empty</td>
+        <td colspan="8" class="text-muted text-center">Service is empty</td>
         @endif
         </tbody>
         <tfoot>
             <tr>
-                <td align='center' colspan="3"><b>Grand Total</b></td>
+                <td align='center' colspan="6"><b>Grand Total</b></td>
                 <td align='center'><b>{{ __('Rp. ') }}@price($grandTotal)</b></td>
                 <td></td>
             </tr>
