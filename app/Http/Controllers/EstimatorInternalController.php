@@ -12,6 +12,7 @@ use App\Models\TypeService;
 use App\Models\Car;
 use App\Models\CarBrand;
 use App\Models\CarType;
+use App\Models\CarProfile;
 use App\Models\Service;
 use App\Models\Estimator;
 use App\Models\Order;
@@ -369,7 +370,13 @@ class EstimatorInternalController extends Controller {
                     if (!$saved) {
                         $success = false;
                         $message = 'Failed save order detail';
-                    }
+                    }else{
+						$sql = "
+							Replace into car_profile (car_id, service_id)
+							select ".$order->cars_id.", '".$row->service_id."'
+						";
+						DB::statement($sql);
+					}
                 }
                 $disc_header = (float) str_replace(',', '.', $request['disc']) * $total / 100;
                 $order->disc_persen_header = (float) str_replace(',', '.', $request['disc']);
@@ -428,6 +435,13 @@ class EstimatorInternalController extends Controller {
         return preg_replace('/[^A-Za-z0-9\-]/', '', $string);
     }
 
+    public function profile() {
+        $request = array_merge($_POST, $_GET);
+        $detail = CarProfile::where('car_id', $request['car_id'])->get();
+
+        return view('estimator.profile', compact('detail'));
+    }
+	
     public function download($id) {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");

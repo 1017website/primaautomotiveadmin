@@ -87,16 +87,100 @@
                     </div>
 
                     <div class="border-top"></div>
-                    <button type="submit" class="btn btn-default btn-action">Save</button>
+					<div class="form-group row">
+					<div class="col-sm-12 pull-right">
+						<button type="submit" class="btn btn-default btn-action">Save</button>
+					</div>
+					</div>
                 </form>
+				<fieldset class="border p-2">
+					<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('Profile Car') }}</legend>
+					<div class="row">
+						<div class="col-sm-5">
+							<select class="select2 form-control custom-select" id="service_id" name="service_id" style="width: 100%;">                              
+								@foreach($service as $row)                                
+								<option value="{{$row->id}}">{{$row->name}}</option>    
+								@endforeach
+							</select>
+						</div>					
+						<div class="col-sm-1">
+							<button type="button" class="btn btn-default btn-action add">{{ __('Add') }}</button>
+						</div>
+					</div>
+					<div class="row" style="margin-top:10px;">
+						<div class="col-sm-6">
+						<div class="detail">
 
+						</div>
+						</div>
+					</div>
+				</fieldset>
             </div>
         </div>
 
     </div>
 
     <script type="text/javascript">
+		$(document).ready(function(){
+			$.ajaxSetup({
+				headers: {
+					'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+				}
+			});
 
+			get_detail()
+		});
+		
+		$(".add").click(function () {
+			$.ajax({
+				url: "{{ route('car.addCar') }}",
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					'service_id': $('#service_id').val()
+				},
+				success: function (res) {
+					if (res.success) {
+						get_detail();
+					} else {
+						popup(res.message, 'error');
+					}
+				}
+			});
+		});
+		
+		function deleteTemp(id){
+			$.ajax({
+				url: "{{ route('car.deleteCar') }}",
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					'service_id': id
+				},
+				success: function (res) {
+					if (res.success) {
+						get_detail();
+					} else {
+						popup(res.message, 'error');
+					}
+				}
+			});
+		}
+		
+		function get_detail() {
+			$.ajax({
+				url: "{{ route('detailCar') }}",
+				type: 'GET',
+				data: {
+					'car_id': '0'
+				},
+				dataType: 'html',
+				success: function (res) {
+					$('.detail').html(res);
+				}
+			});
+		}
+		
         //process upload
         Dropzone.options.dropzoneImages = {
             thumbnailWidth: null,

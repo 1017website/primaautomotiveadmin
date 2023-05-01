@@ -110,7 +110,7 @@
 
                                         <div class="form-group row">
                                             <label for="cars_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
-                                            <div class="col-sm-8">
+                                            <div class="col-sm-6">
                                                 <select class="select2 form-control custom-select" id="cars_id" name="cars_id" style="width: 100%;">                              
                                                     @foreach($car as $row)                                
                                                     <option value="{{$row->id}}">{{ $row->type->name }} - {{ $row->brand->name }} - {{$row->name}}</option>    
@@ -118,7 +118,10 @@
                                                 </select>
                                             </div>
 											<div class="col-sm-2">
-												<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_car" >New Car</button>
+												<button type="button" class="btn btn-sm btn-info" onclick="get_profile()" >Profile</button>
+											</div>
+											<div class="col-sm-2">
+												<button type="button" class="btn btn-sm btn-info" data-toggle="modal" data-target="#modal_car" >New</button>
 											</div>
                                         </div>
 
@@ -386,6 +389,31 @@
                     </div>
                 </div>
             </div>
+			
+            <div class="modal fade" id="modal_profile" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Car Profile</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+						<div class="row">
+							<div class="col-sm-12">
+							<div class="detail_profile">
+
+							</div>
+							</div>
+						</div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
             <!-- Modal -->
         </div>
 
@@ -470,6 +498,21 @@
 			});
 		}
 
+		function get_profile() {
+			$.ajax({
+				url: "{{ route('profile.car') }}",
+				type: 'GET',
+				data: {
+					'car_id': $('#cars_id').val()
+				},
+				dataType: 'html',
+				success: function (res) {
+					$('.detail_profile').html(res);
+					$('#modal_profile').modal('show');
+				}
+			});
+		}
+		
 		function get_product() {
 			$.ajax({
 				url: "{{ route('detailProduct') }}",

@@ -13,6 +13,7 @@ use App\Models\CarBrand;
 use App\Models\CarType;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\CarProfile;
 use App\Models\OrderProduct;
 use App\Models\CustomerDetail;
 use Illuminate\Http\Request;
@@ -146,7 +147,13 @@ class OrderController extends Controller {
                     if (!$saved) {
                         $success = false;
                         $message = 'Failed save order detail';
-                    }
+                    }else{
+						$sql = "
+							Replace into car_profile (car_id, service_id)
+							select ".$order->cars_id.", '".$row->service_id."'
+						";
+						DB::statement($sql);
+					}
                 }
 
                 foreach ($tempProduct as $row) {
@@ -247,7 +254,13 @@ class OrderController extends Controller {
                         if (!$saved) {
                             $success = false;
                             $message = 'Failed save order detail';
-                        }
+                        }else{
+							$sql = "
+								Replace into car_profile (car_id, service_id)
+								select ".$model->cars_id.", '".$row->service_id."'
+							";
+							DB::statement($sql);
+						}
                     }
 
                     OrderProduct::where('order_id', $model->id)->delete();
@@ -295,6 +308,13 @@ class OrderController extends Controller {
         return view('order.show', compact('order', 'total'));
     }
 
+    public function profile() {
+        $request = array_merge($_POST, $_GET);
+        $detail = CarProfile::where('car_id', $request['car_id'])->get();
+
+        return view('order.profile', compact('detail'));
+    }
+	
     public function destroy(Order $order) {
         $order->status = '0';
         $order->save();

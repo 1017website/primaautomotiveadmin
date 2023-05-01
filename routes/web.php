@@ -62,7 +62,8 @@ Route::resource('estimator', EstimatorController::class);
 
 Route::controller(EstimatorInternalController::class)->group(function () {
     Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor')->middleware(['auth']);
-    Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator')->middleware(['auth']);;
+    Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator')->middleware(['auth']);
+	Route::get('estimator-internal/profile', 'profile')->name('estimator.profile')->middleware(['auth']);
 	Route::get('estimator-internal/download/{id}', 'download')->name('internal.download')->middleware(['auth']);
     Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService')->middleware(['auth']);;
     Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService')->middleware(['auth']);;
@@ -90,6 +91,9 @@ Route::resource('customer', CustomerController::class)->middleware(['auth']);
 Route::controller(CarController::class)->group(function () {
     Route::post('car/uploadImages', 'uploadImages')->name('uploadImages')->middleware(['auth']);
     Route::post('car/deleteImages', 'deleteImages')->name('deleteImages')->middleware(['auth']);
+	Route::post('car/addCar', 'addCar')->name('car.addCar')->middleware(['auth']);
+	Route::post('car/deleteCar', 'deleteCar')->name('car.deleteCar')->middleware(['auth']);
+	Route::get('car/detailCar', 'detailCar')->name('detailCar')->middleware(['auth']);
 });
 Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
@@ -106,6 +110,7 @@ Route::controller(StockController::class)->group(function () {
 Route::resource('stock', StockController::class)->middleware(['auth']);
 Route::controller(OrderController::class)->group(function () {
     Route::get('order/detailOrder', 'detailOrder')->name('detailOrder')->middleware(['auth']);
+	Route::get('order/profile', 'profile')->name('profile.car')->middleware(['auth']);
 	Route::get('order/detailProduct', 'detailProduct')->name('detailProduct')->middleware(['auth']);
     Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
 	Route::post('order/updateOrder', 'updateOrder')->name('updateOrder')->middleware(['auth']);

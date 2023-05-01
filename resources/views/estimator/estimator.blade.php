@@ -81,13 +81,16 @@
 
 					<div class="form-group row">
 						<label for="car_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Choose Your Car') }}</label>
-						<div class="col-sm-7">
+						<div class="col-sm-5">
 							<select class="select2 form-control custom-select" id="car_id" name="car_id" style="width: 100%;">
 								<option></option>
 								@foreach($cars as $row)                                
 								<option value="{{$row->id}}">{{$row->name}} {{$row->year}}</option>    
 								@endforeach
 							</select>
+						</div>
+						<div class="col-sm-2">
+							<button type="button" class="btn btn-sm btn-info" onclick="get_profile()" >Profile</button>
 						</div>
 						<div class="col-sm-2">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal_car" >New</button>
@@ -324,6 +327,31 @@
     </div>
     <!-- Modal -->
 	
+	<div class="modal fade" id="modal_profile" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Car Profile</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+				<div class="row">
+					<div class="col-sm-12">
+					<div class="detail_profile">
+
+					</div>
+					</div>
+				</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 	@stack('modals')        
 
 	<script>
@@ -443,6 +471,19 @@ $('#btn-estimator').on('click', function () {
 	});
 });
 });
-
+function get_profile() {
+	$.ajax({
+		url: "{{ route('estimator.profile') }}",
+		type: 'GET',
+		data: {
+			'car_id': $('#car_id').val()
+		},
+		dataType: 'html',
+		success: function (res) {
+			$('.detail_profile').html(res);
+			$('#modal_profile').modal('show');
+		}
+	});
+}
 	</script>
 </x-app-layout>
