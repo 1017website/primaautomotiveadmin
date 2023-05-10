@@ -18,6 +18,7 @@ use App\Models\CustomerDetail;
 use App\Models\PrimerColor;
 use Session;
 use App\Models\Setting;
+use PDF;
 
 class EstimatorController extends Controller {
 
@@ -25,9 +26,9 @@ class EstimatorController extends Controller {
         $colors = Color::all();
         $services = TypeService::all();
         $cars = Car::all();
-		$setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
-		$colorPrimers = PrimerColor::all();
-        return view('estimator', compact('colors', 'services', 'cars', 'setting','colorPrimers'));
+        $setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
+        $colorPrimers = PrimerColor::all();
+        return view('estimator', compact('colors', 'services', 'cars', 'setting', 'colorPrimers'));
     }
 
     public function changeColor() {
@@ -113,41 +114,45 @@ class EstimatorController extends Controller {
         try {
             $service = (!empty($request['service_id']) ? $request['service_id'] : $request['service_additional_id']);
 
-			if(empty($request['service_id'])){
-				$sql = "
+            if (empty($request['service_id'])) {
+                $sql = "
 					SELECT * FROM estimator_temp a
 					inner join services b on a.service_id = b.id and b.type_service_id is not null
-					where a.session_id = '".$request['session_id']."'
+					where a.session_id = '" . $request['session_id'] . "'
 				";
-				$cek = DB::select($sql);
-			}else{
-				$cek = [1];
-			}
-			if(!empty($cek)){
-				$temp = EstimatorTemp::where([
-							'session_id' => $request['session_id'],
-							'service_id' => $service,
-						])->first();
-				if (!isset($temp)) {
-					$temp = new EstimatorTemp();
-					$temp->session_id = $request['session_id'];
-					$temp->service_id = $service;
-					$service = Service::findOrFail($service);
-					$temp->service_name = $service->name;
-					$temp->service_desc = isset($request['service_desc'])?$request['service_desc']:'';
-					$temp->service_price = $service->estimated_costs;
-					$temp->service_qty = str_replace('.', '', $request['service_qty']);
-					$temp->service_disc = 0;
-					$temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
-					$temp->save();
-				} else {
-					$success = false;
-					$message = 'Service already added';
-				}
-			}else{
-				$success = false;
-				$message = 'Main Service must added first';
-			}
+                $cek = DB::select($sql);
+            } else {
+                $cek = [1];
+            }
+            if (!empty($cek)) {
+                $temp = EstimatorTemp::where([
+                            'session_id' => $request['session_id'],
+                            'service_id' => $service,
+                        ])->first();
+                if (!isset($temp)) {
+                    $temp = new EstimatorTemp();
+                    $temp->session_id = $request['session_id'];
+                    $temp->type_color_id = $request['type_color_id'];
+                    $temp->color_id = $request['color_id'];
+                    $temp->type_service_id = $request['type_service_id'];
+                    $temp->car_id = $request['car_id'];
+                    $temp->service_id = $service;
+                    $service = Service::findOrFail($service);
+                    $temp->service_name = $service->name;
+                    $temp->service_desc = isset($request['service_desc']) ? $request['service_desc'] : '';
+                    $temp->service_price = $service->estimated_costs;
+                    $temp->service_qty = str_replace('.', '', $request['service_qty']);
+                    $temp->service_disc = 0;
+                    $temp->service_total = ($service->estimated_costs * $temp->service_qty) - $temp->service_disc;
+                    $temp->save();
+                } else {
+                    $success = false;
+                    $message = 'Service already added';
+                }
+            } else {
+                $success = false;
+                $message = 'Main Service must added first';
+            }
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -164,17 +169,17 @@ class EstimatorController extends Controller {
         try {
             $temp = EstimatorTemp::findOrFail($request['id']);
             $temp->delete();
-			
-			$sql = "
+
+            $sql = "
 				SELECT * FROM estimator_temp a
 				inner join services b on a.service_id = b.id and b.type_service_id is not null
-				where a.session_id = '".$temp->session_id."'
+				where a.session_id = '" . $temp->session_id . "'
 			";
-			$cek = DB::select($sql);
-            
-			if(empty($cek)){
-				EstimatorTemp::where('session_id', $temp->session_id)->delete();
-			}
+            $cek = DB::select($sql);
+
+            if (empty($cek)) {
+                EstimatorTemp::where('session_id', $temp->session_id)->delete();
+            }
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -221,42 +226,42 @@ class EstimatorController extends Controller {
                     $checkCar = CustomerDetail::where([
                                 'cars_id' => $order->cars_id,
                                 'car_plate' => $this->clean($order->vehicle_plate)
-								])
-							->first();
+                            ])
+                            ->first();
 
-					if (!isset($checkCar)) {
-						$checkCustomer = Customer::where([
-									'phone' => $order->cust_phone
-								])
-								->first();
-						if (!isset($checkCustomer)) {
-							$checkCustomer = new Customer();
-							$checkCustomer->name = $order->cust_name;
-							$checkCustomer->cars_id = $order->cars_id;
-							$checkCustomer->phone = $order->cust_phone;
-							$checkCustomer->address = $order->cust_address;
-							$checkCustomer->car_year = $order->vehicle_year;
-							$checkCustomer->car_color = $order->vehicle_color;
-							$checkCustomer->car_plate = $this->clean($order->vehicle_plate);
-							$checkCustomer->status = '1';
-							$saved = $checkCustomer->save();
-							if (!$saved) {
-								$success = false;
-								$message = 'Failed save customer';
-							}
-						}
-						$checkCar = new CustomerDetail();
-						$checkCar->cars_id = $order->cars_id;
-						$checkCar->customer_id = $checkCustomer->id;
-						$checkCar->car_year = $order->vehicle_year;
-						$checkCar->car_color = $order->vehicle_color;
-						$checkCar->car_plate = $this->clean($order->vehicle_plate);
-						$saved = $checkCar->save();
-						if (!$saved) {
-							$success = false;
-							$message = 'Failed save cars';
-						}
-					}
+                    if (!isset($checkCar)) {
+                        $checkCustomer = Customer::where([
+                                    'phone' => $order->cust_phone
+                                ])
+                                ->first();
+                        if (!isset($checkCustomer)) {
+                            $checkCustomer = new Customer();
+                            $checkCustomer->name = $order->cust_name;
+                            $checkCustomer->cars_id = $order->cars_id;
+                            $checkCustomer->phone = $order->cust_phone;
+                            $checkCustomer->address = $order->cust_address;
+                            $checkCustomer->car_year = $order->vehicle_year;
+                            $checkCustomer->car_color = $order->vehicle_color;
+                            $checkCustomer->car_plate = $this->clean($order->vehicle_plate);
+                            $checkCustomer->status = '1';
+                            $saved = $checkCustomer->save();
+                            if (!$saved) {
+                                $success = false;
+                                $message = 'Failed save customer';
+                            }
+                        }
+                        $checkCar = new CustomerDetail();
+                        $checkCar->cars_id = $order->cars_id;
+                        $checkCar->customer_id = $checkCustomer->id;
+                        $checkCar->car_year = $order->vehicle_year;
+                        $checkCar->car_color = $order->vehicle_color;
+                        $checkCar->car_plate = $this->clean($order->vehicle_plate);
+                        $saved = $checkCar->save();
+                        if (!$saved) {
+                            $success = false;
+                            $message = 'Failed save cars';
+                        }
+                    }
                 }
 
                 foreach ($temp as $row) {
@@ -317,19 +322,22 @@ class EstimatorController extends Controller {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");
 
-        $invoice = EstimatorTemp::where('session_id', $id)->get();
+        $invoice = EstimatorTemp::where('session_id', $id)->whereRaw('coalesce(services.type_service_id,0) <> 0')
+                ->join('services', 'services.id', '=', 'estimator_temp.service_id')
+                ->get();
+        $add = EstimatorTemp::where('session_id', $id)->whereRaw('coalesce(services.type_service_id,0) = 0')
+                ->join('services', 'services.id', '=', 'estimator_temp.service_id')
+                ->get();
         $setting = Setting::where('id', '1')->first();
-        
-        //view html
-        //return view('invoice.download', compact('invoice', 'setting'));
 
-        $pdf = PDF::loadview('download', ['invoice' => $invoice, 'setting' => $setting]);
+        //view html
+        //return view('download', compact('invoice', 'setting', 'add'));
+
+        $pdf = PDF::loadview('download', ['invoice' => $invoice, 'setting' => $setting, 'add' => $add]);
         $pdf->render();
 
         //render
         return $pdf->stream();
-
-        //download
-        //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
     }
+
 }

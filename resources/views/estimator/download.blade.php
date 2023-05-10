@@ -142,49 +142,49 @@
                                 <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
                             </td>
                             <td class="top-right" style="width:50%;">
-                                Tanggal : <?= date('d M Y')?>
+                                Tanggal : <?= date('d M Y') ?>
                             </td>
                         </tr>
-						<tr>
-							<td colspan=2 align=center>
-								Estimasi Perbaikan
-							</td>
-						</tr>
-						<tr>
-							<td colspan=2 align=center>
-								&nbsp;
-							</td>
-						</tr>
+                        <tr>
+                            <td colspan=2 align=center>
+                                Estimasi Perbaikan
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 align=center>
+                                &nbsp;
+                            </td>
+                        </tr>
                     </table>
 
-					<table>
-						<tr>
-							<td colspan=3>
-								Dengan Hormat, <BR>
-								Bersama
-							</td>
-						</tr>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;</td><td>Nama Pemilik</td><td>: <?= $invoice[0]->cust_name ?></td>
-						</tr>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;</td><td>Telephone</td><td>: <?= $invoice[0]->cust_phone ?></td>
-						</tr>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;</td><td>Alamat</td><td>: <?= $invoice[0]->cust_address ?></td>
-						</tr>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;</td><td>Type Kendaraan</td><td>: <?= $invoice[0]->car->name ?></td>
-						</tr>
-						<tr>
-							<td>&nbsp;&nbsp;&nbsp;</td><td>No. Polisi</td><td>: <?= $invoice[0]->vehicle_plate ?></td>
-						</tr>
-						<tr>
-							<td colspan=3>
-								Adapun yang diperbaiki :
-							</td>
-						</tr>
-					</table>
+                    <table>
+                        <tr>
+                            <td colspan=3>
+                                Dengan Hormat, <BR>
+                                Bersama
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Nama Pemilik</td><td>: <?= $invoice[0]->cust_name ?></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Telp</td><td>: <?= $invoice[0]->cust_phone ?></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Alamat</td><td>: <?= $invoice[0]->cust_address ?></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Kendaraan</td><td>: <?= $invoice[0]->car->name ?></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>No. Polisi</td><td>: <?= $invoice[0]->vehicle_plate ?></td>
+                        </tr>
+                        <tr>
+                            <td colspan=3>
+                                Adapun yang diperbaiki :
+                            </td>
+                        </tr>
+                    </table>
                 </div>
                 <hr>
 
@@ -194,54 +194,55 @@
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
                                 <th class="text-left" style="width:25%">{{ __('Service') }}</th>
-								<th class="text-left" style="width:25%">{{ __('Desc') }}</th>
+                                <th class="text-left" style="width:25%">{{ __('Desc') }}</th>
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-								<?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
+                                <?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
                                 <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-							<?php $sub[0] = 0; $sub[1] = 0; ?>
+                            <?php $sub[0] = 0;
+                            $sub[1] = 0; ?>
                             @foreach ($invoice as $row => $value)
                             <tr>
                                 <td class="text-center">{{ ($row+1) }}</td>
                                 <td class="text-left">{{ $value->service_name }}</td>                                         
-								<td class="text-left">{{ $value->service_desc }}</td>
+                                <td class="text-left">{{ $value->service_desc }}</td>
                                 <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
                                 <td class="text-left">{{ $value->service_qty }}</td>
-								<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
-								<td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
-							<?php $sub[0] += $value->service_total; ?>
+<?php $sub[0] += $value->service_total; ?>
                             @endforeach
                             <tr class="last-row"></tr>
                         </tbody>
                     </table>
-					<table style="width:100%;">
-						<tr>
-							<td style="float:right">
-								<table>
-									<tr>
-										<td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[0])</td>
-									</tr>
-									<tr>
-										<td colspan=3>&nbsp;</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
+                    <table style="width:100%;">
+                        <tr>
+                            <td style="float:right">
+                                <table>
+                                    <tr>
+                                        <td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[0])</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan=3>&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
                     <table class="table table-striped" style="width:100%;">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
                                 <th class="text-left" style="width:25%">{{ __('Service') }}</th>
-								<th class="text-left" style="width:25%">{{ __('Desc') }}</th>
+                                <th class="text-left" style="width:25%">{{ __('Desc') }}</th>
                                 <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
                                 <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-								<?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
+<?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
                                 <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
                             </tr>
                         </thead>
@@ -250,67 +251,67 @@
                             <tr>
                                 <td class="text-center">{{ ($row+1) }}</td>
                                 <td class="text-left">{{ $value->service_name }}</td>                                         
-								<td class="text-left">{{ $value->service_desc }}</td>
+                                <td class="text-left">{{ $value->service_desc }}</td>
                                 <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
                                 <td class="text-left">{{ $value->service_qty }}</td>
-								<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
-								<td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
-							<?php $sub[1] += $value->service_total; ?>
+<?php $sub[1] += $value->service_total; ?>
                             @endforeach
                             <tr class="last-row"></tr>
                         </tbody>
                     </table>
-					<table style="width:100%;">
-						<tr>
+                    <table style="width:100%;">
+                        <tr>
 
-							<td style="float:right">
-								<table>
-									<tr>
-										<td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1])</td>
-									</tr>
-									<tr>
-										<td colspan=3>&nbsp;</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
+                            <td style="float:right">
+                                <table>
+                                    <tr>
+                                        <td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1])</td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan=3>&nbsp;</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </table>
                 </div>
 
                 <div class="page-footer">
                     <div class="row">
-					<table style="width:100%;">
-						<tr>
+                        <table style="width:100%;">
+                            <tr>
 
-							<td>
-								<table>
-									<tr>
-										<td>{{ __('Sub Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0])</td>
-									</tr>
-									<tr>
-										<td>{{ __('Disc') }}</td><td>:</td><td>{{ __('Rp. ') }}@price((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100)</td>
-									</tr>
-									<tr>
-										<td>{{ __('Grand Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0] - ((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100))</td>
-									</tr>
-								</table>
-							</td>
-						</tr>
-					</table>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <td>{{ __('Sub Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0])</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ __('Disc') }}</td><td>:</td><td>{{ __('Rp. ') }}@price((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>{{ __('Grand Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0] - ((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100))</td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
 
                     </div>
-					
-					<div class="row">
-						<BR><BR>
-					</div>
-					<div class="row">
-						<label for="disclaimer" class="col-sm-12 text-left control-label col-form-label">{{ __('Disclaimer') }}</label>
-						<div class="col-sm-12">
-							<i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
-						</div>
-					</div>
+
+                    <div class="row">
+                        <BR><BR>
+                    </div>
+                    <div class="row">
+                        <label for="disclaimer" class="col-sm-12 text-left control-label col-form-label">{{ __('Disclaimer') }}</label>
+                        <div class="col-sm-12">
+                            <i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
+                        </div>
+                    </div>
                 </div>
 
             </div>

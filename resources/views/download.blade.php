@@ -128,6 +128,10 @@
         }
     }
 
+    .table td, .table th {
+        padding: 0.5rem!important;
+    }
+
 </style>
 
 <div class="row page">
@@ -142,75 +146,131 @@
                                 <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
                             </td>
                             <td class="top-right" style="width:50%;">
-                                
+                                Tanggal : <?= date('d M Y') ?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 align=center>
+                                <b>ESTIMASI PERBAIKAN</b>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan=2 align=center>
+                                &nbsp;
                             </td>
                         </tr>
                     </table>
 
+                    <table>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Service</td><td>: <?= $invoice[0]->typeService->name ?></td>
+                        </tr>
+                        <tr>
+                            <td>&nbsp;&nbsp;&nbsp;</td><td>Kendaraan</td><td>: <?= $invoice[0]->car->name ?></td>
+                        </tr>
+                    </table>
                 </div>
-                <hr>
 
-                <div class="row table-row">
-                    <table class="table table-striped" style="width:100%;">
+                <div class="row">
+                    <table class="table table-borderless" style="width:100%;">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
-                                <th class="text-left" style="width:25%">{{ __('Service') }}</th>
-								<th class="text-left" style="width:25%">{{ __('Desc') }}</th>
-                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
-                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
+                                <th class="text-center" style="width:20%">{{ __('Service') }}</th>
+                                <th class="text-center" style="width:15%">{{ __('Keterangan') }}</th>
+                                <th class="text-center" style="width:20%">{{ __('Harga') }}</th>
+                                <th class="text-center" style="width:10%">{{ __('Qty') }}</th>
+                                <th class="text-center" style="width:20%">{{ __('Total') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-							<?php $sub = 0 ?>
+                            <?php
+                            $sub[0] = 0;
+                            $sub[1] = 0;
+                            ?>
                             @foreach ($invoice as $row => $value)
                             <tr>
                                 <td class="text-center">{{ ($row+1) }}</td>
                                 <td class="text-left">{{ $value->service_name }}</td>                                         
-								<td class="text-left">{{ $value->service_desc }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
-                                <td class="text-left">{{ $value->service_qty }}</td>
+                                <td class="text-left">{{ $value->service_desc }}</td>
+                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                <td class="text-right">{{ $value->service_qty }}</td>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
-							<?php $sub += $value->service_total; ?>
+                            <?php $sub[0] += $value->service_total; ?>
                             @endforeach
-                            <tr class="last-row"></tr>
+                            <tr>
+                                <td class="text-right" colspan="5"><b>{{ __('Total') }}</b></td>
+                                <td class="text-right">{{ __('Rp. ') }}@price($sub[0])</td>
+                            </tr>
                         </tbody>
                     </table>
 
+                    <?php if (count($add) > 0) { ?>
+                        <table class="table table-borderless" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width:5%">#</th>
+                                    <th class="text-center" style="width:20%">{{ __('Service') }}</th>
+                                    <th class="text-center" style="width:15%">{{ __('Keterangan') }}</th>
+                                    <th class="text-center" style="width:20%">{{ __('Harga') }}</th>
+                                    <th class="text-center" style="width:10%">{{ __('Qty') }}</th>
+                                    <th class="text-center" style="width:20%">{{ __('Total') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($add as $row => $value)
+                                <tr>
+                                    <td class="text-center">{{ ($row+1) }}</td>
+                                    <td class="text-left">{{ $value->service_name }}</td>                                         
+                                    <td class="text-left">{{ $value->service_desc }}</td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                    <td class="text-right">{{ $value->service_qty }}</td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
+                                </tr>
+                                <?php $sub[1] += $value->service_total; ?>
+                                @endforeach
+                                <tr>
+                                    <td class="text-right" colspan="5"><b>{{ __('Total') }}</b></td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($sub[1])</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php } ?>
                 </div>
 
-                <div class="page-footer">
-                    <div class="row">
+                <div class="row">
+                    <table class="table table-borderless" style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Sub Total') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:20%;text-align: right;">{{ __('Rp. ') }}@price($sub[1] + $sub[0])</td>
+                            </tr>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Disc') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:10%;text-align: right;">{{ __('Rp. ') }}@price((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100)</td>
+                            </tr>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Grand Total') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:10%;text-align: right;">{{ __('Rp. ') }}@price($sub[1] + $sub[0] - ((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100))</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
 
-                        <table style="width:100%;">
+                <div class="row">
+                    <table class="table table-borderless" style="width:50%;">
+                        <tbody>
+                            <tr>
+                                <td style="width:50%;">{{ __('Disclaimer') }}</td>
+                            </tr>
                             <tr>
                                 <td>
-                                    <table>
-                                        <tr>
-                                            <td style="width:8rem;text-align:center;white-space: nowrap;"></td>
-                                            <td style="width:5rem;"></td>
-                                            <td style="width:8rem;text-align:center;white-space: nowrap;"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="height:5rem;"></td>
-                                            <td></td>
-                                            <td style="height:5rem;"></td>
-                                        </tr>
-                                    </table>
-                                </td>
-
-                                <td>
-                                    <table style="float:right;text-align: right;">
-										<tr>
-											<td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub)</td>
-										</tr>
-                                    </table>
+                                    <i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
                                 </td>
                             </tr>
-                        </table>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

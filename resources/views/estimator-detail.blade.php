@@ -67,7 +67,7 @@
                             <textarea type="text" rows=3 class="form-control" id="service_desc" name="service_desc" required="" />
                         </div>
                     </div>
-					
+
                     <div class="form-group row">
                         <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
                         <div class="col-sm-9">
@@ -121,7 +121,7 @@
                             <textarea type="text" rows=3 class="form-control" id="add_desc" name="add_desc" required="" />
                         </div>
                     </div>
-					
+
                     <div class="form-group row">
                         <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
                         <div class="col-sm-9">
@@ -216,7 +216,7 @@
 
 <div class="form-group row" style="margin-top:1.5rem;">
     <div class="col-sm-12 text-center">
-		<a href="{{ route('estimator.download', $session) }}" type="button" target="_blank" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
+        <a href="{{ route('estimator.download', $session) }}" type="button" target="_blank" class="btn btn-default" id="btn-download"><i class="mdi mdi-download"></i>Download</a>
         <a href="#" type="button" class="btn btn-default" id="btn-order" data-toggle="modal" data-target="#Modal4"><i class="mdi mdi-cart-plus"></i>Order</a>
     </div>
 </div> 
@@ -258,9 +258,13 @@ $(document).ready(function ($) {
             type: 'POST',
             dataType: 'json',
             data: {
+                'type_color_id': $('#color_id').val(),
+                'color_id': $('#color').val(),
+                'type_service_id': $('#type_service_id').val(),
+                'car_id': $('#car_id').val(),
                 'session_id': $('#session_id').val(),
                 'service_id': $('#service_id').val(),
-				'service_desc': $('#service_desc').val(),
+                'service_desc': $('#service_desc').val(),
                 'service_qty': $('#service_qty').val(),
             },
             success: function (res) {
@@ -282,9 +286,13 @@ $(document).ready(function ($) {
             type: 'POST',
             dataType: 'json',
             data: {
+                'type_color_id': $('#color_id').val(),
+                'color_id': $('#color').val(),
+                'type_service_id': $('#type_service_id').val(),
+                'car_id': $('#car_id').val(),
                 'session_id': $('#session_id').val(),
                 'service_additional_id': $('#service_additional_id').val(),
-				'service_desc': $('#add_desc').val(),
+                'service_desc': $('#add_desc').val(),
                 'service_qty': $('#service_qty').val(),
             },
             success: function (res) {

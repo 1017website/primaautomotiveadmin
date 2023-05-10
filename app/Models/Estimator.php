@@ -24,4 +24,5 @@ class Estimator extends Model {
     public function car() {
         return $this->hasOne(Car::class, 'id', 'cars_id');
     }
+
 }
