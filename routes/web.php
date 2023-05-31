@@ -12,6 +12,7 @@ use App\Http\Controllers\EstimatorInternalController;
 use App\Http\Controllers\Workshop\TypeProductController;
 use App\Http\Controllers\Workshop\ProductController;
 use App\Http\Controllers\Workshop\ServiceController;
+use App\Http\Controllers\Workshop\ServiceParentController;
 use App\Http\Controllers\Workshop\TypeServiceController;
 use App\Http\Controllers\Workshop\MechanicController;
 use App\Http\Controllers\Workshop\CustomerController;
@@ -79,6 +80,13 @@ Route::resource('type-product', TypeProductController::class)->middleware(['auth
 Route::resource('product', ProductController::class)->middleware(['auth']);
 Route::resource('type-service', TypeServiceController::class)->middleware(['auth']);
 Route::resource('service', ServiceController::class)->middleware(['auth']);
+
+Route::controller(ServiceParentController::class)->group(function () {
+    Route::post('service-parent/editCustom', 'editCustom')->name('serviceParent.editCustom')->middleware(['auth']);
+	Route::post('service-parent/updateService', 'updateService')->name('serviceParent.updateService')->middleware(['auth']);
+});
+Route::resource('service-parent', ServiceParentController::class)->middleware(['auth']);
+
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 
 Route::controller(CustomerController::class)->group(function () {

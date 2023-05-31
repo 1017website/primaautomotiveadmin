@@ -7,20 +7,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Service extends Model {
+class ServiceParent extends Model {
 
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
     protected $fillable = [
-        'name', 'estimated_costs', 'panel', 'type_service_id', 'parent_id'
+        'name', 'panel', 'type_service_id'
     ];
+
+    public function service() {
+        return $this->hasMany(Service::class, 'parent_id', 'id');
+    }
 
     public function typeService() {
         return $this->hasOne(TypeService::class, 'id', 'type_service_id');
     }
-
+	
     public function userCreated() {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
