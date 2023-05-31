@@ -1,12 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Artisan;
 //general
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EstimatorController;
 use App\Http\Controllers\EstimatorInternalController;
-
 //general
 //workshop
 use App\Http\Controllers\Workshop\TypeProductController;
@@ -44,6 +44,7 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
+
 //hrm
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
@@ -52,7 +53,7 @@ Route::resource('setting', SettingController::class)->middleware(['auth']);
 Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/changeColor', 'changeColor')->name('changeColor');
     Route::post('estimator/showEstimator', 'showEstimator')->name('showEstimator');
-	Route::get('estimator/download/{id}', 'download')->name('estimator.download');
+    Route::get('estimator/download/{id}', 'download')->name('estimator.download');
     Route::post('estimator/detailEstimatorService', 'detailEstimatorService')->name('detailEstimatorService');
     Route::post('estimator/addEstimatorService', 'addEstimatorService')->name('addEstimatorService');
     Route::post('estimator/priceEstimatorService', 'priceEstimatorService')->name('priceEstimatorService');
@@ -64,15 +65,15 @@ Route::resource('estimator', EstimatorController::class);
 Route::controller(EstimatorInternalController::class)->group(function () {
     Route::post('estimator-internal/changeColor', 'changeColor')->name('internal.changeColor')->middleware(['auth']);
     Route::post('estimator-internal/showEstimator', 'showEstimator')->name('internal.showEstimator')->middleware(['auth']);
-	Route::get('estimator-internal/profile', 'profile')->name('estimator.profile')->middleware(['auth']);
-	Route::get('estimator-internal/download/{id}', 'download')->name('internal.download')->middleware(['auth']);
-    Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService')->middleware(['auth']);;
-    Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService')->middleware(['auth']);;
-    Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService')->middleware(['auth']);;
-    Route::post('estimator-internal/deleteEstimatorService', 'deleteEstimatorService')->name('internal.deleteEstimatorService')->middleware(['auth']);;
-	Route::post('estimator-internal/saveMaster', 'saveMaster')->name('internal.saveMaster')->middleware(['auth']);
-	Route::post('estimator-internal/headersave', 'headersave')->name('internal.headersave')->middleware(['auth']);
-    Route::post('estimator-internal/order', 'order')->name('internal.order')->middleware(['auth']);;
+    Route::get('estimator-internal/profile', 'profile')->name('estimator.profile')->middleware(['auth']);
+    Route::get('estimator-internal/download/{id}', 'download')->name('internal.download')->middleware(['auth']);
+    Route::post('estimator-internal/detailEstimatorService', 'detailEstimatorService')->name('internal.detailEstimatorService')->middleware(['auth']);
+    Route::post('estimator-internal/addEstimatorService', 'addEstimatorService')->name('internal.addEstimatorService')->middleware(['auth']);
+    Route::post('estimator-internal/priceEstimatorService', 'priceEstimatorService')->name('internal.priceEstimatorService')->middleware(['auth']);
+    Route::post('estimator-internal/deleteEstimatorService', 'deleteEstimatorService')->name('internal.deleteEstimatorService')->middleware(['auth']);
+    Route::post('estimator-internal/saveMaster', 'saveMaster')->name('internal.saveMaster')->middleware(['auth']);
+    Route::post('estimator-internal/headersave', 'headersave')->name('internal.headersave')->middleware(['auth']);
+    Route::post('estimator-internal/order', 'order')->name('internal.order')->middleware(['auth']);
 });
 Route::resource('estimator-internal', EstimatorInternalController::class)->middleware(['auth']);
 //workshop
@@ -90,18 +91,18 @@ Route::resource('service-parent', ServiceParentController::class)->middleware(['
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 
 Route::controller(CustomerController::class)->group(function () {
-	Route::get('customer/customerDetail', 'customerDetail')->name('customerDetail')->middleware(['auth']);
-	Route::post('customer/deleteCustomerCar', 'deleteCustomerCar')->name('deleteCustomerCar')->middleware(['auth']);
-	Route::post('customer/addCarCustomer', 'addCarCustomer')->name('addCarCustomer')->middleware(['auth']);
+    Route::get('customer/customerDetail', 'customerDetail')->name('customerDetail')->middleware(['auth']);
+    Route::post('customer/deleteCustomerCar', 'deleteCustomerCar')->name('deleteCustomerCar')->middleware(['auth']);
+    Route::post('customer/addCarCustomer', 'addCarCustomer')->name('addCarCustomer')->middleware(['auth']);
 });
 Route::resource('customer', CustomerController::class)->middleware(['auth']);
 
 Route::controller(CarController::class)->group(function () {
     Route::post('car/uploadImages', 'uploadImages')->name('uploadImages')->middleware(['auth']);
     Route::post('car/deleteImages', 'deleteImages')->name('deleteImages')->middleware(['auth']);
-	Route::post('car/addCar', 'addCar')->name('car.addCar')->middleware(['auth']);
-	Route::post('car/deleteCar', 'deleteCar')->name('car.deleteCar')->middleware(['auth']);
-	Route::get('car/detailCar', 'detailCar')->name('detailCar')->middleware(['auth']);
+    Route::post('car/addCar', 'addCar')->name('car.addCar')->middleware(['auth']);
+    Route::post('car/deleteCar', 'deleteCar')->name('car.deleteCar')->middleware(['auth']);
+    Route::get('car/detailCar', 'detailCar')->name('detailCar')->middleware(['auth']);
 });
 Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
@@ -118,15 +119,15 @@ Route::controller(StockController::class)->group(function () {
 Route::resource('stock', StockController::class)->middleware(['auth']);
 Route::controller(OrderController::class)->group(function () {
     Route::get('order/detailOrder', 'detailOrder')->name('detailOrder')->middleware(['auth']);
-	Route::get('order/profile', 'profile')->name('profile.car')->middleware(['auth']);
-	Route::get('order/detailProduct', 'detailProduct')->name('detailProduct')->middleware(['auth']);
+    Route::get('order/profile', 'profile')->name('profile.car')->middleware(['auth']);
+    Route::get('order/detailProduct', 'detailProduct')->name('detailProduct')->middleware(['auth']);
     Route::post('order/addOrder', 'addOrder')->name('addOrder')->middleware(['auth']);
-	Route::post('order/updateOrder', 'updateOrder')->name('updateOrder')->middleware(['auth']);
-	Route::get('order/allDetail', 'allDetail')->name('allDetail')->middleware(['auth']);
-	Route::post('order/addOrderProduct', 'addOrderProduct')->name('addOrderProduct')->middleware(['auth']);
-	Route::post('order/addCar', 'addCar')->name('addCar')->middleware(['auth']);
+    Route::post('order/updateOrder', 'updateOrder')->name('updateOrder')->middleware(['auth']);
+    Route::get('order/allDetail', 'allDetail')->name('allDetail')->middleware(['auth']);
+    Route::post('order/addOrderProduct', 'addOrderProduct')->name('addOrderProduct')->middleware(['auth']);
+    Route::post('order/addCar', 'addCar')->name('addCar')->middleware(['auth']);
     Route::post('order/deleteOrder', 'deleteOrder')->name('deleteOrder')->middleware(['auth']);
-	Route::post('order/deleteOrderProduct', 'deleteOrderProduct')->name('deleteOrderProduct')->middleware(['auth']);
+    Route::post('order/deleteOrderProduct', 'deleteOrderProduct')->name('deleteOrderProduct')->middleware(['auth']);
     Route::post('order/addInvoice', 'addInvoice')->name('addInvoice')->middleware(['auth']);
     Route::post('order/price', 'price')->name('order.price')->middleware(['auth']);
 });
@@ -136,7 +137,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::post('invoice/workOrder', 'workOrder')->name('workOrder')->middleware(['auth']);
     Route::post('invoice/voidInvoice', 'voidInvoice')->name('voidInvoice')->middleware(['auth']);
     Route::get('invoice/print/{id}', 'print')->name('invoice.print')->middleware(['auth']);
-	Route::get('invoice/printProduct/{id}', 'printProduct')->name('invoice.printProduct')->middleware(['auth']);
+    Route::get('invoice/printProduct/{id}', 'printProduct')->name('invoice.printProduct')->middleware(['auth']);
     Route::get('invoice/download/{id}', 'download')->name('invoice.download')->middleware(['auth']);
 });
 Route::resource('invoice', InvoiceController::class)->middleware(['auth']);
@@ -226,7 +227,7 @@ Route::resource('employee-credit', EmployeeCreditController::class)->middleware(
 
 Route::controller(PayrollController::class)->group(function () {
     Route::post('payroll/getAttendance', 'getAttendance')->name('payroll.getAttendance')->middleware(['auth']);
-	Route::get('payroll/print/{id}', 'print')->name('payroll.print')->middleware(['auth']);
+    Route::get('payroll/print/{id}', 'print')->name('payroll.print')->middleware(['auth']);
 });
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 //hrm 
@@ -234,4 +235,8 @@ Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
     echo 'ok';
+});
+
+Route::get('/linkstorage', function () {
+    Artisan::call('storage:link');
 });

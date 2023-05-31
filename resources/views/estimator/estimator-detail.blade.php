@@ -67,7 +67,7 @@
                             <textarea type="text" rows=3 class="form-control" id="service_desc" name="service_desc" required="" />
                         </div>
                     </div>
-					
+
                     <div class="form-group row">
                         <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
                         <div class="col-sm-9">
@@ -81,12 +81,12 @@
                             <input type="text" class="form-control" id="price" name="price" required="" readonly="">
                         </div>
                     </div>
-					<div class="form-group row">
-						<label for="disc_persen" class="col-sm-3 text-left control-label col-form-label">{{ __('Disc') }}</label>
-						<div class="col-sm-7">
-							<input type="text" class="form-control" id="disc_persen" name="disc_persen" placeholder="">
-						</div><div class="col-sm-2" style="line-height: 35px;"><span class="align-middle">%</span></div>
-					</div>
+                    <div class="form-group row">
+                        <label for="disc_persen" class="col-sm-3 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="disc_persen" name="disc_persen" placeholder="">
+                        </div><div class="col-sm-2" style="line-height: 35px;"><span class="align-middle">%</span></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -110,8 +110,8 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
-                        <label for="service_additional_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Additional Service') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_additional_id" class="col-sm-3 text-left control-label col-form-label">{{ __('Additional Service') }}</label>
+                        <div class="col-sm-9">
                             <select class="select2 form-control custom-select" id="service_additional_id" name="service_additional_id" style="width: 100%;">                              
                                 @foreach($additionalServices as $row)                                
                                 <option value="{{$row->id}}">{{$row->name}}</option>    
@@ -126,26 +126,26 @@
                             <textarea type="text" rows=3 class="form-control" id="add_desc" name="add_desc" required="" />
                         </div>
                     </div>
-					
+
                     <div class="form-group row">
-                        <label for="service_qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
-                        <div class="col-sm-10">
+                        <label for="service_qty" class="col-sm-3 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="service_qty" name="service_qty" required="true" value="1">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="price_additional" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-                        <div class="col-sm-10">
+                        <label for="price_additional" class="col-sm-3 text-left control-label col-form-label">{{ __('Price') }}</label>
+                        <div class="col-sm-9">
                             <input type="text" class="form-control" id="price_additional" name="price_additional" required="" readonly="">
                         </div>
                     </div>
-					<div class="form-group row">
-						<label for="disc_persen_add" class="col-sm-2 text-left control-label col-form-label">{{ __('Disc') }}</label>
-						<div class="col-sm-8">
-							<input type="text" class="form-control" id="disc_persen_add" name="disc_persen_add" placeholder="">
-						</div><div class="col-sm-2" style="line-height: 35px;"><span class="align-middle">%</span></div>
-					</div>
+                    <div class="form-group row">
+                        <label for="disc_persen_add" class="col-sm-3 text-left control-label col-form-label">{{ __('Disc') }}</label>
+                        <div class="col-sm-7">
+                            <input type="text" class="form-control" id="disc_persen_add" name="disc_persen_add" placeholder="">
+                        </div><div class="col-sm-2" style="line-height: 35px;"><span class="align-middle">%</span></div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -227,9 +227,9 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_id': $('#service_id').val(),
-				'service_desc': $('#service_desc').val(),
+                'service_desc': $('#service_desc').val(),
                 'service_qty': $('#service_qty').val(),
-				'disc_persen': $('#disc_persen').val()
+                'disc_persen': $('#disc_persen').val()
             },
             success: function (res) {
                 if (res.success) {
@@ -252,10 +252,10 @@ $(document).ready(function ($) {
             data: {
                 'session_id': $('#session_id').val(),
                 'service_additional_id': $('#service_additional_id').val(),
-				'service_desc': $('#add_desc').val(),
+                'service_desc': $('#add_desc').val(),
                 'service_qty': $('#service_qty').val(),
-				'service_qty': $('#service_qty').val(),
-				'disc_persen': $('#disc_persen_add').val()
+                'service_qty': $('#service_qty').val(),
+                'disc_persen': $('#disc_persen_add').val()
             },
             success: function (res) {
                 if (res.success) {
@@ -315,20 +315,20 @@ $(document).ready(function ($) {
                 'order_address': $('#order_address').val(),
                 'order_plate': $('#order_plate').val(),
                 'order_color': $('#order_color').val(),
-				'disc': $('#disc_header').val()
+                'disc': $('#disc_header').val()
             },
             success: function (res) {
                 if (res.success) {
                     $('#Modal4').modal('hide');
                     popup('Order Successfully', 'success');
-					location.reload();
+                    location.reload();
                 } else {
                     popup(res.message, 'error');
                 }
             }
         });
     });
-	
+
     $("#btn-download").click(function () {
 
         if ($('#order_date').val() === '') {
@@ -374,13 +374,13 @@ $(document).ready(function ($) {
                 'order_address': $('#order_address').val(),
                 'order_plate': $('#order_plate').val(),
                 'order_color': $('#order_color').val(),
-				'disc': $('#disc_header').val(),
-				'url':'<?= route('internal.download', $session) ?>'
+                'disc': $('#disc_header').val(),
+                'url': '<?= route('internal.download', $session) ?>'
             },
             success: function (res) {
                 if (res.success) {
-					url = '<?= route('internal.download', $session) ?>'
-					window.open(url, "_blank");
+                    url = '<?= route('internal.download', $session) ?>'
+                    window.open(url, "_blank");
                 } else {
                     popup(res.message, 'error');
                 }

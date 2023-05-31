@@ -3,10 +3,10 @@
         <thead class="thead-light">
             <tr>
                 <th scope="col">Service</th>
-				<th scope="col">Desc</th>
+                <th scope="col">Desc</th>
                 <th scope="col">Qty</th>
                 <th scope="col">Cost Service</th>
-				<th scope="col" colspan=2>Disc</th>
+                <th scope="col" colspan=2>Disc</th>
                 <th scope="col">Total</th>
                 <th scope="col">Action</th>
             </tr>
@@ -19,11 +19,11 @@
             @foreach ($detailOrder as $row)
             <tr>
                 <td align='center'>{{ $row->service_name }}</td>
-				<td align='center'>{{ $row->service_desc }}</td>
+                <td align='center'>{{ $row->service_desc }}</td>
                 <td align='center'>{{ number_format($row->service_qty, 0, ',', '.') }}</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->service_price)</td>
-				<td align='center'>{{ number_format($row->disc_persen) }}</td>
-				<td align='center'>{{ __('Rp. ') }}@price($row->service_disc)</td>
+                <td align='center'>{{ number_format($row->disc_persen) }}</td>
+                <td align='center'>{{ __('Rp. ') }}@price($row->service_disc)</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->service_total)</td> 
                 <?php
                 $grandTotal += $row->service_total;
@@ -50,31 +50,31 @@
 
 <script>
     function get_detail() {
-        $.ajax({
-            url: "{{ route('internal.detailEstimatorService') }}",
+    $.ajax({
+    url: "{{ route('internal.detailEstimatorService') }}",
             type: 'POST',
             dataType: 'html',
             data:{
-                'session_id': $('#session_id').val(),
+            'session_id': $('#session_id').val(),
             },
             success: function (res) {
-                $('.detail').html(res);
+            $('.detail').html(res);
             }
-        });
+    });
     }
 
     function deleteTemp(id) {
-        $.ajax({
-            url: "{{ route('internal.deleteEstimatorService') }}",
+    $.ajax({
+    url: "{{ route('internal.deleteEstimatorService') }}",
             type: 'POST',
             dataType: 'json',
             data: {
-                'id': id
+            'id': id
             },
             success: function (res) {
-                get_detail();
+            get_detail();
             }
-        });
+    });
     }
 
 </script>

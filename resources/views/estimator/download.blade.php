@@ -128,6 +128,10 @@
         }
     }
 
+    .table td, .table th {
+        padding: 0.5rem!important;
+    }
+
 </style>
 
 <div class="row page">
@@ -147,7 +151,7 @@
                         </tr>
                         <tr>
                             <td colspan=2 align=center>
-                                Estimasi Perbaikan
+                                <b>ESTIMASI PERBAIKAN</b>
                             </td>
                         </tr>
                         <tr>
@@ -186,132 +190,113 @@
                         </tr>
                     </table>
                 </div>
-                <hr>
 
-                <div class="row table-row">
-                    <table class="table table-striped" style="width:100%;">
+                <div class="row">
+                    <table class="table table-borderless" style="width:100%;">
                         <thead>
                             <tr>
                                 <th class="text-center" style="width:5%">#</th>
-                                <th class="text-left" style="width:25%">{{ __('Service') }}</th>
-                                <th class="text-left" style="width:25%">{{ __('Desc') }}</th>
-                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
-                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-                                <?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
-                                <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
+                                <th class="text-center" style="width:15%">{{ __('Service') }}</th>
+                                <th class="text-center" style="width:15%">{{ __('Ket') }}</th>
+                                <th class="text-center" style="width:15%">{{ __('Harga') }}</th>
+                                <th class="text-center" style="width:10%">{{ __('Qty') }}</th>                                                
+                                <th class="text-center" style="width:20%">{{ __('Disc') }}</th>
+                                <th class="text-center" style="width:20%">{{ __('Total') }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php $sub[0] = 0;
-                            $sub[1] = 0; ?>
+                            <?php
+                            $sub[0] = 0;
+                            $sub[1] = 0;
+                            ?>
                             @foreach ($invoice as $row => $value)
                             <tr>
                                 <td class="text-center">{{ ($row+1) }}</td>
                                 <td class="text-left">{{ $value->service_name }}</td>                                         
                                 <td class="text-left">{{ $value->service_desc }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
-                                <td class="text-left">{{ $value->service_qty }}</td>
-                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                <td class="text-right">{{ $value->service_qty }}</td>
+                                 <!--<td class="text-right">{{ number_format($value->disc_persen,2).' %' }}</td>-->
+                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_disc)</td>
                                 <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
                             </tr>
-<?php $sub[0] += $value->service_total; ?>
+                            <?php $sub[0] += $value->service_total; ?>
                             @endforeach
-                            <tr class="last-row"></tr>
+                            <tr>
+                                <td class="text-right" colspan="6"><b>{{ __('Total') }}</b></td>
+                                <td class="text-right">{{ __('Rp. ') }}@price($sub[0])</td>
+                            </tr>
                         </tbody>
                     </table>
-                    <table style="width:100%;">
-                        <tr>
-                            <td style="float:right">
-                                <table>
-                                    <tr>
-                                        <td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[0])</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan=3>&nbsp;</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                    <table class="table table-striped" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th class="text-center" style="width:5%">#</th>
-                                <th class="text-left" style="width:25%">{{ __('Service') }}</th>
-                                <th class="text-left" style="width:25%">{{ __('Desc') }}</th>
-                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
-                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
-<?= '<th class="text-left" style="width:20%" colspan=2>Disc</th>' ?>
-                                <th class="text-right" style="width:20%">{{ __('Total Price') }}</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($add as $row => $value)
-                            <tr>
-                                <td class="text-center">{{ ($row+1) }}</td>
-                                <td class="text-left">{{ $value->service_name }}</td>                                         
-                                <td class="text-left">{{ $value->service_desc }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
-                                <td class="text-left">{{ $value->service_qty }}</td>
-                                <td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
-                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
-                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
-                            </tr>
-<?php $sub[1] += $value->service_total; ?>
-                            @endforeach
-                            <tr class="last-row"></tr>
-                        </tbody>
-                    </table>
-                    <table style="width:100%;">
-                        <tr>
 
-                            <td style="float:right">
-                                <table>
-                                    <tr>
-                                        <td>{{ __('Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1])</td>
-                                    </tr>
-                                    <tr>
-                                        <td colspan=3>&nbsp;</td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
+                    <?php if (count($add) > 0) { ?>
+                        <table class="table table-borderless" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width:5%">#</th>
+                                    <th class="text-center" style="width:15%">{{ __('Service') }}</th>
+                                    <th class="text-center" style="width:15%">{{ __('Ket') }}</th>
+                                    <th class="text-center" style="width:15%">{{ __('Harga') }}</th>
+                                    <th class="text-center" style="width:10%">{{ __('Qty') }}</th>                                                
+                                    <th class="text-center" style="width:20%">{{ __('Disc') }}</th>
+                                    <th class="text-center" style="width:20%">{{ __('Total') }}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($add as $row => $value)
+                                <tr>
+                                    <td class="text-center">{{ ($row+1) }}</td>
+                                    <td class="text-left">{{ $value->service_name }}</td>                                         
+                                    <td class="text-left">{{ $value->service_desc }}</td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                    <td class="text-right">{{ $value->service_qty }}</td>
+                                    <!--<td class="text-right">{{ number_format($value->disc_persen,2).' %' }}</td>-->
+                                    <td class="text-right">{{ __('Rp. ') }}@price($value->service_disc)</td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
+                                </tr>
+                                <?php $sub[1] += $value->service_total; ?>
+                                @endforeach
+                                <tr>
+                                    <td class="text-right" colspan="6"><b>{{ __('Total') }}</b></td>
+                                    <td class="text-right">{{ __('Rp. ') }}@price($sub[1])</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    <?php } ?>
+                </div>
+
+                <div class="row">
+                    <table class="table table-borderless" style="width:100%;">
+                        <tbody>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Sub Total') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:20%;text-align: right;">{{ __('Rp. ') }}@price($sub[1] + $sub[0])</td>
+                            </tr>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Disc') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:10%;text-align: right;">{{ __('Rp. ') }}@price((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100)</td>
+                            </tr>
+                            <tr>
+                                <td style="width:50%;"></td>
+                                <td style="width:20%;text-align: right;"><b>{{ __('Grand Total') }}</b></td><td style="width:10%;text-align: right;">:</td><td style="width:10%;text-align: right;">{{ __('Rp. ') }}@price($sub[1] + $sub[0] - ((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100))</td>
+                            </tr>
+                        </tbody>
                     </table>
                 </div>
 
-                <div class="page-footer">
-                    <div class="row">
-                        <table style="width:100%;">
+                <div class="row">
+                    <table class="table table-borderless" style="width:50%;">
+                        <tbody>
                             <tr>
-
+                                <td style="width:50%;">{{ __('Disclaimer') }}</td>
+                            </tr>
+                            <tr>
                                 <td>
-                                    <table>
-                                        <tr>
-                                            <td>{{ __('Sub Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0])</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('Disc') }}</td><td>:</td><td>{{ __('Rp. ') }}@price((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100)</td>
-                                        </tr>
-                                        <tr>
-                                            <td>{{ __('Grand Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub[1] + $sub[0] - ((($sub[1] + $sub[0]) * $invoice[0]->disc_header) / 100))</td>
-                                        </tr>
-                                    </table>
+                                    <i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
                                 </td>
                             </tr>
-                        </table>
-
-                    </div>
-
-                    <div class="row">
-                        <BR><BR>
-                    </div>
-                    <div class="row">
-                        <label for="disclaimer" class="col-sm-12 text-left control-label col-form-label">{{ __('Disclaimer') }}</label>
-                        <div class="col-sm-12">
-                            <i>{{ isset($setting) ? $setting->disclaimer : '' }}</i>
-                        </div>
-                    </div>
+                        </tbody>
+                    </table>
                 </div>
 
             </div>

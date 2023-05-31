@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-sm-10">
                         @if(!empty($product->image))
-                        <img src="{{ asset('storage/'.$product->image) }}" class="img-fluid img-view">
+                        <img src="{{ asset($product->image) }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>
@@ -77,7 +77,7 @@
                         {{ __('Rp. ') }}@price($product->price)
                     </div>
                 </div>
-				
+
                 <div class="border-top"></div>
                 <div class="row p-3">
                     <div class="col-sm-2">

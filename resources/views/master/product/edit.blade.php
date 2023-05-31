@@ -43,64 +43,64 @@
                     @method('PUT')
                     <div class="row">
                         <div class="col-sm-6">
-							<div class="form-group row">
-								<label for="type_product" class="col-sm-2 text-left control-label col-form-label">{{ __('Type Product') }}</label>
-								<div class="col-sm-10">
-									<select class="select2 form-control custom-select" id="type_product_id" name="type_product_id" style="width: 100%;">
-										@foreach($typeProducts as $typeProduct)                                
-										<option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>    
-										@endforeach
-									</select>
-								</div>
-							</div>
+                            <div class="form-group row">
+                                <label for="type_product" class="col-sm-2 text-left control-label col-form-label">{{ __('Type Product') }}</label>
+                                <div class="col-sm-10">
+                                    <select class="select2 form-control custom-select" id="type_product_id" name="type_product_id" style="width: 100%;">
+                                        @foreach($typeProducts as $typeProduct)                                
+                                        <option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>    
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
 
-							<div class="form-group row">
-								<label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="name" name="name" placeholder="Name Product" value="{{ $product->name }}" required>
-								</div>
-							</div>
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name Product" value="{{ $product->name }}" required>
+                                </div>
+                            </div>
 
-							<div class="form-group row">
-								<label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
-								<div class="col-sm-10">
-									@if(!empty($product->image))
-										<img src="{{ asset('storage/'.$product->image) }}" class="mb-2 img-fluid img-view">
-									@endif
-									<div class="custom-file">
-										<input type="file" class="custom-file-input" id="image" name="image">
-										<label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>
-										@error('image')
-										<div class="invalid-feedback">{{ $message }}k</div>
-										@enderror
-									</div>
+                            <div class="form-group row">
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
+                                <div class="col-sm-10">
+                                    @if(!empty($product->image))
+                                    <img src="{{ asset('storage/'.$product->image) }}" class="mb-2 img-fluid img-view">
+                                    @endif
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="image" name="image">
+                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>
+                                        @error('image')
+                                        <div class="invalid-feedback">{{ $message }}k</div>
+                                        @enderror
+                                    </div>
 
-								</div>
-							</div>
-						</div>
-						<div class="col-sm-6">
-							<div class="form-group row">
-								<label for="um" class="col-sm-2 text-left control-label col-form-label">{{ __('Unit') }}</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="um" name="um" placeholder="Unit" value="{{ $product->um }}" required>
-								</div>
-							</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="um" class="col-sm-2 text-left control-label col-form-label">{{ __('Unit') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="um" name="um" placeholder="Unit" value="{{ $product->um }}" required>
+                                </div>
+                            </div>
 
-							<div class="form-group row">
-								<label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP') }}</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="hpp" name="hpp" placeholder="" value="{{ $product->hpp }}" required>
-								</div>
-							</div>
-							
-							<div class="form-group row">
-								<label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-								<div class="col-sm-10">
-									<input type="text" class="form-control" id="price" name="price" placeholder="" value="{{ $product->price }}">
-								</div>
-							</div>
-						</div>
-					</div>
+                            <div class="form-group row">
+                                <label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="hpp" name="hpp" placeholder="" value="{{ $product->hpp }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="" value="{{ $product->price }}">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -116,7 +116,7 @@
             nextSibling.innerText = fileName
         });
         $('#type_product_id').val('{{ $product->type_product_id}}').change();
-		
+
         $(function () {
             $("input[id*='qty']").keydown(function (event) {
                 if (event.shiftKey == true) {
@@ -134,7 +134,7 @@
                 //if a decimal has been added, disable the "."-button
             });
         });
-		
+
         var harga = document.getElementById('hpp');
         var harga2 = document.getElementById('price');
 
@@ -145,7 +145,7 @@
             var formated = formatRupiah($('#price').val(), 'Rp. ');
             harga2.value = formated;
         });
-		
+
         harga.addEventListener('keyup', function (e) {
             harga.value = formatRupiah(this.value, 'Rp. ');
         });
@@ -153,7 +153,7 @@
         harga2.addEventListener('keyup', function (e) {
             harga.value = formatRupiah(this.value, 'Rp. ');
         });
-		
+
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
                     split = number_string.split(','),

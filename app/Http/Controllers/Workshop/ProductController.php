@@ -7,9 +7,9 @@ use App\Models\TypeProduct;
 use Illuminate\Http\Request;
 use App\Models\InventoryProduct;
 use App\Models\InventoryProductHistory;
-
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+
 class ProductController extends Controller {
 
     public function index() {
@@ -36,9 +36,26 @@ class ProductController extends Controller {
 
         try {
             DB::beginTransaction();
-            if ($request->file('image')) {
-                $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            if ($request->file('image') && request('image') != '') {
+                if (!file_exists('images')) {
+                    mkdir('images', 0777, true);
+                }
+                if (!file_exists('images/product-images/')) {
+                    mkdir('images/product-images/', 0777, true);
+                }
+                if (!empty($model->image)) {
+                    $imagePath = $_SERVER['DOCUMENT_ROOT'] . $model->image;
+                    if (file_exists($imagePath)) {
+                        File::delete($imagePath);
+                    }
+                }
+                $nameImg = time() . '.' . $request->file('image')->getClientOriginalExtension();
+                $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/images/product-images/';
+                $imagePath = $destinationPath . $nameImg;
+                $request->file('image')->move($destinationPath, $nameImg);
+                $validateData['image'] = '/images/product-images/' . $nameImg;
             }
+
             $validateData['hpp'] = (float) substr(str_replace('.', '', $request->hpp), 3);
             $validateData['price'] = (float) substr(str_replace('.', '', $request->price), 3);
 
@@ -90,7 +107,7 @@ class ProductController extends Controller {
         return redirect()->route('product.index')
                         ->with('success', 'Product created successfully.');
     }
-	
+
     public function show(Product $product) {
         return view('master.product.show', compact('product'));
     }
