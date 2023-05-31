@@ -62,7 +62,8 @@
                                 <li class="sidebar-item"><a href="/type-product" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Type Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Items') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/type-service" class="sidebar-link"><i class="mdi mdi-format-list-bulleted"></i><span class="hide-menu">{{ __('Type Service') }}</span></a></li>
-                                <li class="sidebar-item"><a href="/service" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/service-parent" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/service" class="sidebar-link"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Service Additional') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/customer" class="sidebar-link"><i class="mdi mdi-account-multiple-plus"></i><span class="hide-menu">{{ __('Customer') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car" class="sidebar-link"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Cars') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car-brand" class="sidebar-link"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Car Brands') }}</span></a></li>
