@@ -38,36 +38,42 @@
                     <table id="service" class="table table-striped table-bordered">
                         <thead>
                             <tr>
-                                <th>{{ __('Type Service') }}</th>
-                                <th>{{ __('Name') }}</th>
-                                <th>{{ __('Estimated Costs') }}</th>
-                                <th>{{ __('Panel') }}</th>
-                                <th>{{ __('Created By') }}</th>
-                                <th>{{ __('Updated By') }}</th>
-                                <th>{{ __('Created At') }}</th>
-                                <th>{{ __('Updated At') }}</th>
-                                <th>{{ __('Action') }}</th>
+                                <th rowspan=2>{{ __('Type Service') }}</th>
+                                <th rowspan=2>{{ __('Name') }}</th>
+                                <th colspan=4>{{ __('Estimated Costs') }}</th>
+                                <th rowspan=2>{{ __('Panel') }}</th>
+                                <th rowspan=2>{{ __('Created By') }}</th>
+                                <th rowspan=2>{{ __('Updated By') }}</th>
+                                <th rowspan=2>{{ __('Action') }}</th>
                             </tr>
+							<tr>
+                                <th>{{ __('s') }}</th>
+                                <th>{{ __('m') }}</th>
+                                <th>{{ __('l') }}</th>
+                                <th>{{ __('xl') }}</th>
+							</tr>
                         </thead>
                         <tbody>
                             @foreach ($service as $row)
                             <tr>
                                 <td>{{ isset($row->typeService) ? $row->typeService->name : 'Additional' }}</td>
                                 <td>{{ $row->name }}</td>
-                                <td align="left"><?php
-									$html = '<table>';
-									foreach($row->service as $v){
-										$str = $v->type;
-										$html .= '<tr style="background-color:transparent !important;"><td style="border:none !important;padding:5px;padding-top:0px;">'.$str .'</td><td style="border:none !important;padding:5px;padding-top:0px;"> Rp.'. number_format($v->estimated_costs).'</td></tr>';
-									}
-									echo $html.'</table>';
+								<?php $s = '<td></td>'; $m = '<td></td>'; $l = '<td></td>'; $xl = '<td></td>';
+								foreach($row->service as $v){
+									if($v->type == 's')
+										$s = "<td>Rp.". number_format($v->estimated_costs)."</td>";
+									if($v->type == 'm')
+										$m = "<td>Rp.".number_format($v->estimated_costs)."</td>";
+									if($v->type == 'l')
+										$l = "<td>Rp.".number_format($v->estimated_costs)."</td>";
+									if($v->type == 'xl')
+										$xl = "<td>Rp.".number_format($v->estimated_costs)."</td>";
+								}
+								echo $s.$m.$l.$xl;
 								?>
-								</td>
                                 <td align="right" data-order="{{ $row->panel }}">@price($row->panel)</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
-                                <td>{{ $row->created_at }}</td>
-                                <td>{{ $row->updated_at }}</td>
                                 <td class="action-button">
 									<button class="btn btn-warning btn-edit" data-id="{{ $row->id }}"><i class="fas fa-pencil-alt"></i></button>
                                     <form action="{{ route('service-parent.destroy',$row->id) }}" method="POST">
