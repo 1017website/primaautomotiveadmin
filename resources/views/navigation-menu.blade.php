@@ -1,3 +1,23 @@
+<style>
+    #style-1::-webkit-scrollbar-track
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+        background-color: #1F262D!important;
+    }
+
+    #style-1::-webkit-scrollbar
+    {
+        width: 5px;
+        background-color: #1F262D!important;
+    }
+
+    #style-1::-webkit-scrollbar-thumb
+    {
+        -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+        background-color: #ffffff;
+    }
+</style>
+
 <header class="topbar" data-navbarbg="skin5">
     <nav class="navbar top-navbar navbar-expand-md navbar-dark">
         <div class="navbar-header" data-logobg="skin5">
@@ -31,7 +51,7 @@
     </nav>
 </header>
 <aside class="left-sidebar" data-sidebarbg="skin5">
-    <div class="scroll-sidebar">
+    <div class="scroll-sidebar" style="overflow-y: auto" id="style-1">
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30">
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/dashboard" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">{{ __('Dashboard') }}</span></a></li>
@@ -69,7 +89,7 @@
                                 <li class="sidebar-item"><a href="/car-brand" class="sidebar-link"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Car Brands') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car-type" class="sidebar-link"><i class="mdi mdi-car-connected"></i><span class="hide-menu">{{ __('Car Types') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/color" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Color') }}</span></a></li>
-								<li class="sidebar-item"><a href="/primer-color" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Primer Color') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/primer-color" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Primer Color') }}</span></a></li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-dropbox"></i><span class="hide-menu">{{ __('Inventory') }}</span></a>
@@ -106,8 +126,8 @@
                     </ul>
                 </li>
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
-				<li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/estimator-internal" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Estimator Internal') }}</span></a></li>
-			</ul>
+                <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/estimator-internal" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Estimator Internal') }}</span></a></li>
+            </ul>
         </nav>
     </div>
 </aside>

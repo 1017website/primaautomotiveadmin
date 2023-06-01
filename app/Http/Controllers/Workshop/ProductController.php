@@ -9,6 +9,7 @@ use App\Models\InventoryProduct;
 use App\Models\InventoryProductHistory;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use File;
 
 class ProductController extends Controller {
 
@@ -144,8 +145,8 @@ class ProductController extends Controller {
 
     public function destroy(Product $product) {
         if (strlen($product->image) > 0) {
-            if (Storage::exists($product->image)) {
-                Storage::delete($product->image);
+            if (File::exists($product->image)) {
+                File::delete($product->image);
             }
         }
         $product->delete();

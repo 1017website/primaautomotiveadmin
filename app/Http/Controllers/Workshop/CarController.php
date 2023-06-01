@@ -15,6 +15,7 @@ use App\Models\Service;
 use App\Models\CarProfileTmp;
 use App\Models\CarProfile;
 use Session;
+use File;
 
 class CarController extends Controller {
 
@@ -28,56 +29,56 @@ class CarController extends Controller {
         $carType = CarType::all();
         $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
 
-		$sql = "
-			delete from car_profile_tmp where 
-			session_id = '".Session()->getid()."'
-		";
-		DB::statement($sql);
-		$service = Service::whereRaw('deleted_at is null')->get();
+        $sql = "
+            delete from car_profile_tmp where 
+            session_id = '" . Session()->getid() . "'
+        ";
+        DB::statement($sql);
+        $service = Service::whereRaw('deleted_at is null')->get();
         return view('master.car.create', compact('service', 'carBrand', 'carType', 'carImages'));
     }
 
     public function store(Request $request) {
-		DB::beginTransaction();
-		try {
-			$request->validate([
-				'car_brand_id' => 'required',
-				'car_type_id' => 'required',
-				'year' => 'required',
-				//'name' => 'required|max:255|unique:cars,name,NULL,id,year,deleted_at,NULL',
-				'name' => 'required|max:255',
-			]);
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'car_brand_id' => 'required',
+                'car_type_id' => 'required',
+                'year' => 'required',
+                //'name' => 'required|max:255|unique:cars,name,NULL,id,year,deleted_at,NULL',
+                'name' => 'required|max:255',
+            ]);
 
-			$car = Car::create($request->all());
-			//images
-			$carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
-			foreach ($carImages as $images) {
-				$imageUpload = new CarImage();
-				$imageUpload->car_id = $car->id;
-				$imageUpload->image = $images->image;
-				$imageUpload->image_url = $images->image_url;
-				$imageUpload->size = $images->size;
-				$imageUpload->save();
-			}
-			CarImageTemp::where(['user_id' => Auth::id()])->delete();
-			//images
-			$detail = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
-			foreach ($detail as $row) {
-				$detail = new CarProfile();
-				$detail->car_id = $car->id;
-				$detail->service_id = $row->service_id;
-				$detail->save();
-			}
-			
-			$sql = "
-				delete from car_profile_tmp where 
-				session_id = '".Session()->getid()."'
-			";
-			DB::statement($sql);
-			DB::commit();
-		} catch (\Exception $e) {
-			DB::rollback();
-		}
+            $car = Car::create($request->all());
+            //images
+            $carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
+            foreach ($carImages as $images) {
+                $imageUpload = new CarImage();
+                $imageUpload->car_id = $car->id;
+                $imageUpload->image = $images->image;
+                $imageUpload->image_url = $images->image_url;
+                $imageUpload->size = $images->size;
+                $imageUpload->save();
+            }
+            CarImageTemp::where(['user_id' => Auth::id()])->delete();
+            //images
+            $detail = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
+            foreach ($detail as $row) {
+                $detail = new CarProfile();
+                $detail->car_id = $car->id;
+                $detail->service_id = $row->service_id;
+                $detail->save();
+            }
+
+            $sql = "
+                delete from car_profile_tmp where 
+                session_id = '" . Session()->getid() . "'
+            ";
+            DB::statement($sql);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+        }
         return redirect()->route('car.index')
                         ->with('success', 'Car created successfully.');
     }
@@ -103,78 +104,78 @@ class CarController extends Controller {
         //move image to temp
         $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
 
-		$sql = "
-			delete from car_profile_tmp where 
-			session_id = '".Session()->getid()."'
-		";
-		DB::statement($sql);
-		
+        $sql = "
+            delete from car_profile_tmp where 
+            session_id = '" . Session()->getid() . "'
+        ";
+        DB::statement($sql);
+
         $detail = CarProfile::where(['car_id' => $car->id])->get();
         foreach ($detail as $row) {
             $detail = new CarProfileTmp();
-			$detail->session_id = Session()->getid();
+            $detail->session_id = Session()->getid();
             $detail->car_id = $car->id;
             $detail->service_id = $row->service_id;
             $detail->save();
         }
-		
-		$service = Service::whereRaw('deleted_at is null')->get();
-		
-        return view('master.car.edit', compact('service','car', 'carBrand', 'carType', 'carImages'));
+
+        $service = Service::whereRaw('deleted_at is null')->get();
+
+        return view('master.car.edit', compact('service', 'car', 'carBrand', 'carType', 'carImages'));
     }
 
     public function update(Request $request, Car $car) {
-		
-		DB::beginTransaction();
-		try {
-			$request->validate([
-				'car_brand_id' => 'required',
-				'car_type_id' => 'required',
-				'year' => 'required',
-				//'name' => 'required|max:255|unique:cars,name,' . $car->id . ',id,year,deleted_at,NULL',
-				'name' => 'required|max:255',
-			]);
 
-			$car->update($request->all());
-			//images
-			CarImage::where(['car_id' => $car->id])->delete();
-			$carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
-			foreach ($carImages as $images) {
-				$imageUpload = new CarImage();
-				$imageUpload->car_id = $car->id;
-				$imageUpload->image = $images->image;
-				$imageUpload->image_url = $images->image_url;
-				$imageUpload->size = $images->size;
-				$imageUpload->save();
-			}
-			CarImageTemp::where(['user_id' => Auth::id()])->delete();
-			//images
+        DB::beginTransaction();
+        try {
+            $request->validate([
+                'car_brand_id' => 'required',
+                'car_type_id' => 'required',
+                'year' => 'required',
+                //'name' => 'required|max:255|unique:cars,name,' . $car->id . ',id,year,deleted_at,NULL',
+                'name' => 'required|max:255',
+            ]);
 
-			$sql = "
-				delete from car_profile where 
-				car_id = '".$car->id."'
-			";
-			DB::statement($sql);
-			
-			$detail = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
-			foreach ($detail as $row) {
-				$detail = new CarProfile();
-				$detail->car_id = $car->id;
-				$detail->service_id = $row->service_id;
-				$detail->save();
-			}
-			
-			$sql = "
-				delete from car_profile_tmp where 
-				session_id = '".Session()->getid()."'
-			";
-			DB::statement($sql);
-			DB::commit();
-		} catch (\Exception $e) {
-			DB::rollback();
-			$success = false;
-			$message = $e->getMessage();
-		}
+            $car->update($request->all());
+            //images
+            CarImage::where(['car_id' => $car->id])->delete();
+            $carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
+            foreach ($carImages as $images) {
+                $imageUpload = new CarImage();
+                $imageUpload->car_id = $car->id;
+                $imageUpload->image = $images->image;
+                $imageUpload->image_url = $images->image_url;
+                $imageUpload->size = $images->size;
+                $imageUpload->save();
+            }
+            CarImageTemp::where(['user_id' => Auth::id()])->delete();
+            //images
+
+            $sql = "
+                delete from car_profile where 
+                car_id = '" . $car->id . "'
+            ";
+            DB::statement($sql);
+
+            $detail = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
+            foreach ($detail as $row) {
+                $detail = new CarProfile();
+                $detail->car_id = $car->id;
+                $detail->service_id = $row->service_id;
+                $detail->save();
+            }
+
+            $sql = "
+                delete from car_profile_tmp where 
+                session_id = '" . Session()->getid() . "'
+            ";
+            DB::statement($sql);
+            DB::commit();
+        } catch (\Exception $e) {
+            DB::rollback();
+            $success = false;
+            $message = $e->getMessage();
+        }
         return redirect()->route('car.index')
                         ->with('success', 'Car updated successfully');
     }
@@ -182,8 +183,8 @@ class CarController extends Controller {
     public function destroy(Car $car) {
         $carImages = CarImage::where(['car_id' => $car->id])->get();
         foreach ($carImages as $images) {
-            if (Storage::exists('car-images/' . $images->image)) {
-                Storage::delete('car-images/' . $images->image);
+            if (File::exists('images/car-images/' . $images->image)) {
+                File::delete('images/car-images/' . $images->image);
             }
             $images->delete();
         }
@@ -196,26 +197,29 @@ class CarController extends Controller {
     public function uploadImages(Request $request) {
         $images = $request->file('file');
         foreach ($images as $image) {
-            $imageName = $image->getClientOriginalName();
-            $imagePic = $image->storeAs('car-images', $imageName);
+            if ($image != '') {
+                $uploadImage = Controller::uploadImage($image, 'images/car-images/');
+            }
             $imageUpload = new CarImageTemp();
-            $imageUpload->image = $imageName;
-            $imageUpload->image_url = asset('storage/car-images/' . $imageName);
-            $imageUpload->size = $request->filesize;
+            $imageUpload->image = $uploadImage['imgName'];
+            $imageUpload->image_url = $uploadImage['imgUrl'];
+            $imageUpload->size = $uploadImage['imgSize'];
             $imageUpload->user_id = Auth::id();
             $imageUpload->save();
 
-            return response()->json(['success' => $imageName]);
+            return response()->json(['success' => $uploadImage['imgName']]);
         }
     }
 
     public function deleteImages(Request $request) {
         $filename = $request->get('filename');
         $carImages = CarImageTemp::where(['image' => $filename, 'user_id' => Auth::id()])->first();
-        if (Storage::exists('car-images/' . $carImages->image)) {
-            Storage::delete('car-images/' . $carImages->image);
+        if (isset($carImages)) {
+            if (File::exists('images/car-images/' . $carImages->image)) {
+                File::delete('images/car-images/' . $carImages->image);
+            }
+            $carImages->delete();
         }
-        $carImages->delete();
 
         return $filename;
     }
@@ -226,18 +230,18 @@ class CarController extends Controller {
 
         return view('master.car.detail', compact('detail'));
     }
-	
+
     public function addCar() {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
 
         try {
-			$sql = "
-				Replace into car_profile_tmp(session_id, car_id, service_id)
-				select '".Session()->getid()."', ".(isset($request['car_id'])?$request['car_id']:'0').", '".$request['service_id']."'
-			";
-			DB::statement($sql);
+            $sql = "
+                Replace into car_profile_tmp(session_id, car_id, service_id)
+                select '" . Session()->getid() . "', " . (isset($request['car_id']) ? $request['car_id'] : '0') . ", '" . $request['service_id'] . "'
+            ";
+            DB::statement($sql);
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -245,20 +249,20 @@ class CarController extends Controller {
 
         return json_encode(['success' => $success, 'message' => $message]);
     }
-	
+
     public function deleteCar() {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
 
         try {
-			$sql = "
-				delete from car_profile_tmp where 
-				session_id = '".Session()->getid()."' 
-				and car_id = ".(isset($request['car_id'])?$request['car_id']:'0')." 
-				and service_id = '".$request['service_id']."'
-			";
-			DB::statement($sql);
+            $sql = "
+                delete from car_profile_tmp where 
+                session_id = '" . Session()->getid() . "' 
+                and car_id = " . (isset($request['car_id']) ? $request['car_id'] : '0') . " 
+                and service_id = '" . $request['service_id'] . "'
+            ";
+            DB::statement($sql);
         } catch (\Exception $e) {
             $success = false;
             $message = $e->getMessage();
@@ -266,4 +270,5 @@ class CarController extends Controller {
 
         return json_encode(['success' => $success, 'message' => $message]);
     }
+
 }
