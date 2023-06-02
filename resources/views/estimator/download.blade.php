@@ -165,7 +165,6 @@
                         <tr>
                             <td colspan=3>
                                 Dengan Hormat, <BR>
-                                Bersama
                             </td>
                         </tr>
                         <tr>
