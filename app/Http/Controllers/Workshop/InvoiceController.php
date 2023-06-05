@@ -128,14 +128,14 @@ class InvoiceController extends Controller {
         $setting = Setting::where('id', '1')->first();
         return view('invoice.printProduct', compact('invoice', 'setting'));
     }
-	
+
     public function download($id) {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");
 
         $invoice = Invoice::findorfail($id);
         $setting = Setting::where('id', '1')->first();
-        
+
         //view html
         //return view('invoice.download', compact('invoice', 'setting'));
 
@@ -156,13 +156,14 @@ class InvoiceController extends Controller {
     }
 
     public static function generateCode($date) {
-        $count = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->count();
+        $count = Invoice::where('code', 'LIKE', '%INV%')->count();
         $n = 0;
         if ($count > 0) {
-            $invoice = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->orderBy('code', 'DESC')->first();
-            $n = (int) substr($invoice->code, -4);
+            $inv = Invoice::where('code', 'LIKE', '%INV%')->orderBy('code', 'DESC')->first();
+            $codeInv = explode('-', $inv->code);
+            $n = (int) substr($codeInv[0], -4);
         }
-        return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
+        return (string) 'INV' . sprintf('%04s', ($n + 1)) . '-' . $date;
     }
 
     public static function generateCodeWo($date) {

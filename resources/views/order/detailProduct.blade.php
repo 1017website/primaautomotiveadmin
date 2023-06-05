@@ -5,7 +5,7 @@
                 <th scope="col">Product</th>
                 <th scope="col">Qty</th>
                 <th scope="col">Price</th>
-				<th scope="col" colspan=2>Disc</th>
+                <th scope="col" colspan=2>Disc</th>
                 <th scope="col">Total</th>
                 <th scope="col">Action</th>
             </tr>
@@ -20,8 +20,8 @@
                 <td align='center'>{{ $row->product_name }}</td>
                 <td align='center'>{{ number_format($row->product_qty, 2) }}</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->product_price)</td> 
-				<td align='center'>{{ number_format($row->disc_persen, 2, ',', '.') }}</td>
-				<td align='center'>{{ __('Rp. ') }}@price($row->disc)</td>
+                <td align='center'>{{ number_format($row->disc_persen, 2, ',', '.') }}</td>
+                <td align='center'>{{ __('Rp. ') }}@price($row->disc)</td>
                 <td align='center'>{{ __('Rp. ') }}@price($row->total)</td> 
                 <?php
                 $grandTotal += $row->total;

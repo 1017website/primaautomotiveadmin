@@ -101,10 +101,7 @@ class OrderController extends Controller {
                             ->first();
 
                     if (!isset($checkCar)) {
-                        $checkCustomer = Customer::where([
-                                    'phone' => $order->cust_phone
-                                ])
-                                ->first();
+                        $checkCustomer = Customer::where(['phone' => $order->cust_phone])->first();
                         if (!isset($checkCustomer)) {
                             $checkCustomer = new Customer();
                             $checkCustomer->name = $order->cust_name;
@@ -152,9 +149,9 @@ class OrderController extends Controller {
                         $message = 'Failed save order detail';
                     } else {
                         $sql = "
-							Replace into car_profile (car_id, service_id)
-							select " . $order->cars_id . ", '" . $row->service_id . "'
-						";
+                            Replace into car_profile (car_id, service_id)
+                            select " . $order->cars_id . ", '" . $row->service_id . "'
+                        ";
                         DB::statement($sql);
                     }
                 }
@@ -178,17 +175,8 @@ class OrderController extends Controller {
                     }
                 }
 
-                $deleted = OrderDetailTemp::where('user_id', Auth::id())->delete();
-                if (!$deleted) {
-                    $success = false;
-                    $message = 'Failed delete temp';
-                }
-
-                $deleted = OrderProductTemp::where('user_id', Auth::id())->delete();
-                if (!$deleted) {
-                    $success = false;
-                    $message = 'Failed delete temp';
-                }
+                OrderDetailTemp::where('user_id', Auth::id())->delete();
+                OrderProductTemp::where('user_id', Auth::id())->delete();
 
                 if ($success) {
                     DB::commit();
@@ -259,9 +247,9 @@ class OrderController extends Controller {
                             $message = 'Failed save order detail';
                         } else {
                             $sql = "
-								Replace into car_profile (car_id, service_id)
-								select " . $model->cars_id . ", '" . $row->service_id . "'
-							";
+                                Replace into car_profile (car_id, service_id)
+                                select " . $model->cars_id . ", '" . $row->service_id . "'
+                            ";
                             DB::statement($sql);
                         }
                     }
@@ -491,10 +479,12 @@ class OrderController extends Controller {
             $order->save();
 
             $invoice = new Invoice();
-            $invoice->code = $this->generateCodeInv(date('Ymd'));
+            $invoice->code = $this->generateCodeInv(date('ymd'));
             $invoice->date = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
             $invoice->order_id = $request['order_id'];
-            $invoice->total = substr((float) str_replace('.', '', $request['total']), 3);
+            $total = substr($request['total'], 3);
+            $total = str_replace('.', '', $total);
+            $invoice->total = $total;
             $invoice->dp = 0;
             $invoice->status = '1';
             $invoice->status_payment = '0';
@@ -522,13 +512,14 @@ class OrderController extends Controller {
     }
 
     public static function generateCodeInv($date) {
-        $count = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->count();
+        $count = Invoice::where('code', 'LIKE', '%INV%')->count();
         $n = 0;
         if ($count > 0) {
-            $inv = Invoice::where('code', 'LIKE', '%INV' . $date . '%')->orderBy('code', 'DESC')->first();
-            $n = (int) substr($inv->code, -4);
+            $inv = Invoice::where('code', 'LIKE', '%INV%')->orderBy('code', 'DESC')->first();
+            $codeInv = explode('-', $inv->code);
+            $n = (int) substr($codeInv[0], -4);
         }
-        return (string) 'INV' . $date . sprintf('%04s', ($n + 1));
+        return (string) 'INV' . sprintf('%04s', ($n + 1)) . '-' . $date;
     }
 
     private function clean($string) {
