@@ -16,7 +16,7 @@ class Customer extends Model {
     protected $table = 'customer';
     protected $fillable = [
         'name', 'cars_id', 'car_types_id', 'car_brands_id', 'id_card', 'phone', 'address',
-        'image', 'car_year', 'car_color', 'car_plate', 'status'
+        'image', 'car_year', 'car_color', 'car_plate', 'status', 'image_url'
     ];
 
     public function userCreated() {
@@ -30,7 +30,7 @@ class Customer extends Model {
     public function detail() {
         return $this->hasMany(CustomerDetail::class, 'customer_id', 'id');
     }
-	
+
     public function car() {
         return $this->hasOne(Car::class, 'id', 'cars_id');
     }

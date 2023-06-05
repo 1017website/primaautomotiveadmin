@@ -74,7 +74,7 @@
                                 <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
                                 <div class="col-sm-10">
                                     @if(!empty($storeProduct->image))
-                                    <img src="{{ asset('storage/'.$storeProduct->image) }}" class="mb-2 img-fluid img-view">
+                                    <img src="{{ $storeProduct->image_url }}" class="mb-2 img-fluid img-view">
                                     @endif
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="image" name="image">
@@ -90,7 +90,7 @@
                                 <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Document') }}</label>
                                 <div class="col-sm-10">
                                     @if(!empty($storeProduct->document))
-                                    <a href="{{ asset('storage/'.$storeProduct->document) }}"><b><i>Download Current File</i></b></a>
+                                    <a href="{{ $storeProduct->document_url }}" target="_blank"><b><i>Download Current File</i></b></a>
                                     @endif
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="document" name="document">

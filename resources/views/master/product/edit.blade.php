@@ -65,7 +65,7 @@
                                 <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
                                 <div class="col-sm-10">
                                     @if(!empty($product->image))
-                                    <img src="{{ asset('storage/'.$product->image) }}" class="mb-2 img-fluid img-view">
+                                    <img src="{{ $product->image_url }}" class="mb-2 img-fluid img-view">
                                     @endif
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="image" name="image">

@@ -68,7 +68,7 @@
 
                                                     <!-- Current Profile Photo -->
                                                     <div class="mt-2" x-show="! photoPreview">
-                                                        <img src="{{ !empty($customer->image) ? asset('storage/'.$customer->image) : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
+                                                        <img src="{{ !empty($customer->image) ? $customer->image_url : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
                                                     </div>
 
                                                     <!-- New Profile Photo Preview -->
@@ -165,7 +165,7 @@
                                             </div>
                                         </div>
 
-										<button type="button" class="btn btn-default btn-add float-right">Add Car</button>
+                                        <button type="button" class="btn btn-default btn-add float-right">Add Car</button>
                                     </div>
 
                                 </div>
@@ -173,13 +173,13 @@
                         </div>
 
                     </div>
-					<fieldset class="border p-2">
-						<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
+                    <fieldset class="border p-2">
+                        <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
 
-						<div class="detail">
-							
-						</div>
-					</fieldset>
+                        <div class="detail">
+
+                        </div>
+                    </fieldset>
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -195,57 +195,57 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-			get_detail();
-		});
+            get_detail();
+        });
 
-		function get_detail() {
-			$.ajax({
-				url: "{{ route('customerDetail') }}",
-				type: 'GET',
-				dataType: 'html',
-				success: function (res) {
-					$('.detail').html(res);
-				}
-			});
-		}
-		
-		function deleteCar(id) {
-			$.ajax({
-				url: "{{ route('deleteCustomerCar') }}",
-				type: 'POST',
-				dataType: 'html',
-				data: {
-					'id': id
-				},
-				success: function (res) {
-					$('.detail').html(res);
-				}
-			});
-		}
-		
-		$(".btn-add").click(function () {
-			if($('#car_plate').val() == ''){
-				alert("Car Plate Cant be empty");
-				return
-			}
-			$.ajax({
-				url: "{{ route('addCarCustomer') }}",
-				type: 'POST',
-				dataType: 'JSON',
-				data: {
-					'cars_id': $('#cars_id').val(),
-					'car_year': $('#car_year').val(),
-					'car_color': $('#car_color').val(),
-					'car_plate': $('#car_plate').val(),
-				},
-				success: function (res) {
-					if (res.success) {
-						get_detail();
-					} else {
-						alert('Failed Add Car')
-					}
-				}
-			});
-		});
-	</script>
+        function get_detail() {
+            $.ajax({
+                url: "{{ route('customerDetail') }}",
+                type: 'GET',
+                dataType: 'html',
+                success: function (res) {
+                    $('.detail').html(res);
+                }
+            });
+        }
+
+        function deleteCar(id) {
+            $.ajax({
+                url: "{{ route('deleteCustomerCar') }}",
+                type: 'POST',
+                dataType: 'html',
+                data: {
+                    'id': id
+                },
+                success: function (res) {
+                    $('.detail').html(res);
+                }
+            });
+        }
+
+        $(".btn-add").click(function () {
+            if ($('#car_plate').val() == '') {
+                alert("Car Plate Cant be empty");
+                return
+            }
+            $.ajax({
+                url: "{{ route('addCarCustomer') }}",
+                type: 'POST',
+                dataType: 'JSON',
+                data: {
+                    'cars_id': $('#cars_id').val(),
+                    'car_year': $('#car_year').val(),
+                    'car_color': $('#car_color').val(),
+                    'car_plate': $('#car_plate').val(),
+                },
+                success: function (res) {
+                    if (res.success) {
+                        get_detail();
+                    } else {
+                        alert('Failed Add Car')
+                    }
+                }
+            });
+        });
+    </script>
 </x-app-layout>

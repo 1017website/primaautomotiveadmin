@@ -39,7 +39,7 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
                     </div>
                     <div class="col-sm-10">
                         @if(!empty($storeProduct->image))
-                        <img src="{{ asset('storage/'.$storeProduct->image) }}" class="img-fluid img-view">
+                        <img src="{{ $storeProduct->image_url }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>
@@ -112,7 +112,7 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
                     </div>
                     <div class="col-sm-10">
                         @if((!empty($storeProduct->document)))
-                        <a href="{{ asset('storage/'.$storeProduct->document) }}" class="btn btn-default" target="_blank">Download</a>
+                        <a href="{{ $storeProduct->document_url }}" class="btn btn-default" target="_blank">Download</a>
                         @endif
                     </div>
                 </div>

@@ -38,23 +38,9 @@ class ProductController extends Controller {
         try {
             DB::beginTransaction();
             if ($request->file('image') && request('image') != '') {
-                if (!file_exists('images')) {
-                    mkdir('images', 0777, true);
-                }
-                if (!file_exists('images/product-images/')) {
-                    mkdir('images/product-images/', 0777, true);
-                }
-                if (!empty($model->image)) {
-                    $imagePath = $_SERVER['DOCUMENT_ROOT'] . $model->image;
-                    if (file_exists($imagePath)) {
-                        File::delete($imagePath);
-                    }
-                }
-                $nameImg = time() . '.' . $request->file('image')->getClientOriginalExtension();
-                $destinationPath = $_SERVER['DOCUMENT_ROOT'] . '/images/product-images/';
-                $imagePath = $destinationPath . $nameImg;
-                $request->file('image')->move($destinationPath, $nameImg);
-                $validateData['image'] = '/images/product-images/' . $nameImg;
+                $uploadImage = Controller::uploadImage($request->file('image'), 'images/product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+                $validateData['image'] = $uploadImage['imgName'];
+                $validateData['image_url'] = $uploadImage['imgUrl'];
             }
 
             $validateData['hpp'] = (float) substr(str_replace('.', '', $request->hpp), 3);
@@ -128,31 +114,26 @@ class ProductController extends Controller {
 
         if ($request->file('image') && request('image') != '') {
             if (!empty($product->image)) {
-                if (Storage::exists($product->image)) {
-                    Storage::delete($product->image);
+                if (File::exists('images/product-images/' . $product->image)) {
+                    File::delete('images/product-images/' . $product->image);
                 }
             }
-            $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $uploadImage = Controller::uploadImage($request->file('image'), 'images/product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $validateData['image'] = $uploadImage['imgName'];
+            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
         $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
         $validateData['price'] = substr(str_replace('.', '', $request->price), 3);
 
         $product->update($validateData);
 
-        return redirect()->route('product.index')
-                        ->with('success', 'Product updated successfully');
+        return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 
     public function destroy(Product $product) {
-        if (strlen($product->image) > 0) {
-            if (File::exists($product->image)) {
-                File::delete($product->image);
-            }
-        }
         $product->delete();
 
-        return redirect()->route('product.index')
-                        ->with('success', 'Product <b>' . $product->name . '</b> deleted successfully');
+        return redirect()->route('product.index')->with('success', 'Product <b>' . $product->name . '</b> deleted successfully');
     }
 
 }

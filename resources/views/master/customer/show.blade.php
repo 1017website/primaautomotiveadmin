@@ -32,7 +32,7 @@
                     </div>
                     <div class="col-sm-10">
                         @if(!empty($customer->image))
-                        <img src="{{ asset('storage/'.$customer->image) }}" class="img-fluid img-view">
+                        <img src="{{ $customer->image_url }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>
@@ -136,13 +136,13 @@
                         </div>
                     </div>
                 </div>
-				<fieldset class="border p-2">
-					<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
+                <fieldset class="border p-2">
+                    <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('List Car') }}</legend>
 
-					<div class="detail">
-						
-					</div>
-				</fieldset>
+                    <div class="detail">
+
+                    </div>
+                </fieldset>
 
             </div>
         </div>
@@ -155,22 +155,22 @@
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 }
             });
-			get_detail();
-		});
+            get_detail();
+        });
 
-		function get_detail() {
-			$.ajax({
-				url: "{{ route('customerDetail') }}",
-				type: 'GET',
-				dataType: 'html',
-				data:{
-					'view':1,
-					'id':'<?= $customer->id ?>'
-				},
-				success: function (res) {
-					$('.detail').html(res);
-				}
-			});
-		}
-	</script>
+        function get_detail() {
+            $.ajax({
+                url: "{{ route('customerDetail') }}",
+                type: 'GET',
+                dataType: 'html',
+                data: {
+                    'view': 1,
+                    'id': '<?= $customer->id ?>'
+                },
+                success: function (res) {
+                    $('.detail').html(res);
+                }
+            });
+        }
+    </script>
 </x-app-layout>

@@ -14,7 +14,7 @@ class Product extends Model {
         Userstamps;
 
     protected $fillable = [
-        'name', 'type_product_id', 'image', 'hpp', 'price', 'um'
+        'name', 'type_product_id', 'image', 'hpp', 'price', 'um', 'image_url'
     ];
 
     public function typeProduct() {

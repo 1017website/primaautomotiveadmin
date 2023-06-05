@@ -31,8 +31,8 @@
                         <strong>{{ __('Image') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        @if(!empty($customer->image))
-                        <img src="{{ asset('storage/'.$customer->image) }}" class="img-fluid img-view">
+                        @if(!empty($customer->image_url))
+                        <img src="{{ $customer->image_url }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>

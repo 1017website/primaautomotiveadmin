@@ -68,7 +68,7 @@
 
                                                     <!-- Current Profile Photo -->
                                                     <div class="mt-2" x-show="! photoPreview">
-                                                        <img src="{{ !empty($customer->image) ? asset('storage/'.$customer->image) : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
+                                                        <img src="{{ !empty($customer->image) ? $customer->image_url : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
                                                     </div>
 
                                                     <!-- New Profile Photo Preview -->
@@ -125,7 +125,7 @@
                             </fieldset>
                         </div>
 
-                     </div>
+                    </div>
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>

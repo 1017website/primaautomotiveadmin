@@ -15,7 +15,8 @@ class Workorder extends Model {
 
     protected $table = 'workorder';
     protected $fillable = [
-        'code', 'order_id', 'invoice_id', 'mechanic_id', 'date', 'date_done', 'description', 'document', 'status'
+        'code', 'order_id', 'invoice_id', 'mechanic_id', 'date', 'date_done', 
+        'description', 'document', 'status', 'document_url'
     ];
 
     public function userCreated() {

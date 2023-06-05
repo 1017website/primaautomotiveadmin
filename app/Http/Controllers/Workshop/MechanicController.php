@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Workshop;
 use App\Models\Mechanic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use File;
 
 class MechanicController extends Controller {
 
@@ -29,7 +30,9 @@ class MechanicController extends Controller {
         ]);
 
         if ($request->file('image')) {
-            $validateData['image'] = $request->file('image')->storeAs('mechanic-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $uploadImage = Controller::uploadImage($request->file('image'), 'images/mechanic-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $validateData['image'] = $uploadImage['imgName'];
+            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
         $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
         $validateData['positional_allowance'] = substr(str_replace('.', '', $request->positional_allowance), 3);
@@ -40,8 +43,7 @@ class MechanicController extends Controller {
 
         Mechanic::create($validateData);
 
-        return redirect()->route('mechanic.index')
-                        ->with('success', 'Mechanic created successfully.');
+        return redirect()->route('mechanic.index')->with('success', 'Mechanic created successfully.');
     }
 
     public function show(Mechanic $mechanic) {
@@ -65,11 +67,13 @@ class MechanicController extends Controller {
 
         if ($request->file('image') && request('image') != '') {
             if (!empty($mechanic->image)) {
-                if (Storage::exists($mechanic->image)) {
-                    Storage::delete($mechanic->image);
+                if (File::exists('images/mechanic-images/' . $mechanic->image)) {
+                    File::delete('images/mechanic-images/' . $mechanic->image);
                 }
             }
-            $validateData['image'] = $request->file('image')->storeAs('mechanic-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $uploadImage = Controller::uploadImage($request->file('image'), 'images/mechanic-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $validateData['image'] = $uploadImage['imgName'];
+            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
 
         $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
@@ -80,15 +84,13 @@ class MechanicController extends Controller {
 
         $mechanic->update($validateData);
 
-        return redirect()->route('mechanic.index')
-                        ->with('success', 'Mechanic updated successfully');
+        return redirect()->route('mechanic.index')->with('success', 'Mechanic updated successfully');
     }
 
     public function destroy(Mechanic $mechanic) {
         $mechanic->delete();
 
-        return redirect()->route('mechanic.index')
-                        ->with('success', 'Mechanic <b>' . $mechanic->name . '</b> deleted successfully');
+        return redirect()->route('mechanic.index')->with('success', 'Mechanic <b>' . $mechanic->name . '</b> deleted successfully');
     }
 
 }

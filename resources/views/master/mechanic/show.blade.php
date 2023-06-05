@@ -35,7 +35,7 @@
                             </div>
                             <div class="col-sm-9">
                                 @if(!empty($mechanic->image))
-                                <img src="{{ asset('storage/'.$mechanic->image) }}" class="img-fluid img-view">
+                                <img src="{{ $mechanic->image_url }}" class="img-fluid img-view">
                                 @endif
                             </div>
                         </div>

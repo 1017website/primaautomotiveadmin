@@ -126,7 +126,9 @@ class WorkorderController extends Controller {
             try {
                 //save header
                 if ($request->file('document')) {
-                    $validateData['document'] = $request->file('document')->storeAs('workorder', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
+                    $uploadImage = Controller::uploadImage($request->file('document'), 'images/workorder/', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
+                    $validateData['document'] = $uploadImage['imgName'];
+                    $validateData['document_url'] = $uploadImage['imgUrl'];
                 }
                 $validateData['date_done'] = (!empty($request->date_done) ? date('Y-m-d', strtotime($request->date_done)) : NULL);
                 $validateData['status'] = '2';

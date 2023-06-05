@@ -18,7 +18,7 @@ class Order extends Model {
         'code', 'date', 'description', 'cust_name', 'cust_id_card', 'cust_address', 'cust_phone',
         'vehicle_type', 'vehicle_brand', 'vehicle_name', 'vehicle_year', 'vehicle_color',
         'vehicle_plate', 'vehicle_document', 'status', 'cars_id', 'car_brands_id', 'car_types_id',
-		'total','disc_header','disc_persen_header', 'ppn_header', 'ppn_persen_header'
+        'total', 'disc_header', 'disc_persen_header', 'ppn_header', 'ppn_persen_header', 'vehicle_document_url'
     ];
 
     public function userCreated() {
@@ -48,7 +48,7 @@ class Order extends Model {
     public function product() {
         return $this->hasMany(OrderProduct::class, 'order_id', 'id');
     }
-	
+
     public function getStatus() {
         if ($this->status == '0') {
             return 'Deleted';

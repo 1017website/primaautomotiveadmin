@@ -20,6 +20,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use File;
 
 class OrderController extends Controller {
 
@@ -70,7 +71,9 @@ class OrderController extends Controller {
             try {
                 //save header
                 if ($request->file('vehicle_document')) {
-                    $validateData['vehicle_document'] = $request->file('vehicle_document')->storeAs('order', date('YmdHis') . '.' . $request->file('vehicle_document')->getClientOriginalExtension());
+                    $uploadImage = Controller::uploadImage($request->file('vehicle_document'), 'images/vehicle_document/', date('YmdHis') . '.' . $request->file('vehicle_document')->getClientOriginalExtension());
+                    $validateData['vehicle_document'] = $uploadImage['imgName'];
+                    $validateData['vehicle_document_url'] = $uploadImage['imgUrl'];
                 }
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
                 $validateData['code'] = $this->generateCode(date('Ymd'));
@@ -147,13 +150,13 @@ class OrderController extends Controller {
                     if (!$saved) {
                         $success = false;
                         $message = 'Failed save order detail';
-                    }else{
-						$sql = "
+                    } else {
+                        $sql = "
 							Replace into car_profile (car_id, service_id)
-							select ".$order->cars_id.", '".$row->service_id."'
+							select " . $order->cars_id . ", '" . $row->service_id . "'
 						";
-						DB::statement($sql);
-					}
+                        DB::statement($sql);
+                    }
                 }
 
                 foreach ($tempProduct as $row) {
@@ -254,13 +257,13 @@ class OrderController extends Controller {
                         if (!$saved) {
                             $success = false;
                             $message = 'Failed save order detail';
-                        }else{
-							$sql = "
+                        } else {
+                            $sql = "
 								Replace into car_profile (car_id, service_id)
-								select ".$model->cars_id.", '".$row->service_id."'
+								select " . $model->cars_id . ", '" . $row->service_id . "'
 							";
-							DB::statement($sql);
-						}
+                            DB::statement($sql);
+                        }
                     }
 
                     OrderProduct::where('order_id', $model->id)->delete();
@@ -314,7 +317,7 @@ class OrderController extends Controller {
 
         return view('order.profile', compact('detail'));
     }
-	
+
     public function destroy(Order $order) {
         $order->status = '0';
         $order->save();

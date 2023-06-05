@@ -9,6 +9,7 @@ use App\Models\StoreInventoryProductHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
+use File;
 
 class StoreProductController extends Controller {
 
@@ -42,10 +43,14 @@ class StoreProductController extends Controller {
         try {
             DB::beginTransaction();
             if ($request->file('image')) {
-                $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+                $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+                $validateData['image'] = $uploadImage['imgName'];
+                $validateData['image_url'] = $uploadImage['imgUrl'];
             }
             if ($request->file('document')) {
-                $validateData['document'] = $request->file('document')->storeAs('product-files', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
+                $uploadFile = Controller::uploadImage($request->file('document'), 'images/store-product-files/', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
+                $validateData['document'] = $uploadFile['imgName'];
+                $validateData['document_url'] = $uploadFile['imgUrl'];
             }
             $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
             $validateData['price'] = substr(str_replace('.', '', $request->price), 3);
@@ -119,20 +124,24 @@ class StoreProductController extends Controller {
 
         if ($request->file('image') && request('image') != '') {
             if (!empty($storeProduct->image)) {
-                if (Storage::exists($storeProduct->image)) {
-                    Storage::delete($storeProduct->image);
+                if (File::exists('images/store-customer-images/' . $storeProduct->image)) {
+                    File::delete('images/store-customer-images/' . $storeProduct->image);
                 }
             }
-            $validateData['image'] = $request->file('image')->storeAs('product-images', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $validateData['image'] = $uploadImage['imgName'];
+            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
 
         if ($request->file('document') && request('document') != '') {
             if (!empty($storeProduct->document)) {
-                if (Storage::exists($storeProduct->document)) {
-                    Storage::delete($storeProduct->document);
+                if (File::exists('images/store-product-files/' . $storeProduct->document)) {
+                    File::delete('images/store-product-files/' . $storeProduct->document);
                 }
             }
-            $validateData['document'] = $request->file('document')->storeAs('product-files', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
+            $uploadFile = Controller::uploadImage($request->file('document'), 'images/store-product-files/', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
+            $validateData['document'] = $uploadFile['imgName'];
+            $validateData['document_url'] = $uploadFile['imgUrl'];
         }
 
         $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
@@ -146,11 +155,6 @@ class StoreProductController extends Controller {
     }
 
     public function destroy(StoreProduct $storeProduct) {
-        if (strlen($storeProduct->image) > 0) {
-            if (Storage::exists($storeProduct->image)) {
-                Storage::delete($storeProduct->image);
-            }
-        }
         $storeProduct->delete();
 
         return redirect()->route('store-product.index')

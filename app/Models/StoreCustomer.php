@@ -15,7 +15,7 @@ class StoreCustomer extends Model {
 
     protected $table = 'store_customer';
     protected $fillable = [
-        'name', 'phone', 'address'
+        'name', 'phone', 'address', 'image', 'image_url'
     ];
 
     public function userCreated() {
