@@ -38,6 +38,7 @@ use App\Http\Controllers\Store\StoreCustomerController;
 use App\Http\Controllers\Store\StoreSpendingController;
 use App\Http\Controllers\Store\StoreInvestmentController;
 use App\Http\Controllers\Store\ReportStoreController;
+use App\Http\Controllers\Store\MixController;
 //store
 //hrm
 use App\Http\Controllers\Hrm\AttendanceController;
@@ -87,6 +88,15 @@ Route::controller(ServiceParentController::class)->group(function () {
 	Route::post('service-parent/updateService', 'updateService')->name('serviceParent.updateService')->middleware(['auth']);
 });
 Route::resource('service-parent', ServiceParentController::class)->middleware(['auth']);
+
+Route::controller(MixController::class)->group(function () {
+    Route::post('mix/add', 'add')->name('mix.add')->middleware(['auth']);
+	Route::get('mix/detail', 'detail')->name('mix.detail')->middleware(['auth']);
+	Route::post('mix/delete', 'delete')->name('mix.delete')->middleware(['auth']);
+	Route::post('mix/updateService', 'updateService')->name('mix.updateService')->middleware(['auth']);
+	Route::post('mix/ingredient', 'ingredient')->name('mix.ingredient')->middleware(['auth']);
+});
+Route::resource('mix', MixController::class)->middleware(['auth']);
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth']);
 

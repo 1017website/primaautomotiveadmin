@@ -7,6 +7,8 @@ use App\Models\StoreStockDetail;
 use App\Models\StoreStockDetailTemp;
 use App\Models\StoreInventoryProduct;
 use App\Models\StoreInventoryProductHistory;
+use App\Models\InventoryRackPaint;
+use App\Models\InventoryRackPaintHistory;
 use App\Models\StoreProduct;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -32,8 +34,10 @@ class StoreStockController extends Controller {
         $validateData = $request->validate([
             'date' => 'required',
             'description' => 'required',
+			'type' => 'integer'
         ]);
 
+		
         $temp = StoreStockDetailTemp::where('user_id', Auth::id())->get();
         if (count($temp) == 0) {
             $success = false;
@@ -69,7 +73,7 @@ class StoreStockController extends Controller {
                     $inventoryHistory->type_product_id = $row->type_product_id;
                     $inventoryHistory->price = $row->price;
                     $inventoryHistory->description = $stock->description;
-                    if ($row->type == 'in') {
+                    if ($row->type == 'in' && $stock->type == 1) {
                         $inventoryHistory->qty_in = $row->qty;
                         $inventoryHistory->qty_out = 0;
                     } else {
@@ -91,7 +95,7 @@ class StoreStockController extends Controller {
                         $inventory->price = $row->price;
                         $inventory->qty = $row->qty;
                     } else {
-                        if ($row->type == 'in') {
+                        if ($row->type == 'in' && $stock->type == 1) {
                             $inventory->qty = $inventory->qty + $row->qty;
                         } else {
                             $inventory->qty = $inventory->qty - $row->qty;
@@ -102,6 +106,35 @@ class StoreStockController extends Controller {
                         $success = false;
                         $message = 'Failed save inventory product';
                     }
+					
+					if($stock->type == 2){
+						//history
+						$product = StoreProduct::where(['id' => $row->product_id])->first();
+						$inventoryHistory = new InventoryRackPaintHistory();
+						$inventoryHistory->product_id = $row->product_id;
+						$inventoryHistory->doc_id = $stock->id;
+						$inventoryHistory->weight_in = ($product->berat_jenis * $row->qty);
+						$inventoryHistory->weight_out = 0;
+						
+						$saved = $inventoryHistory->save();
+						if (!$saved) {
+							$success = false;
+							$message = 'Failed save history';
+						}
+
+						//stock
+						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id])->first();
+						if (!isset($inventory)) {
+							$inventory = new InventoryRackPaint();
+							$inventory->product_id = $row->product_id;
+						}
+						$inventory->weight = ($product->berat_jenis * $row->qty);
+						$saved = $inventory->save();
+						if (!$saved) {
+							$success = false;
+							$message = 'Failed save stock';
+						}
+					}
                 }
 
                 $deleted = StoreStockDetailTemp::where('user_id', Auth::id())->delete();

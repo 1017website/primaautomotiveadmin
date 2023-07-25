@@ -4,16 +4,18 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class StoreStock extends Model {
+class Mix extends Model {
 
     use HasFactory,
+        SoftDeletes,
         Userstamps;
 
-    protected $table = 'store_stock';
+    protected $table = 'mix';
     protected $fillable = [
-        'date', 'description','type'
+        'date', 'description','code', 'name', 'type_product_id', 'qty', 'um', 'hpp', 'margin_profit', 'price', 'berat_timbang', 'berat_jenis', 'berat_kemasan'
     ];
 
     public function userCreated() {
@@ -23,9 +25,8 @@ class StoreStock extends Model {
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
-
+	
     public function detail() {
-        return $this->hasMany(StoreStockDetail::class, 'store_stock_id', 'id');
+        return $this->hasMany(MixDetail::class, 'mix_id', 'id');
     }
-
 }

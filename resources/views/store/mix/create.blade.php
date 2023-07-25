@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('store-stock.index') }}">{{ __('Adjusting Stock') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('mix.index') }}">{{ __('Mixing Color') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +19,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('store-stock.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('mix.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Add Adjusting Stock') }}</h5>
+                <h5 class="card-title">{{ __('Add Mixing Color') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,14 +37,14 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('store-stock.store') }}" method="POST">
+                <form class="form-horizontal" action="{{ route('mix.store') }}" method="POST">
                     @csrf
 
                     <div class="row">
-                        <div class="col-sm-6">
+                        <div class="col-sm-5">
 
                             <div class="form-group row">
-                                <label for="date" class="col-sm-2 text-left control-label col-form-label">{{ __('Date') }}</label>
+                                <label for="date" class="col-sm-12 text-left control-label col-form-label">{{ __('Date') }}</label>
                                 <div class="col-sm-5 input-group">
                                     <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ old('date') }}"  placeholder="dd/mm/yyyy">
                                     <div class="input-group-append">
@@ -53,21 +53,65 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="type" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
-                                <div class="col-sm-5">
-									<select class="select2 form-control custom-select" id="typei" name="type" style="width: 100%;">                              
-										<option value="1">Adjust Stock</option>
-										<option value="2">Move to Mixing Rack</option>
-									</select>
-								</div>
-							</div>
-                            <div class="form-group row">
-                                <label for="description" class="col-sm-2 text-left control-label col-form-label">{{ __('Description') }}</label>
-                                <div class="col-sm-10">
+                                <label for="description" class="col-sm-12 text-left control-label col-form-label">{{ __('Description') }}</label>
+                                <div class="col-sm-12">
                                     <textarea class="form-control" id="address" name="description" placeholder="Description">{{ old('description') }}</textarea>
                                 </div>
                             </div>
-
+						</div>
+						<div class="col-sm-7">
+							<div class="form-group row">
+                                <div class="col-sm-3">
+									<label for="product" class="text-left control-label col-form-label">{{ __('Product') }}</label>
+									<select class="select2 form-control custom-select" id="product" name="product" style="width: 100%;">                              
+										<option value="0">New</option>
+										<?php foreach($product as $v){ ?>
+											<option value="<?= $v->id ?>" data-code="<?= $v->barcode ?>"
+												data-berat_jenis="<?= $v->berat_jenis ?>"
+												data-name="<?= $v->name ?>"
+												data-price="<?= $v->price ?>"
+												data-um="<?= $v->um ?>"
+												data-type="<?= $v->type_product_id ?>"
+											><?= $v->name ?></option>
+										<?php } ?>
+										
+									</select>
+								</div>
+								<div class="col-sm-3" style="display:none">
+									<label for="code" class="text-left control-label col-form-label">{{ __('Code') }}</label>
+									<input type="text" class="form-control" id="code" name="code" required="">
+								</div>
+								<div class="col-sm-3">
+									<label for="name" class="text-left control-label col-form-label">{{ __('Name') }}</label>
+									<input type="text" class="form-control" id="name" name="name" required="">
+								</div>
+								<div class="col-sm-3">
+									<label for="name" class="text-left control-label col-form-label">{{ __('Type') }}</label>
+                                    <select class="select2 form-control custom-select" id="type_product_id" name="type_product_id" style="width: 100%;">
+                                        @foreach($typeProducts as $typeProduct)                                
+                                        <option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>    
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group row">
+								<div class="col-sm-3">
+									<label for="qty" class="text-left control-label col-form-label">{{ __('Qty') }}</label>
+									<input type="text" class="form-control" id="qty" name="qty" required="">
+								</div>
+								<div class="col-sm-3">
+									<label for="name" class="text-left control-label col-form-label">{{ __('UM') }}</label>
+									<input type="text" class="form-control" id="um" name="um" required="">
+								</div>
+								<div class="col-sm-3">
+									<label for="berat_jenis" class="text-left control-label col-form-label">{{ __('Weight') }}</label>
+									<input type="text" class="form-control" id="berat_jenis" name="berat_jenis" required="">
+								</div>
+								<div class="col-sm-3">
+									<label for="price" class="text-left control-label col-form-label">{{ __('Price') }}</label>
+									<input type="text" class="form-control" id="price" name="price" required="">
+								</div>
+							</div>
                         </div>
                     </div>
 
@@ -106,20 +150,10 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
-                        <label for="type" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
-                        <div class="col-sm-5">
-                            <select class="select2 form-control custom-select" id="type" name="type" style="width: 100%;">                              
-                                <option value="in">In</option>  
-                                <option value="out">Out</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
                         <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Product') }}</label>
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" id="product_id" name="product_id" style="width: 100%;">                              
-                                @foreach($product as $item)                                
+                                @foreach($bahan as $item)                                
                                 <option value="{{$item->id}}">{{$item->name}}</option>    
                                 @endforeach
                             </select>
@@ -127,19 +161,11 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>
+                        <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Weight') }}</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="qty" name="qty" required="">
+                            <input type="text" class="form-control" id="weight" name="weight" required="">
                         </div>
                     </div>
-
-                    <div class="form-group row">
-                        <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
-                        <div class="col-sm-10">
-                            <input type="text" class="form-control" id="price" name="price" required="" readonly="">
-                        </div>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -151,21 +177,69 @@
     <!-- Modal -->
 
     <script type="text/javascript">
-		$('#typei').on('change', function () {
-			console.log($(this).val());
-			html = '<option value="in">In</option>';
-			html += '<option value="out">Out</option>'
-			if($(this).val() == 2){
-				html = '<option value="out">Out</option>';
+
+		$('#product').on('change', function () {
+			if($('#product option:selected').data('code') != undefined){
+				$('#code').val($('#product option:selected').data('code'));
+				$('#code').attr('readonly',true)
+				$('#add_item').hide()
+			}else{
+				$('#code').val('');
+				$('#add_item').show()
+				$('#code').attr('readonly',false)
 			}
-			$('#type').html(html)
+			if($('#product option:selected').data('name') != undefined){
+				$('#name').val($('#product option:selected').data('name'));
+				$('#name').attr('readonly',true)
+			}else{
+				$('#name').val('');
+				$('#name').attr('readonly',false)
+			}
+			$('#type_product_id').attr('disabled',false)
+			if($('#product option:selected').data('type') != undefined){
+				$('#type_product_id').val($('#product option:selected').data('type')).trigger('change');
+				$('#type_product_id').attr('disabled',true)
+			}
+			if($('#product option:selected').data('um') != undefined){
+				$('#um').val($('#product option:selected').data('um'));
+				$('#um').attr('readonly',true)
+			}else{
+				$('#um').val('');
+				$('#um').attr('readonly',false)
+			}
+			if($('#product option:selected').data('berat_jenis') != undefined){
+				$('#berat_jenis').val($('#product option:selected').data('berat_jenis'));
+				$('#berat_jenis').attr('readonly',true)
+			}else{
+				$('#berat_jenis').val('')
+				$('#berat_jenis').attr('readonly',false)
+			}
+			if($('#product option:selected').data('price') != undefined){
+				value = formatRupiah($('#product option:selected').data('price').toString(), 'Rp. ')
+				$('#price').val(value);
+				$('#price').attr('readonly',true)
+			}else{
+				$('#price').val('');
+				$('#price').attr('readonly',false)
+			}
+			$.ajax({
+				url: "{{ route('mix.ingredient') }}",
+				type: 'POST',
+				dataType: 'json',
+				data: {
+					'id': $('#product').val()
+				},
+				success: function (res) {
+					if (res.success) {
+						get_detail();
+					}else{
+						get_detail();
+					}
+				}
+			});
 		});
 		
-        $(document).ready(function ($) {
-			<?php if(!empty(old('type'))){ ?>
-				$('#typei').val({{ old('type') }}).trigger('change')
-			<?php } ?>
-			
+        $(document).ready(function ($) {			
             $("#product_id").val(null).trigger("change"); 
             
             get_detail();
@@ -176,50 +250,20 @@
                 }
             });
 
-            function get_detail() {
-                $.ajax({
-                    url: "{{ route('store-stock.detail') }}",
-                    type: 'GET',
-                    dataType: 'html',
-                    success: function (res) {
-                        $('.detail').html(res);
-                    }
-                });
-            }
-
             $("#addItem").click(function () {
                 $.ajax({
-                    url: "{{ route('store-stock.add') }}",
+                    url: "{{ route('mix.add') }}",
                     type: 'POST',
                     dataType: 'json',
                     data: {
-                        'type': $('#type').val(),
                         'product_id': $('#product_id').val(),
-                        'qty': $('#qty').val(),
-                        'price': $('#price').val(),
+                        'qty': $('#weight').val(),
                     },
                     success: function (res) {
                         if (res.success) {
                             $('#Modal2').modal('toggle');
                             get_detail();
                         }
-                    }
-                });
-            });
-
-            $('#product_id').on('change', function () {
-                $.ajax({
-                    url: "{{ route('store-stock.price') }}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: {
-                        'product_id': this.value
-                    },
-                    success: function (res) {
-                        $('#price').val(res.price);
-                        var price = document.getElementById('price');
-                        var formated = formatRupiah($('#price').val(), 'Rp. ');
-                        price.value = formated;
                     }
                 });
             });
@@ -253,24 +297,34 @@
                 harga.value = formatRupiah(this.value, 'Rp. ');
             });
 
-            function formatRupiah(angka, prefix)
-            {
-                var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                        split = number_string.split(','),
-                        sisa = split[0].length % 3,
-                        rupiah = split[0].substr(0, sisa),
-                        ribuan = split[0].substr(sisa).match(/\d{3}/gi);
-
-                if (ribuan) {
-                    separator = sisa ? '.' : '';
-                    rupiah += separator + ribuan.join('.');
-                }
-
-                rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-                return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
-            }
-
         });
+		function formatRupiah(angka, prefix)
+		{
+			console.log(angka);
+			var number_string = angka.replace(/[^,\d]/g, '').toString(),
+					split = number_string.split(','),
+					sisa = split[0].length % 3,
+					rupiah = split[0].substr(0, sisa),
+					ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+
+			if (ribuan) {
+				separator = sisa ? '.' : '';
+				rupiah += separator + ribuan.join('.');
+			}
+
+			rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
+			return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+		}
+		function get_detail() {
+			$.ajax({
+				url: "{{ route('mix.detail') }}",
+				type: 'GET',
+				dataType: 'html',
+				success: function (res) {
+					$('.detail').html(res);
+				}
+			});
+		}
     </script>
 
 </x-app-layout>

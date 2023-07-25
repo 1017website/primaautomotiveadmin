@@ -6,14 +6,15 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Wildside\Userstamps\Userstamps;
 
-class StoreStock extends Model {
+class InventoryRackPaint extends Model {
 
     use HasFactory,
         Userstamps;
 
-    protected $table = 'store_stock';
+    protected $table = 'inventory_rack_paint';
+	protected $primaryKey = 'product_id';
     protected $fillable = [
-        'date', 'description','type'
+        'product_id', 'weight'
     ];
 
     public function userCreated() {
@@ -24,8 +25,8 @@ class StoreStock extends Model {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
-    public function detail() {
-        return $this->hasMany(StoreStockDetail::class, 'store_stock_id', 'id');
+    public function product() {
+        return $this->hasOne(StoreProduct::class, 'id', 'product_id');
     }
 
 }
