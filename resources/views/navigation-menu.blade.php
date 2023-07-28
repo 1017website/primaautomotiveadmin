@@ -57,6 +57,7 @@
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/dashboard" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">{{ __('Dashboard') }}</span></a></li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Store') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="/mix" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Mix') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-type-product" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Type Items') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Product') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-stock" class="sidebar-link"><i class="mdi mdi-scale-balance"></i><span class="hide-menu">{{ __('Stock') }}</span></a></li>
