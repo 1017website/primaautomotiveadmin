@@ -56,8 +56,10 @@
                                 <label for="type" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
                                 <div class="col-sm-5">
 									<select class="select2 form-control custom-select" id="typei" name="type" style="width: 100%;">                              
-										<option value="1">Adjust Stock</option>
-										<option value="2">Move to Mixing Rack</option>
+										<option value="0">Adjust Stock</option>
+										<?php foreach($mixingRack as $v) {?>
+											<option value="<?= $v->id?>">Move to <?= $v->name ?></option>
+										<?php } ?>
 									</select>
 								</div>
 							</div>

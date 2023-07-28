@@ -61,6 +61,16 @@
 						</div>
 						<div class="col-sm-7">
 							<div class="form-group row">
+								<div class="col-sm-3">
+									<label for="rack_id" class="text-left control-label col-form-label">{{ __('Rack') }}</label>
+                                    <select class="select2 form-control custom-select" id="rack_id" name="rack_id" style="width: 100%;">
+                                        @foreach($mixingRack as $v)                                
+											<option value="{{$v->id}}">{{$v->name}}</option>    
+                                        @endforeach
+                                    </select>
+								</div>
+							</div>
+							<div class="form-group row">
                                 <div class="col-sm-3">
 									<label for="product" class="text-left control-label col-form-label">{{ __('Product') }}</label>
 									<select class="select2 form-control custom-select" id="product" name="product" style="width: 100%;">                              
@@ -258,6 +268,7 @@
                     data: {
                         'product_id': $('#product_id').val(),
                         'qty': $('#weight').val(),
+						'rack_id': $('#rack_id').val()
                     },
                     success: function (res) {
                         if (res.success) {
@@ -319,6 +330,9 @@
 			$.ajax({
 				url: "{{ route('mix.detail') }}",
 				type: 'GET',
+				data: {
+					'rack_id': $('#rack_id').val()
+				},
 				dataType: 'html',
 				success: function (res) {
 					$('.detail').html(res);

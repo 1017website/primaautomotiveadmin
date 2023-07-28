@@ -31,6 +31,7 @@ class StoreProductController extends Controller {
             $request->barcode = time();
         }
 
+		
         $validateData = $request->validate([
             'name' => 'required|max:255|unique:store_products,name,NULL,id,deleted_at,NULL',
             'barcode' => 'required|unique:store_products,barcode,NULL,id,deleted_at,NULL',
@@ -38,6 +39,7 @@ class StoreProductController extends Controller {
             'image' => 'image|file|max:2048',
             'document' => 'file|mimes:zip,rar,pdf,doc,docx,xls,xlsx|max:5120',
             'um' => 'required|max:255',
+			'berat_jenis'=>'nullable','berat_kemasan'=>'nullable','berat_timbang'=>'nullable'
         ]);
 
         try {

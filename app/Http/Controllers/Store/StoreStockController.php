@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Store;
 
 use App\Models\StoreStock;
 use App\Models\StoreStockDetail;
+use App\Models\MixingRack;
 use App\Models\StoreStockDetailTemp;
 use App\Models\StoreInventoryProduct;
 use App\Models\StoreInventoryProductHistory;
@@ -24,7 +25,8 @@ class StoreStockController extends Controller {
 
     public function create() {
         $product = StoreProduct::all();
-        return view('store.stock.create', compact('product'));
+		$mixingRack = MixingRack::all();
+        return view('store.stock.create', compact('product','mixingRack'));
     }
 
     public function store(Request $request) {
@@ -73,7 +75,7 @@ class StoreStockController extends Controller {
                     $inventoryHistory->type_product_id = $row->type_product_id;
                     $inventoryHistory->price = $row->price;
                     $inventoryHistory->description = $stock->description;
-                    if ($row->type == 'in' && $stock->type == 1) {
+                    if ($row->type == 'in' && $stock->type == 0) {
                         $inventoryHistory->qty_in = $row->qty;
                         $inventoryHistory->qty_out = 0;
                     } else {
@@ -95,7 +97,7 @@ class StoreStockController extends Controller {
                         $inventory->price = $row->price;
                         $inventory->qty = $row->qty;
                     } else {
-                        if ($row->type == 'in' && $stock->type == 1) {
+                        if ($row->type == 'in' && $stock->type == 0) {
                             $inventory->qty = $inventory->qty + $row->qty;
                         } else {
                             $inventory->qty = $inventory->qty - $row->qty;
@@ -107,11 +109,12 @@ class StoreStockController extends Controller {
                         $message = 'Failed save inventory product';
                     }
 					
-					if($stock->type == 2){
+					if($stock->type != 0){
 						//history
 						$product = StoreProduct::where(['id' => $row->product_id])->first();
 						$inventoryHistory = new InventoryRackPaintHistory();
 						$inventoryHistory->product_id = $row->product_id;
+						$inventoryHistory->rack_id = $stock->type;
 						$inventoryHistory->doc_id = $stock->id;
 						$inventoryHistory->weight_in = ($product->berat_jenis * $row->qty);
 						$inventoryHistory->weight_out = 0;
@@ -123,10 +126,11 @@ class StoreStockController extends Controller {
 						}
 
 						//stock
-						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id])->first();
+						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id, 'rack_id' => $stock->type])->first();
 						if (!isset($inventory)) {
 							$inventory = new InventoryRackPaint();
 							$inventory->product_id = $row->product_id;
+							$inventory->rack_id = $stock->type;
 						}
 						$inventory->weight = ($product->berat_jenis * $row->qty);
 						$saved = $inventory->save();

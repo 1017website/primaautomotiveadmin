@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Store;
 
 use App\Models\StoreProduct;
+use App\Models\MixingRack;
 use App\Models\Mix;
 use App\Models\MixDetail;
 use App\Models\MixDetailTemp;
@@ -26,7 +27,8 @@ class MixController extends Controller {
         $product = StoreProduct::where('mix','1')->get();
 		$bahan = StoreProduct::join('inventory_rack_paint as b', 'b.product_id', '=', 'store_products.id')->get();
 		$typeProducts = StoreTypeProduct::all();
-        return view('store.mix.create', compact('product','bahan','typeProducts'));
+		$mixingRack = MixingRack::all();
+        return view('store.mix.create', compact('product','bahan','typeProducts','mixingRack'));
     }
 
     public function store(Request $request) {
@@ -35,7 +37,7 @@ class MixController extends Controller {
 
         $validateData = $request->validate([
             'date' => 'required',
-            // 'code' => 'required',
+            'rack_id' => 'required',
 			'name' => 'required',
 			'berat_jenis' => 'required',
 			'qty' => 'required', 
@@ -123,6 +125,7 @@ class MixController extends Controller {
 						$inventoryHistory = new InventoryRackPaintHistory();
 						$inventoryHistory->product_id = $row->product_id;
 						$inventoryHistory->doc_id = $mix->id;
+						$inventoryHistory->rack_id = $mix->rack_id;
 						$inventoryHistory->weight_out = $row->weight;
 						$inventoryHistory->weight_in = 0;
 						
@@ -135,10 +138,11 @@ class MixController extends Controller {
 					
 					if($success){
 						//stock
-						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id])->first();
+						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id, 'rack_id' => $mix->rack_id])->first();
 						if (!isset($inventory)) {
 							$inventory = new InventoryRackPaint();
 							$inventory->product_id = $row->product_id;
+							$inventory->rack_id = $mix->rack_id;
 							$inventory->weight = -1 * ($mix->qty * $row->weight);
 						} else {
 							$inventory->weight -= ($mix->qty * $row->weight);
@@ -176,7 +180,7 @@ class MixController extends Controller {
         }
 
         if (!$success) {
-            return Redirect::back()->withErrors(['msg' => $message]);
+            return redirect()->back()->withErrors(['msg' => $message]);
         }
 
         return redirect()->route('mix.index')->with('success', 'Mix added successfully.');

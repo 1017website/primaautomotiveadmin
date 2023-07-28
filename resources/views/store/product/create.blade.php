@@ -94,6 +94,24 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Timbang') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="berat_timbang" name="berat_timbang" placeholder="" value="{{ old('berat_timbang') }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Kemasan') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="berat_kemasan" name="berat_kemasan" placeholder="" value="{{ old('berat_kemasan') }}">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Jenis') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="berat_jenis" name="berat_jenis" placeholder="" value="{{ old('berat_kemasan') }}">
+                                </div>
+                            </div>
 
                         </div>
 

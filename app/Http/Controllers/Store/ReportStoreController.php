@@ -7,6 +7,9 @@ use App\Models\StoreInventoryProductHistory;
 use App\Models\StoreTypeProduct;
 use App\Models\StoreChasier;
 use App\Models\StoreSpending;
+use App\Models\MixingRack;
+use App\Models\InventoryRackPaint;
+use App\Models\InventoryRackPaintHistory;
 
 class ReportStoreController extends Controller {
 
@@ -131,4 +134,57 @@ class ReportStoreController extends Controller {
         return json_encode($data);
     }
 
+    public function stockRack() {
+        $mixingRack = MixingRack::all();
+
+        return view('store.report.rack_stock.index', compact('mixingRack'));
+    }
+	
+    public function stockRackView() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $model = InventoryRackPaint::where('rack_id', $request['rack_id']);
+        $models = $model->get();
+
+        $data = [
+            'success' => $success,
+            'message' => $message,
+            'filter' => $request,
+            'html' => view('store.report.rack_stock.view', compact('models'))->render()
+        ];
+
+        return json_encode($data);
+    }
+	
+    public function historyRack() {
+        $mixingRack = MixingRack::all();
+
+        return view('store.report.history_stock_rack.index', compact('mixingRack'));
+    }
+	
+    public function historyStockRackView() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $model = InventoryRackPaintHistory::where('rack_id', $request['rack_id']);
+        if (isset($request['date_1']) && strlen($request['date_1']) > 0) {
+            $model = $model->where('created_at', '>=', date('Y-m-d', strtotime($request['date_1'])));
+        }
+        if (isset($request['date_2']) && strlen($request['date_2']) > 0) {
+            $model = $model->where('created_at', '<=', date('Y-m-d', strtotime($request['date_2'])));
+        }
+        $models = $model->get();
+
+        $data = [
+            'success' => $success,
+            'message' => $message,
+            'filter' => $request,
+            'html' => view('store.report.history_stock_rack.view', compact('models'))->render()
+        ];
+
+        return json_encode($data);
+    }
 }

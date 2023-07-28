@@ -7,15 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Mix extends Model {
+class MixingRack extends Model {
 
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
-    protected $table = 'mix';
+    protected $table = 'mixing_rack';
     protected $fillable = [
-        'rack_id', 'date', 'description','code', 'name', 'type_product_id', 'qty', 'um', 'hpp', 'margin_profit', 'price', 'berat_timbang', 'berat_jenis', 'berat_kemasan'
+        'code', 'name'
     ];
 
     public function userCreated() {
@@ -25,8 +25,5 @@ class Mix extends Model {
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
-	
-    public function detail() {
-        return $this->hasMany(MixDetail::class, 'mix_id', 'id');
-    }
+
 }

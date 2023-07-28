@@ -32,6 +32,7 @@ use App\Http\Controllers\Workshop\ReportController;
 //store
 use App\Http\Controllers\Store\StoreTypeProductController;
 use App\Http\Controllers\Store\StoreProductController;
+use App\Http\Controllers\Store\MasterRackController;
 use App\Http\Controllers\Store\StoreStockController;
 use App\Http\Controllers\Store\StoreChasierController;
 use App\Http\Controllers\Store\StoreCustomerController;
@@ -180,6 +181,11 @@ Route::controller(StoreProductController::class)->group(function () {
 });
 Route::resource('store-product', StoreProductController::class)->middleware(['auth']);
 
+Route::controller(MasterRackController::class)->group(function () {
+    Route::get('master-rack/edit/{code}', 'edit')->name('master-rack.edit')->middleware(['auth']);
+});
+Route::resource('master-rack', MasterRackController::class)->middleware(['auth']);
+
 Route::controller(StoreStockController::class)->group(function () {
     Route::get('store-stock/detail', 'detail')->name('store-stock.detail')->middleware(['auth']);
     Route::post('store-stock/price', 'price')->name('store-stock.price')->middleware(['auth']);
@@ -220,6 +226,10 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/revenue-view', 'revenueView')->name('revenueViewStore')->middleware(['auth']);
     Route::get('report-store/expense', 'expense')->name('expenseStore')->middleware(['auth']);
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
+	Route::get('report-store/stock-rack', 'stockRack')->name('stockRack')->middleware(['auth']);
+	Route::get('report-store/stock-rack-view', 'stockRackView')->name('stockRackView')->middleware(['auth']);
+    Route::get('report-store/history-rack', 'historyRack')->name('historyRack')->middleware(['auth']);
+    Route::get('report-store/history-stock-rack-view', 'historyStockRackView')->name('historyStockRackView')->middleware(['auth']);
 });
 //store
 //hrm 
