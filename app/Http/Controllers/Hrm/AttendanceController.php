@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Imports\AttendanceImport;
 
 class AttendanceController extends Controller {
 
@@ -75,6 +77,27 @@ class AttendanceController extends Controller {
         $attendance->delete();
 
         return redirect()->route('attendance.index')->with('success', 'Attendance Deleted');
+    }
+
+    public function import() {
+        return view('hrm.attendance.import');
+    }
+
+    public function importUpload() {
+        Excel::import(new AttendanceImport, request()->file('file'));
+
+        return back();
+    }
+
+    public function downloadTemplate() {
+        $file = "template/import_attendance.xlsx";
+
+        $headers = array(
+            'Content-Type' => 'application/vnd.ms-excel',
+            'Content-Disposition' => 'inline; filename="import_attendance.xlsx"'
+        );
+
+        return response()->download($file, 'import_attendance.xlsx', $headers);
     }
 
 }

@@ -234,7 +234,9 @@ Route::controller(ReportStoreController::class)->group(function () {
 //store
 //hrm 
 Route::controller(AttendanceController::class)->group(function () {
-    
+    Route::get('attendance/import', 'import')->name('attendance.import')->middleware(['auth']);
+    Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate')->middleware(['auth']);
+    Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 

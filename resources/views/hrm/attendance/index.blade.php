@@ -18,6 +18,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
+            <a class="btn btn-default" href="{{ route('attendance.import') }}">{{ __('Import Excel') }}</a>
             <a class="btn btn-default" href="{{ route('attendance.create') }}">{{ __('Manual') }}</a>
         </div>
 
