@@ -226,8 +226,8 @@ Route::controller(ReportStoreController::class)->group(function () {
     Route::get('report-store/revenue-view', 'revenueView')->name('revenueViewStore')->middleware(['auth']);
     Route::get('report-store/expense', 'expense')->name('expenseStore')->middleware(['auth']);
     Route::get('report-store/expense-view', 'expenseView')->name('expenseViewStore')->middleware(['auth']);
-	Route::get('report-store/stock-rack', 'stockRack')->name('stockRack')->middleware(['auth']);
-	Route::get('report-store/stock-rack-view', 'stockRackView')->name('stockRackView')->middleware(['auth']);
+    Route::get('report-store/stock-rack', 'stockRack')->name('stockRack')->middleware(['auth']);
+    Route::get('report-store/stock-rack-view', 'stockRackView')->name('stockRackView')->middleware(['auth']);
     Route::get('report-store/history-rack', 'historyRack')->name('historyRack')->middleware(['auth']);
     Route::get('report-store/history-stock-rack-view', 'historyStockRackView')->name('historyStockRackView')->middleware(['auth']);
 });
