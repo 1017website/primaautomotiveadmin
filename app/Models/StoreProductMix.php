@@ -4,17 +4,23 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class MixDetailTemp extends Model {
+class StoreProductMix extends Model {
 
     use HasFactory,
+        SoftDeletes,
         Userstamps;
 
-    protected $table = 'mix_detail_temp';
+    protected $table = 'store_products_mix';
     protected $fillable = [
-        'user_id', 'product_id', 'weight', 'price', 'amount'
+        'name', 'price'
     ];
+
+    public function typeProduct() {
+        return $this->hasOne(StoreTypeProduct::class, 'id', 'type_product_id');
+    }
 
     public function userCreated() {
         return $this->hasOne(User::class, 'id', 'created_by');
@@ -22,14 +28,6 @@ class MixDetailTemp extends Model {
 
     public function userUpdated() {
         return $this->hasOne(User::class, 'id', 'updated_by');
-    }
-
-    public function product() {
-        return $this->hasOne(StoreProduct::class, 'id', 'product_id');
-    }
-
-    public function currentStock() {
-        return $this->hasOne(InventoryRackPaint::class, 'product_id', 'product_id');
     }
 
 }

@@ -46,7 +46,7 @@
                             <div class="form-group row">
                                 <label for="date" class="col-sm-12 text-left control-label col-form-label">{{ __('Date') }}</label>
                                 <div class="col-sm-5 input-group">
-                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ old('date') }}"  placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ empty(old('date'))?date('d/m/Y'):old('date') }}"  placeholder="dd/mm/yyyy">
                                     <div class="input-group-append">
                                         <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -63,7 +63,7 @@
 							<div class="form-group row">
 								<div class="col-sm-3">
 									<label for="rack_id" class="text-left control-label col-form-label">{{ __('Rack') }}</label>
-                                    <select class="select2 form-control custom-select" id="rack_id" name="rack_id" style="width: 100%;">
+                                    <select class="select2 form-control custom-select" id="rack_id" name="rack_id" style="width: 100%;" onchange="getproduct()">
                                         @foreach($mixingRack as $v)                                
 											<option value="{{$v->id}}">{{$v->name}}</option>    
                                         @endforeach
@@ -87,39 +87,9 @@
 										
 									</select>
 								</div>
-								<div class="col-sm-3" style="display:none">
-									<label for="code" class="text-left control-label col-form-label">{{ __('Code') }}</label>
-									<input type="text" class="form-control" id="code" name="code" required="">
-								</div>
 								<div class="col-sm-3">
 									<label for="name" class="text-left control-label col-form-label">{{ __('Name') }}</label>
-									<input type="text" class="form-control" id="name" name="name" required="">
-								</div>
-								<div class="col-sm-3">
-									<label for="name" class="text-left control-label col-form-label">{{ __('Type') }}</label>
-                                    <select class="select2 form-control custom-select" id="type_product_id" name="type_product_id" style="width: 100%;">
-                                        @foreach($typeProducts as $typeProduct)                                
-                                        <option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>    
-                                        @endforeach
-                                    </select>
-								</div>
-							</div>
-							<div class="form-group row">
-								<div class="col-sm-3">
-									<label for="qty" class="text-left control-label col-form-label">{{ __('Qty') }}</label>
-									<input type="text" class="form-control" id="qty" name="qty" required="">
-								</div>
-								<div class="col-sm-3">
-									<label for="name" class="text-left control-label col-form-label">{{ __('UM') }}</label>
-									<input type="text" class="form-control" id="um" name="um" required="">
-								</div>
-								<div class="col-sm-3">
-									<label for="berat_jenis" class="text-left control-label col-form-label">{{ __('Weight') }}</label>
-									<input type="text" class="form-control" id="berat_jenis" name="berat_jenis" required="">
-								</div>
-								<div class="col-sm-3">
-									<label for="price" class="text-left control-label col-form-label">{{ __('Price') }}</label>
-									<input type="text" class="form-control" id="price" name="price" required="">
+									<input type="text" class="form-control" id="name" name="name" >
 								</div>
 							</div>
                         </div>
@@ -163,9 +133,7 @@
                         <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Product') }}</label>
                         <div class="col-sm-10">
                             <select class="select2 form-control custom-select" id="product_id" name="product_id" style="width: 100%;">                              
-                                @foreach($bahan as $item)                                
-                                <option value="{{$item->id}}">{{$item->name}}</option>    
-                                @endforeach
+
                             </select>
                         </div>
                     </div>
@@ -187,6 +155,12 @@
     <!-- Modal -->
 
     <script type="text/javascript">
+		bahanList = [];
+		var bahan = function () {
+			this.product = '';
+			this.name = '';
+			this.rack_id = '';
+		}
 
 		$('#product').on('change', function () {
 			if($('#product option:selected').data('code') != undefined){
@@ -224,14 +198,7 @@
 				$('#berat_jenis').val('')
 				$('#berat_jenis').attr('readonly',false)
 			}
-			if($('#product option:selected').data('price') != undefined){
-				value = formatRupiah($('#product option:selected').data('price').toString(), 'Rp. ')
-				$('#price').val(value);
-				$('#price').attr('readonly',true)
-			}else{
-				$('#price').val('');
-				$('#price').attr('readonly',false)
-			}
+
 			$.ajax({
 				url: "{{ route('mix.ingredient') }}",
 				type: 'POST',
@@ -249,9 +216,29 @@
 			});
 		});
 		
-        $(document).ready(function ($) {			
+		function getproduct(){
+			html = ''
+			$.each(bahanList, function(index, val){
+				
+				if(val.rack_id == $('#rack_id').val())
+				{
+					html += '<option value="'+val.product+'">'+val.name+'</option>';
+				}
+				
+			});
+			$("#product_id").html(html)
             $("#product_id").val(null).trigger("change"); 
-            
+		}
+        $(document).ready(function ($) {
+			<?php foreach($bahan as $v){ ?>
+				tmp = new bahan();
+				tmp.product = '<?= $v->product_id ?>'
+				tmp.name = '<?= $v->product->name ?>'
+				tmp.rack_id = '<?= $v->rack_id ?>'
+				bahanList.push(tmp);
+			<?php }?>
+
+            getproduct();
             get_detail();
 
             $.ajaxSetup({
@@ -295,17 +282,6 @@
                         event.preventDefault();
                     //if a decimal has been added, disable the "."-button
                 });
-            });
-
-            var harga = document.getElementById('price');
-
-            $(document).ready(function () {
-                var formated = formatRupiah($('#price').val(), 'Rp. ');
-                harga.value = formated;
-            });
-
-            harga.addEventListener('keyup', function (e) {
-                harga.value = formatRupiah(this.value, 'Rp. ');
             });
 
         });

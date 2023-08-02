@@ -42,8 +42,7 @@
                                 <th>{{ __('Description') }}</th>
                                 <th>{{ __('Code') }}</th>
                                 <th>{{ __('Name') }}</th>
-								<th>{{ __('Price') }}</th>
-								<th>{{ __('Weight') }}</th>
+								<th>{{ __('Total') }}</th>
 								<th>{{ __('Created At') }}</th>
                                 <th>{{ __('Action') }}</th>
                             </tr>
@@ -55,8 +54,7 @@
                                 <td>{{ $row->description }}</td>
 								<td>{{ $row->code }}</td>
 								<td>{{ $row->name }}</td>
-								<td><?= number_format($row->price,2) ?></td>
-                                <td><?= number_format($row->weight,2) ?></td>
+								<td><?= number_format($row->total,2) ?></td>
                                 <td>{{ $row->created_at }}</td>
                                 <td class="action-button">
                                     <a class="btn btn-info" href="{{ route('mix.show',$row->id) }}"><i class="fas fa-eye"></i></a>

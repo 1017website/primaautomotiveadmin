@@ -13,7 +13,7 @@ class MixDetail extends Model {
 
     protected $table = 'mix_detail';
     protected $fillable = [
-        'product_id', 'weight'
+        'product_id', 'weight', 'price', 'amount'
     ];
 
     public function userCreated() {

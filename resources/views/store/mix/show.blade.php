@@ -54,17 +54,12 @@
                     <div class="col-sm-3">
                         {{ $mix->code .' - '.$mix->name }}
                     </div>
+
                     <div class="col-sm-1">
-                        <strong>{{ __('Weight') }}</strong>
+                        <strong>{{ __('Total') }}</strong>
                     </div>
                     <div class="col-sm-2">
-                        {{ $mix->berat_jenis }}
-                    </div>
-                    <div class="col-sm-1">
-                        <strong>{{ __('Qty') }}</strong>
-                    </div>
-                    <div class="col-sm-2">
-                        {{ $mix->qty .'  '.$mix->um }}
+                        {{ number_format($mix->total, 2, ',', '.') }}
                     </div>
                 </div>
 				
@@ -82,6 +77,8 @@
                                             <th scope="col">Item</th>
                                             <th scope="col">Type Item</th>
                                             <th scope="col">Weight</th>
+											<th scope="col">Price</th>
+											<th scope="col">Amount</th>
                                         </tr>
                                     </thead>
                                     <tbody class="customtable">
@@ -92,6 +89,8 @@
                                             <td align='center'>{{ $row->product->name }}</td>
                                             <td align='center'>{{ $row->product->typeProduct->name }}</td>
                                             <td align='center'>{{ number_format($row->weight, 2, ',', '.') }}</td>
+											<td align='center'>{{ number_format($row->price, 2, ',', '.') }}</td>
+											<td align='center'>{{ number_format($row->amount, 2, ',', '.') }}</td>
                                         </tr>
                                         @endforeach
                                         @else

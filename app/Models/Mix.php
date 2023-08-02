@@ -15,7 +15,7 @@ class Mix extends Model {
 
     protected $table = 'mix';
     protected $fillable = [
-        'rack_id', 'date', 'description','code', 'name', 'type_product_id', 'qty', 'um', 'hpp', 'margin_profit', 'price', 'berat_timbang', 'berat_jenis', 'berat_kemasan'
+        'rack_id', 'date', 'description','code', 'name', 'total'
     ];
 
     public function userCreated() {

@@ -5,6 +5,8 @@
                 <th scope="col">Item</th>
                 <th scope="col">Current Stock</th>
                 <th scope="col">Weight</th>
+				<th scope="col">Price</th>
+				<th scope="col">amount</th>
                 <th scope="col">Action</th>
             </tr>
         </thead>
@@ -15,6 +17,8 @@
                 <td align='center'>{{ $row->product->name }}</td>
                 <td align='center'>{{ isset($row->currentStock) ? $row->currentStock->weight : 0 }}</td>
                 <td align='center'>{{ number_format($row->weight, 2, ',', '.') }}</td>
+				<td align='center'>{{ number_format($row->price, 2, ',', '.') }}</td>
+				<td align='center'>{{ number_format($row->amount, 2, ',', '.') }}</td>
                 <td align='center'><button type="button" onclick="deleteTemp({{ $row->id }})" class="btn btn-danger"><i class="fas fa-trash"></i></button></td>
             </tr>
             @endforeach

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Store;
 
 use App\Models\StoreProduct;
+use App\Models\StoreProductMix;
 use App\Models\MixingRack;
 use App\Models\Mix;
 use App\Models\MixDetail;
@@ -24,11 +25,10 @@ class MixController extends Controller {
     }
 
     public function create() {
-        $product = StoreProduct::where('mix','1')->get();
-		$bahan = StoreProduct::join('inventory_rack_paint as b', 'b.product_id', '=', 'store_products.id')->get();
-		$typeProducts = StoreTypeProduct::all();
+        $product = StoreProductMix::get();
+		$bahan = InventoryRackPaint::where('weight','>',0)->get();
 		$mixingRack = MixingRack::all();
-        return view('store.mix.create', compact('product','bahan','typeProducts','mixingRack'));
+        return view('store.mix.create', compact('product','bahan','mixingRack'));
     }
 
     public function store(Request $request) {
@@ -38,11 +38,7 @@ class MixController extends Controller {
         $validateData = $request->validate([
             'date' => 'required',
             'rack_id' => 'required',
-			'name' => 'required',
-			'berat_jenis' => 'required',
-			'qty' => 'required', 
-			'um' => 'required',
-			'description' => 'required'
+			'name' => 'required'
         ]);
 
 		
@@ -57,33 +53,22 @@ class MixController extends Controller {
             try {
                 //save header
                 $validateData['date'] = (!empty($request->date) ? date('Y-m-d', strtotime($request->date)) : NULL);
-				$validateData['price'] = str_replace('Rp','',str_replace('.', '', $request['price']));
-				$validateData['type_product_id'] = $request['type_product_id'];
+				$validateData['total'] = str_replace('Rp','',str_replace('.', '', $request['total']));
 				$validateData['status'] = 1;
 				
                 $mix = mix::create($validateData);
 
-				// print_r($mix->qty);die;
 				$type=0;
-                //get temp
 				$line = 1;
 
-				$prd = StoreProduct::where('id',$request->product)->first();
+				$prd = StoreProductMix::where('id',$request->product)->first();
 				$new = false;
 				if(!isset($prd)){
 					$new = true;
-					$prd = new StoreProduct();
-					$prd->type_product_id = $request->type_product_id;
-					$prd->barcode = $request->code;
+					$prd = new StoreProductMix();
 					$prd->name = $request->name;
-					$prd->hpp = $mix->price;
-					$prd->margin_profit = 0;
-					$prd->price = $mix->price;
-					$prd->um = $request->um;
-					$prd->berat_timbang = $request->berat_jenis;
-					$prd->berat_jenis = $request->berat_jenis;
-					$prd->berat_kemasan = 0;
-					$prd->mix = 1;
+					$prd->price = $mix->total;
+					$prd->berat = 0;
 					$saved = $prd->save();
 					if (!$saved) {
 						$success = false;
@@ -92,74 +77,87 @@ class MixController extends Controller {
 				}
 				
 				if($success){
-                foreach ($temp as $row) {
-					if($new && $success){
-						$ing = new StoreProductsIngredient();
-						$ing->id = $prd->id;
-						$ing->line = $line;
-						$ing->product_id = $row->product_id;
-						$ing->weight = $row->weight;
-						$ing->status = 1;
-						$saved = $ing->save();
-						if (!$saved) {
-							$success = false;
-							$message = 'Failed save ingredient';
-						}
-					}
-					if($success){
-						//detail
-						$mixDetail = new MixDetail();
-						$mixDetail->mix_id = $mix->id;
-						$mixDetail->line = $line++;
-						$mixDetail->product_id = $row->product_id;
-						$mixDetail->weight = $row->weight;
-						$saved = $mixDetail->save();
-						if (!$saved) {
-							$success = false;
-							$message = 'Failed save detail';
-						}
-					}
-					
-					if($success){
-						//history
-						$inventoryHistory = new InventoryRackPaintHistory();
-						$inventoryHistory->product_id = $row->product_id;
-						$inventoryHistory->doc_id = $mix->id;
-						$inventoryHistory->rack_id = $mix->rack_id;
-						$inventoryHistory->weight_out = $row->weight;
-						$inventoryHistory->weight_in = 0;
-						
-						$saved = $inventoryHistory->save();
-						if (!$saved) {
-							$success = false;
-							$message = 'Failed save inventory rack';
-						}
-					}
-					
-					if($success){
-						//stock
-						$inventory = InventoryRackPaint::where(['product_id' => $row->product_id, 'rack_id' => $mix->rack_id])->first();
-						if (!isset($inventory)) {
-							$inventory = new InventoryRackPaint();
-							$inventory->product_id = $row->product_id;
-							$inventory->rack_id = $mix->rack_id;
-							$inventory->weight = -1 * ($mix->qty * $row->weight);
-						} else {
-							$inventory->weight -= ($mix->qty * $row->weight);
-						}
-						if($inventory->weight < 0){
-							$success = false;
-							$message = "Stock ". $row->product->name ." tidak cukup";
-						}else{
-							$saved = $inventory->save();
+					$total = 0;
+					foreach ($temp as $row) {
+						if($new && $success){
+							$ing = new StoreProductsIngredient();
+							$ing->id = $prd->id;
+							$ing->line = $line;
+							$ing->product_id = $row->product_id;
+							$ing->weight = $row->weight;
+							$prd->berat = $row->weight;
+							$ing->status = 1;
+							$saved = $ing->save();
 							if (!$saved) {
 								$success = false;
-								$message = 'Failed save inventory product';
+								$message = 'Failed save ingredient';
 							}
 						}
+						if($success){
+							//detail
+							$mixDetail = new MixDetail();
+							$mixDetail->mix_id = $mix->id;
+							$mixDetail->line = $line++;
+							$mixDetail->product_id = $row->product_id;
+							$mixDetail->weight = $row->weight;
+							$mixDetail->price = $row->price;
+							$mixDetail->amount = $row->weight * $row->price;
+							$total += $mixDetail->amount;
+							
+							$saved = $mixDetail->save();
+							
+							if (!$saved) {
+								$success = false;
+								$message = 'Failed save detail';
+							}
+						}
+						
+						if($success){
+							//history
+							$inventoryHistory = new InventoryRackPaintHistory();
+							$inventoryHistory->product_id = $row->product_id;
+							$inventoryHistory->doc_id = $mix->id;
+							$inventoryHistory->rack_id = $mix->rack_id;
+							$inventoryHistory->weight_out = $row->weight;
+							$inventoryHistory->weight_in = 0;
+							
+							$saved = $inventoryHistory->save();
+							if (!$saved) {
+								$success = false;
+								$message = 'Failed save inventory rack';
+							}
+						}
+						
+						if($success){
+							//stock
+							$inventory = InventoryRackPaint::where(['product_id' => $row->product_id, 'rack_id' => $mix->rack_id])->first();
+							if (!isset($inventory)) {
+								$inventory = new InventoryRackPaint();
+								$inventory->product_id = $row->product_id;
+								$inventory->rack_id = $mix->rack_id;
+								$inventory->weight = -1 * ($row->weight);
+							} else {
+								$inventory->weight -= ($row->weight);
+							}
+							if($inventory->weight < 0){
+								$success = false;
+								$message = "Stock ". $row->product->name ." tidak cukup";
+							}else{
+								$saved = $inventory->save();
+								if (!$saved) {
+									$success = false;
+									$message = 'Failed save inventory product';
+								}
+							}
+						}
+						
 					}
-					
-                }
+					$mix->total = $total;
+					$saved = $mix->save();
+					if (!$saved) {
+						$success = false;
+						$message = 'Failed save Mix';
+					}
 				}
                 $deleted = MixDetailTemp::where('user_id', Auth::id())->delete();
                 if (!$deleted) {
@@ -194,7 +192,9 @@ class MixController extends Controller {
 			$temp->user_id = Auth::id();
 			
 			$temp->product_id = $v->product_id;
+			$temp->price = ($temp->product->price / (($temp->product->berat_jenis == 0)?1:$temp->product->berat_jenis));
 			$temp->weight = $v->weight;
+			$temp->amount = ($temp->weight * $temp->price);
 			$saved = $temp->save();
 		}
 		return ['success' => true];
@@ -223,9 +223,11 @@ class MixController extends Controller {
                 $temp = new MixDetailTemp();
                 $temp->user_id = Auth::id();
 				$temp->product_id = $request['product_id'];
+				$temp->price = ($temp->product->price / (($temp->product->berat_jenis == 0)?1:$temp->product->berat_jenis));
 				$temp->weight = 0;
 			}
 			$temp->weight = str_replace(',', '.', $request['qty']);
+			$temp->amount = ($temp->weight * $temp->price);
 			$temp->save();
         } catch (\Exception $e) {
             $success = false;
