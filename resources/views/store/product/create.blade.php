@@ -95,21 +95,21 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Timbang') }}</label>
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Berat Kotor (Kaleng + Cat + Lid)') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="berat_timbang" name="berat_timbang" placeholder="" value="{{ old('berat_timbang') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Kemasan') }}</label>
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Berat Kemasan (Kaleng + Lid)') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="berat_kemasan" name="berat_kemasan" placeholder="" value="{{ old('berat_kemasan') }}">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Jenis') }}</label>
+                                <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Berat Bersih (Cat)') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="berat_jenis" name="berat_jenis" placeholder="" value="{{ old('berat_kemasan') }}">
+                                    <input type="text" class="form-control" id="berat_jenis" name="berat_jenis" placeholder="" value="{{ old('berat_jenis') }}">
                                 </div>
                             </div>
 
@@ -183,20 +183,69 @@
         });
         $(function () {
         $("input[id*='qty']").keydown(function (event) {
-        if (event.shiftKey == true) {
-        event.preventDefault();
-        }
-        if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+            if (event.shiftKey == true) {
+                event.preventDefault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
                 (event.keyCode >= 96 && event.keyCode <= 105) ||
                 event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
                 event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
-        } else {
-        event.preventDefault();
-        }
-        if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+            } else {
+                event.preventDefault();
+            }
+            if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
                 event.preventDefault();
         //if a decimal has been added, disable the "."-button
         });
+        
+        $("input[id*='berat_timbang']").keydown(function (event) {
+            if (event.shiftKey == true) {
+                event.preventDefault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+            } else {
+                event.preventDefault();
+            }
+            if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+                event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+        });
+        
+        $("input[id*='berat_kemasan']").keydown(function (event) {
+            if (event.shiftKey == true) {
+                event.preventDefault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+            } else {
+                event.preventDefault();
+            }
+            if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+                event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+        });
+        
+        $("input[id*='berat_jenis']").keydown(function (event) {
+            if (event.shiftKey == true) {
+                event.preventDefault();
+            }
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+            } else {
+                event.preventDefault();
+            }
+            if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+                event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+        });
+        
         $("input[id*='margin_profit']").keydown(function (event) {
         if (event.shiftKey == true) {
         event.preventDefault();
