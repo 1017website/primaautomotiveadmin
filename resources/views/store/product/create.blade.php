@@ -109,7 +109,7 @@
                             <div class="form-group row">
                                 <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Berat Bersih (Cat)') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="berat_jenis" name="berat_jenis" placeholder="" value="{{ old('berat_jenis') }}">
+                                    <input type="text" class="form-control" id="berat_jenis" name="berat_jenis" readonly placeholder="" value="{{ old('berat_jenis') }}">
                                 </div>
                             </div>
 
@@ -283,6 +283,33 @@
         price(parseFloat(hpp), parseFloat(margin));
         }
         });
+		
+		function hitungBerat(){
+			var timbang = $('#berat_timbang').val().replace(/[^\d,-]/g, '');
+			var kemasan = $('#berat_kemasan').val().replace(/[^\d,-]/g, '');
+			timbang = timbang.replace(',', '.');
+			kemasan = kemasan.replace(',', '.');
+
+			var nominal = timbang - kemasan;
+			// console.log(nominal)
+			nominal = formatRupiah(String(nominal),'')
+			$('#berat_jenis').val(nominal)
+		}
+		
+        $("input[id*='berat_timbang']").keyup(function (event) {
+			var hpp = $(this).val();
+			hpp = formatRupiah(hpp,'')
+			$(this).val(hpp)
+			hitungBerat()
+        });
+		
+        $("input[id*='berat_kemasan']").keyup(function (event) {
+			var hpp = $(this).val();
+			hpp = formatRupiah(hpp,'')
+			$(this).val(hpp)
+			hitungBerat()
+        });
+		
         $("input[id*='price']").keyup(function (event) {
         var hpp = $('#hpp').val();
         var hpp = hpp.replace(/[^\d,-]/g, '');
@@ -310,6 +337,7 @@
         price_for.value = formatRupiah(this.value, 'Rp. ');
         });
         function formatRupiah(angka, prefix) {
+			console.log(angka)
         var number_string = angka.replace(/[^,\d]/g, '').toString(),
                 split = number_string.split(','),
                 sisa = split[0].length % 3,
@@ -321,7 +349,7 @@
         }
 
         rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
-        return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
+        return prefix == undefined ? rupiah : (rupiah ? prefix + rupiah : '');
         }
         function price(hpp, margin) {
         total = hpp + (hpp * margin / 100);
@@ -330,6 +358,7 @@
         var formated = formatRupiah($('#price').val(), 'Rp. ');
         harga.value = formated;
         }
+
 
         function margin(hpp, total) {
         total_margin = (total - hpp) * 100 / hpp;
