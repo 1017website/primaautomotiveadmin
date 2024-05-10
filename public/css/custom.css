@@ -1,3 +1,7 @@
+.hidden{
+    display:none!important;
+}
+
 .dropdown-item {
     cursor: pointer;
 }
@@ -229,4 +233,8 @@ textarea{
 
 .h-20{
     height: 10rem!important;
+}
+
+.mt-10 {
+    margin-top: 2.5rem!important;
 }

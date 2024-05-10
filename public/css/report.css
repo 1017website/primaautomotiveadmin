@@ -1,0 +1,125 @@
+@font-face {
+    font-family: "Lucida Console";
+    src: url("font/lucida-console.ttf") format("truetype");
+}
+@page {
+    margin-top: 1cm;
+    margin-left: 1cm;
+    margin-right: 1cm;
+    margin-bottom: 1cm;
+    size: auto;
+}
+/** >>>>>>> ALL REPORT CSS <<<<<<< */
+[data-layout="report"] {
+    font-family: "Lucida Console";
+}
+[data-layout="report"] table {
+    font-size: 12px;
+    border-collapse: collapse !important;
+    width: 100%;
+}
+[data-layout="report"] table thead tr th {
+    border: 1px solid #000;
+    font-weight: 400;
+    padding: 5px;
+    text-align: center;
+}
+[data-layout="report"] table thead.heading {
+    border-color: inherit;
+    box-sizing: border-box;
+    display: table-header-group;
+    vertical-align: middle;
+}
+[data-layout="report"] table tbody tr td {
+    border: 1px solid #000;
+    padding: 0 5px;
+}
+[data-layout="report"] table tbody tr td.noborder {
+    border: none;
+}
+[data-layout="report"] table tbody tr:nth-child(1) td {
+    padding-top: 10px;
+}
+[data-layout="report"] table tfoot.footing {
+    display: table-footer-group;
+}
+.footer .date-print {
+    bottom: 15px;
+    display: none;
+    font-family: "Lucida Console";
+    font-size: 10px;
+    font-style: italic;
+    page-break-before: always;
+    position: fixed;
+}
+.company-info {
+    font-family: "Lucida Console";
+    font-size: 11px;
+    font-weight: normal;
+    padding-bottom: 20px;
+}
+.title-report {
+    display: none;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+#ket {
+    margin-left: 20px;
+}
+@media print {
+    [data-layout="report"] {
+        font-family: "Lucida Console";
+        padding: 15px;
+    }
+    [data-layout="report"] table {
+        font-size: 12px;
+    }
+    [data-layout="report"] table thead tr th {
+        /*border: 1px solid #000;
+                                                    border-left: none;
+                                                    border-right: none;*/
+        font-weight: 400;
+        padding: 5px;
+        text-align: center;
+    }
+    [data-layout="report"] table thead.heading {
+        border-color: inherit;
+        box-sizing: border-box;
+        display: table-header-group;
+        vertical-align: middle;
+    }
+    [data-layout="report"] table tbody tr td {
+        /*border: none;*/
+        padding: 0 5px;
+    }
+    [data-layout="report"] table tfoot.footing {
+        display: table-footer-group;
+    }
+    .footer {
+        padding: 0 15px;
+        padding-bottom: 10px;
+    }
+    .footer .date-print {
+        display: block;
+    }
+    .company-info {
+        padding: 0 15px;
+    }
+    .text-left {
+        text-align: left;
+    }
+    .text-center {
+        text-align: center;
+    }
+    .text-right {
+        text-align: right;
+    }
+    .title-report {
+        display: block;
+    }
+}
+/** >>>>>>> END ALL REPORT CSS <<<<<<< */

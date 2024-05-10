@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     "use strict";
 
     $(".preloader").fadeOut();
@@ -10,24 +10,24 @@ $(function() {
     // ==============================================================
 
     $(".left-sidebar").hover(
-        function() {
-            $(".navbar-header").addClass("expand-logo");
-        },
-        function() {
-            $(".navbar-header").removeClass("expand-logo");
-        }
+            function () {
+                $(".navbar-header").addClass("expand-logo");
+            },
+            function () {
+                $(".navbar-header").removeClass("expand-logo");
+            }
     );
     // this is for close icon when navigation open in mobile view
-    $(".nav-toggler").on('click', function() {
+    $(".nav-toggler").on('click', function () {
         $("#main-wrapper").toggleClass("show-sidebar");
         $(".nav-toggler i").toggleClass("ti-menu");
     });
-    $(".nav-lock").on('click', function() {
+    $(".nav-lock").on('click', function () {
         $("body").toggleClass("lock-nav");
         $(".nav-lock i").toggleClass("mdi-toggle-switch-off");
         $("body, .page-wrapper").trigger("resize");
     });
-    $(".search-box a, .search-box .app-search .srh-btn").on('click', function() {
+    $(".search-box a, .search-box .app-search .srh-btn").on('click', function () {
         $(".app-search").toggle(200);
         $(".app-search input").focus();
     });
@@ -35,32 +35,32 @@ $(function() {
     // ============================================================== 
     // Right sidebar options
     // ==============================================================
-    $(function() {
-        $(".service-panel-toggle").on('click', function() {
+    $(function () {
+        $(".service-panel-toggle").on('click', function () {
             $(".customizer").toggleClass('show-service-panel');
 
         });
-        $('.page-wrapper').on('click', function() {
+        $('.page-wrapper').on('click', function () {
             $(".customizer").removeClass('show-service-panel');
         });
     });
     // ============================================================== 
     // This is for the floating labels
     // ============================================================== 
-    $('.floating-labels .form-control').on('focus blur', function(e) {
+    $('.floating-labels .form-control').on('focus blur', function (e) {
         $(this).parents('.form-group').toggleClass('focused', (e.type === 'focus' || this.value.length > 0));
     }).trigger('blur');
 
     // ============================================================== 
     //tooltip
     // ============================================================== 
-    $(function() {
+    $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     })
     // ============================================================== 
     //Popover
     // ============================================================== 
-    $(function() {
+    $(function () {
         $('[data-toggle="popover"]').popover()
     })
 
@@ -72,9 +72,9 @@ $(function() {
     });
 
     /*var ps = new PerfectScrollbar('.message-body');
-    var ps = new PerfectScrollbar('.notifications');
-    var ps = new PerfectScrollbar('.scroll-sidebar');
-    var ps = new PerfectScrollbar('.customizer-body');*/
+     var ps = new PerfectScrollbar('.notifications');
+     var ps = new PerfectScrollbar('.scroll-sidebar');
+     var ps = new PerfectScrollbar('.customizer-body');*/
 
     // ============================================================== 
     // Resize all elements
@@ -84,14 +84,14 @@ $(function() {
     // ============================================================== 
     // To do list
     // ============================================================== 
-    $(".list-task li label").click(function() {
+    $(".list-task li label").click(function () {
         $(this).toggleClass("task-done");
     });
 
     //****************************
     /* This is for the mini-sidebar if width is less then 1170*/
     //**************************** 
-    var setsidebartype = function() {
+    var setsidebartype = function () {
         var width = (window.innerWidth > 0) ? window.innerWidth : this.screen.width;
         if (width < 1170) {
             $("#main-wrapper").attr("data-sidebartype", "mini-sidebar");
@@ -104,7 +104,7 @@ $(function() {
     //****************************
     /* This is for sidebartoggler*/
     //****************************
-    $('.sidebartoggler').on("click", function() {
+    $('.sidebartoggler').on("click", function () {
         $("#main-wrapper").toggleClass("mini-sidebar");
         if ($("#main-wrapper").hasClass("mini-sidebar")) {
             $(".sidebartoggler").prop("checked", !0);
@@ -114,4 +114,27 @@ $(function() {
             $("#main-wrapper").attr("data-sidebartype", "full");
         }
     });
+
 });
+
+var popup = function (msg, type) {
+    // Form elements
+    var title = 'Notification';
+    var message = msg;
+    var position = 'nfc-top-right';
+    var duration = '3000';
+    var theme = type;
+
+    if (!message) {
+        message = 'You did not enter a message...';
+    }
+
+    window.createNotification({
+        positionClass: position,
+        showDuration: duration,
+        theme: theme
+    })({
+        title: title,
+        message: message
+    });
+};
