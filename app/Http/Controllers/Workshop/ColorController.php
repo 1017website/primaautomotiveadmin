@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Workshop;
 
 use App\Models\Color;
+use App\Models\ColorGroup;
 use Illuminate\Http\Request;
 
 class ColorController extends Controller {
@@ -13,12 +14,14 @@ class ColorController extends Controller {
     }
 
     public function create() {
-        return view('master.color.create');
+        $colorGroup = ColorGroup::all();
+        return view('master.color.create', compact('colorGroup'));
     }
 
     public function store(Request $request) {
         $request->validate([
             'name' => 'required|max:255|unique:colors,name,NULL,id,deleted_at,NULL',
+            'id_color_group' => 'required|integer',
         ]);
 
         Color::create($request->all());
@@ -32,12 +35,15 @@ class ColorController extends Controller {
     }
 
     public function edit(Color $color) {
-        return view('master.color.edit', compact('color'));
+        $colorGroup = ColorGroup::all();
+
+        return view('master.color.edit', compact('color', 'colorGroup'));
     }
 
     public function update(Request $request, Color $color) {
         $request->validate([
             'name' => 'required|max:255|unique:colors,name,' . $color->id . ',id,deleted_at,NULL',
+            'id_color_group' => 'required|integer',
         ]);
 
         $color->update($request->all());

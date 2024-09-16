@@ -6,9 +6,10 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('color.index') }}">{{ __('Color') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('Prima X Shine') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('wash-asset.index') }}">{{ __('Assets')
+                                    }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -19,12 +20,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('wash-asset.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Edit Color') }}</h5>
+                <h5 class="card-title">{{ __('Create Asset') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,39 +38,24 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('color.update', $color->id) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('wash-asset.store') }}" method="POST">
                     @csrf
-                    @method('PUT')
 
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
                             }}</label>
                         <div class="col-sm-10">
-                            <input value="{{ $color->name }}" type="text" class="form-control" id="name" name="name"
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
                                 placeholder="" required="true">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
+                        <label for="quantity" class="col-sm-2 text-left control-label col-form-label">{{ __('Quantity')
                             }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                @if($color->id_color_group != 0)
-                                <option value="{{$color->id_color_group}}">{{$color->colorGroup->name}}</option>
-                                @foreach($colorGroup as $row)
-                                @if ($row->id != $color->colorGroup->id)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endif
-                                @endforeach
-                                @else
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                                @endif
-                            </select>
+                            <input type="number" class="form-control" id="quantity" name="quantity"
+                                value="{{ old('quantity') }}" placeholder="" required="true">
                         </div>
                     </div>
 
@@ -81,7 +67,5 @@
         </div>
 
     </div>
-
-
 
 </x-app-layout>

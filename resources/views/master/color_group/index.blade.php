@@ -18,7 +18,7 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.create') }}">{{ __('Create') }}</a>
+            <a class="btn btn-default" href="{{ route('color-group.create') }}">{{ __('Create') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
@@ -39,7 +39,6 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Name') }}</th>
-                                <th>{{ __('Color Group') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -48,21 +47,16 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($color as $row)
+                            @foreach ($color_group as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
-                                @if($row->id_color_group != 0)
-                                <td>{{ $row->colorGroup->name }}</td>
-                                @else
-                                <td>{{ __(' - ') }}</td>
-                                @endif
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
                                 <td class="action-button">
-                                    <form action="{{ route('color.destroy',$row->id) }}" method="POST">
-                                        <a class="btn btn-default" href="{{ route('color.edit',$row->id) }}"><i
+                                    <form action="{{ route('color-group.destroy',$row->id) }}" method="POST">
+                                        <a class="btn btn-default" href="{{ route('color-group.edit',$row->id) }}"><i
                                                 class="fas fa-pencil-alt"></i></a>
                                         @csrf
                                         @method('DELETE')

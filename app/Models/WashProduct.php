@@ -7,24 +7,28 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class PrimerColor extends Model {
-
+class WashProduct extends Model
+{
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
-	protected $table = 'primer_color';
-	
+    protected $table = 'wash_products';
+
     protected $fillable = [
         'name',
+        'selling_price',
+        'buying_price',
+        'stock'
     ];
 
-    public function userCreated() {
+    public function userCreated()
+    {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
 
-    public function userUpdated() {
+    public function userUpdated()
+    {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
-
 }

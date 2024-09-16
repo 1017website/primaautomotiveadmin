@@ -6,8 +6,9 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('primer-color.index') }}">{{ __('Primer Color') }}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('Prima X Shine') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('wash-asset.index') }}">{{ __('Asset') }}</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +20,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('wash-asset.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Edit Primer Color') }}</h5>
+                <h5 class="card-title">{{ __('Edit Asset') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,14 +38,25 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('primer-color.update', $PrimerColor->id) }}" method="POST">
+                <form class="form-horizontal" action="{{ route('wash-asset.update', $washAsset->id) }}" method="POST">
                     @csrf
                     @method('PUT')
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
+                            }}</label>
                         <div class="col-sm-10">
-                            <input value="{{ $PrimerColor->name }}" type="text" class="form-control" id="name" name="name" placeholder="" required="true">
+                            <input value="{{ $washAsset->name }}" type="text" class="form-control" id="name" name="name"
+                                placeholder="" required="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="quantity" class="col-sm-2 text-left control-label col-form-label">{{ __('Quantity')
+                            }}</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="quantity" name="quantity"
+                                value="{{ $washAsset->quantity }}" placeholder="" required="true">
                         </div>
                     </div>
 

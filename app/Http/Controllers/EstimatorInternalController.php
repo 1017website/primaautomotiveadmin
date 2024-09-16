@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use App\Models\Color;
-use App\Models\PrimerColor;
+use App\Models\ColorCategory;
 use App\Models\TypeService;
 use App\Models\Car;
 use App\Models\CarBrand;
@@ -29,13 +29,13 @@ class EstimatorInternalController extends Controller {
         $colors = Color::all();
         $services = TypeService::all();
         $cars = Car::all();
-        $colorPrimers = PrimerColor::all();
+        $colorCategory = ColorCategory::all();
         $carBrand = CarBrand::all();
         $carType = CarType::all();
 
         $setting = Setting::where('code', env('APP_NAME', 'primaautomotive'))->first();
 
-        return view('estimator.estimator', compact('colors', 'services', 'cars', 'colorPrimers', 'carBrand', 'carType', 'setting'));
+        return view('estimator.estimator', compact('colors', 'services', 'cars', 'colorCategory', 'carBrand', 'carType', 'setting'));
     }
 
     public function changeColor() {
@@ -67,10 +67,33 @@ class EstimatorInternalController extends Controller {
         $html = '';
 
         if (isset($_POST['value'])) {
+            if($_POST['type'] == 'cost'){
+                $model = ColorCategory::find($_POST['id']);
+                if($model){
+                    $cost = $_POST['value'];
+
+                    if(is_numeric($cost) && $cost >= 0 && $cost <= 100){
+                        $model->cost = $cost;
+                        if(!$model->save()){
+                            $success = false;
+                            $message = "Update Failed";
+                        } else {
+                            $success = true;
+                            $message = "Cost Updated Successfully!";
+                        }
+                    } else {
+                        $success = false;
+                        $message = "Cost must be a number between 0 and 100.";
+                    }
+                } else {
+                    $success = false;
+                    $message = "Record not found";
+                }
+            }
             if ($_POST['type'] == 'primer_color') {
-                $check = PrimerColor::where(['name' => $_POST['value']])->first();
+                $check = ColorCategory::where(['name' => $_POST['value']])->first();
                 if (!isset($check)) {
-                    $model = new PrimerColor();
+                    $model = new ColorCategory();
                     $model->name = $_POST['value'];
                     if (!$model->save()) {
                         $success = false;

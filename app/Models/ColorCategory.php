@@ -7,16 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class Color extends Model
+class ColorCategory extends Model
 {
-
     use HasFactory,
         SoftDeletes,
         Userstamps;
 
+    protected $table = 'color_category';
+
     protected $fillable = [
         'name',
-        'id_color_group',
+        'cost',
     ];
 
     public function userCreated()
@@ -27,11 +28,6 @@ class Color extends Model
     public function userUpdated()
     {
         return $this->hasOne(User::class, 'id', 'updated_by');
-    }
-
-    public function colorGroup()
-    {
-        return $this->belongsTo(ColorGroup::class, 'id_color_group');
     }
 
 }

@@ -7,8 +7,9 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('color.index') }}">{{ __('Color') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
+                            <li class="breadcrumb-item"><a href="{{ route('color-group.index') }}">{{ __('Color
+                                    Group') }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -19,12 +20,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('color-group.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Create Color') }}</h5>
+                <h5 class="card-title">{{ __('Edit Color Group') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,28 +38,16 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('color.store') }}" method="POST">
+                <form class="form-horizontal" action="{{ route('color-group.update', $ColorGroup->id) }}" method="POST">
                     @csrf
+                    @method('PUT')
 
                     <div class="form-group row">
                         <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
                             }}</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
-                                placeholder="" required="true">
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
-                            }}</label>
-                        <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
+                            <input value="{{ $ColorGroup->name }}" type="text" class="form-control" id="name"
+                                name="name" placeholder="" required="true">
                         </div>
                     </div>
 
@@ -70,5 +59,7 @@
         </div>
 
     </div>
+
+
 
 </x-app-layout>

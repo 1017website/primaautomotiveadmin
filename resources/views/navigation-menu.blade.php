@@ -55,6 +55,7 @@
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30">
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/dashboard" aria-expanded="false"><i class="mdi mdi-view-dashboard"></i><span class="hide-menu">{{ __('Dashboard') }}</span></a></li>
+                @if(Auth::user()->is_store == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Store') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="/master-rack" class="sidebar-link"><i class="mdi mdi-table-large"></i><span class="hide-menu">{{ __('Mixing Rack') }}</span></a></li>
@@ -79,7 +80,8 @@
                         </li>
                     </ul>
                 </li>
-
+                @endif
+                @if(Auth::user()->is_workshop == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Workshop') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-format-list-bulleted"></i><span class="hide-menu">{{ __('Master') }}</span></a>
@@ -93,8 +95,9 @@
                                 <li class="sidebar-item"><a href="/car" class="sidebar-link"><i class="mdi mdi-car"></i><span class="hide-menu">{{ __('Cars') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car-brand" class="sidebar-link"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Car Brands') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/car-type" class="sidebar-link"><i class="mdi mdi-car-connected"></i><span class="hide-menu">{{ __('Car Types') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/color-group" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Color Group') }}</span></a></li>
                                 <li class="sidebar-item"><a href="/color" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Color') }}</span></a></li>
-                                <li class="sidebar-item"><a href="/primer-color" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Primer Color') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/color-category" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Color Category') }}</span></a></li>
                             </ul>
                         </li>
                         <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-dropbox"></i><span class="hide-menu">{{ __('Inventory') }}</span></a>
@@ -121,6 +124,19 @@
                         </li>
                     </ul>
                 </li>
+                @endif
+                @if(Auth::user()->is_wash == 1 || Auth::user()->is_owner == 1)
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-car-wash"></i><span class="hide-menu">{{ __('Prima X Shine') }}</span></a>
+                    <ul aria-expanded="false" class="collapse first-level">
+                        <li class="sidebar-item"><a href="/wash-service" class="sidebar-link"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Services') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/wash-product" class="sidebar-link"><i class="mdi mdi-basket"></i><span class="hide-menu">{{ __('Products') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/wash-asset" class="sidebar-link"><i class="mdi mdi-archive"></i><span class="hide-menu">{{ __('Assets') }}</span></a></li>
+                        {{-- <li class="sidebar-item"><a href="/wash-expense" class="sidebar-link"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Expenses') }}</span></a></li> --}}
+                        {{-- <li class="sidebar-item"><a href="/wash-sale" class="sidebar-link"><i class="mdi mdi-basket"></i><span class="hide-menu">{{ __('Sales') }}</span></a></li> --}}
+                    </ul>
+                </li>
+                @endif
+                @if(Auth::user()->is_hrm == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('HRM') }}</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="/mechanic" class="sidebar-link"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('Employee') }}</span></a></li>
@@ -130,8 +146,16 @@
                         <li class="sidebar-item"><a href="/employee-credit" class="sidebar-link"><i class="mdi mdi-account-minus"></i><span class="hide-menu">{{ __('Credit') }}</span></a></li>
                     </ul>
                 </li>
+                @endif
+                @if(Auth::user()->is_setting == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
+                @endif
+                @if(Auth::user()->is_user == 1 || Auth::user()->is_owner == 1)
+                <li class="sidebar-item"><a class="sidebar-link" href="/user" aria-expanded="false"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('User') }}</span></a></li>
+                @endif
+                @if(Auth::user()->is_estimator == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/estimator-internal" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Estimator Internal') }}</span></a></li>
+                @endif
             </ul>
         </nav>
     </div>

@@ -6,8 +6,9 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('color.index') }}">{{ __('Color') }}</a></li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('Prima X Shine') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('wash-product.index') }}">{{ __('Product')
+                                    }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +20,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('wash-product.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Create Color') }}</h5>
+                <h5 class="card-title">{{ __('Create Product') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,7 +38,7 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('color.store') }}" method="POST">
+                <form class="form-horizontal" action="{{ route('wash-product.store') }}" method="POST">
                     @csrf
 
                     <div class="form-group row">
@@ -48,17 +49,34 @@
                                 placeholder="" required="true">
                         </div>
                     </div>
+
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
+                        <label for="buying_price" class="col-sm-2 text-left control-label col-form-label">{{ __('Buying
+                            Price')
                             }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
+                            <input type="number" class="form-control" id="buying_price" name="buying_price"
+                                value="{{ old('buying_price') }}" placeholder="" required="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="selling_price" class="col-sm-2 text-left control-label col-form-label">{{
+                            __('Selling Price')
+                            }}</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="selling_price" name="selling_price"
+                                value="{{ old('selling_price') }}" placeholder="" required="true">
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="stock" class="col-sm-2 text-left control-label col-form-label">{{
+                            __('Stock')
+                            }}</label>
+                        <div class="col-sm-10">
+                            <input type="number" class="form-control" id="stock" name="stock" value="{{ old('stock') }}"
+                                placeholder="" required="true">
                         </div>
                     </div>
 

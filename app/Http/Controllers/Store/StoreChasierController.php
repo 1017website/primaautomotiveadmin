@@ -26,7 +26,9 @@ class StoreChasierController extends Controller {
     }
 
     public function create() {
-        $product = StoreInventoryProduct::all();
+        $product = StoreInventoryProduct::whereHas('product', function($query){
+            $query->whereNull('deleted_at');
+        })->get();
         $customer = StoreCustomer::all();
         return view('store.chasier.create', compact('product', 'customer'));
     }

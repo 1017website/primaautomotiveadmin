@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Color') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Color Category') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -18,12 +18,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.create') }}">{{ __('Create') }}</a>
+            <a class="btn btn-default" href="{{ route('color-category.create') }}">{{ __('Create') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Color') }}</h5>
+                <h5 class="card-title">{{ __('Color Category') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -39,7 +39,7 @@
                         <thead>
                             <tr>
                                 <th>{{ __('Name') }}</th>
-                                <th>{{ __('Color Group') }}</th>
+                                <th>{{ __('Cost (%)') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -51,18 +51,14 @@
                             @foreach ($color as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
-                                @if($row->id_color_group != 0)
-                                <td>{{ $row->colorGroup->name }}</td>
-                                @else
-                                <td>{{ __(' - ') }}</td>
-                                @endif
+                                <td align='center'>{{ number_format($row->cost, 2, ',', '.') }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
                                 <td class="action-button">
-                                    <form action="{{ route('color.destroy',$row->id) }}" method="POST">
-                                        <a class="btn btn-default" href="{{ route('color.edit',$row->id) }}"><i
+                                    <form action="{{ route('color-category.destroy',$row->id) }}" method="POST">
+                                        <a class="btn btn-default" href="{{ route('color-category.edit',$row->id) }}"><i
                                                 class="fas fa-pencil-alt"></i></a>
                                         @csrf
                                         @method('DELETE')

@@ -7,7 +7,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('color.index') }}">{{ __('Color') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('color-category.index') }}">{{ __('Color Category') }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Create') }}</li>
                         </ol>
                     </nav>
@@ -19,12 +19,12 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('color.index') }}">{{ __('Back') }}</a>
+            <a class="btn btn-default" href="{{ route('color-category.index') }}">{{ __('Back') }}</a>
         </div>
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Create Color') }}</h5>
+                <h5 class="card-title">{{ __('Create Color Category') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -37,28 +37,20 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('color.store') }}" method="POST">
+                <form class="form-horizontal" action="{{ route('color-category.store') }}" method="POST">
                     @csrf
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
-                            }}</label>
+                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}"
-                                placeholder="" required="true">
+                            <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="" required="true">
                         </div>
                     </div>
+
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
-                            }}</label>
+                        <label for="cost" class="col-sm-2 text-left control-label col-form-label">{{ __('Cost (%)') }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
+                            <input type="number" class="form-control" id="cost" name="cost" value="{{ old('cost') }}" placeholder="" required="true" step="0.01">
                         </div>
                     </div>
 
@@ -71,4 +63,21 @@
 
     </div>
 
+    <script>
+        $("input[id*='cost']").keydown(function (event) {
+        if (event.shiftKey == true) {
+        event.preventDefault();
+        }
+        if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+        } else {
+        event.preventDefault();
+        }
+        if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+                event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+        });
+    </script>
 </x-app-layout>

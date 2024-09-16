@@ -6,8 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Color Primer') }}</li>
+                            <li class="breadcrumb-item"><a href="#">{{ __('Prima X Shine') }}</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Products') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -16,18 +16,18 @@
     </div>
 
     <div class="container-fluid">
-        
+
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('primer-color.create') }}">{{ __('Create') }}</a>
+            <a class="btn btn-default" href="{{ route('wash-product.create') }}">{{ __('Create') }}</a>
         </div>
-        
+
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Primer Color') }}</h5>
+                <h5 class="card-title">{{ __('Products') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
-                   {!! $message !!}
+                    {!! $message !!}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -35,10 +35,13 @@
                 @endif
 
                 <div class="table-responsive">
-                    <table id="color" class="table table-striped table-bordered">
+                    <table id="products" class="table table-striped table-bordered">
                         <thead>
                             <tr>
                                 <th>{{ __('Name') }}</th>
+                                <th>{{ __('Buying Price' )}}</th>
+                                <th>{{ __('Selling Price' )}}</th>
+                                <th>{{ __('Stock') }}</th>
                                 <th>{{ __('Created By') }}</th>
                                 <th>{{ __('Updated By') }}</th>
                                 <th>{{ __('Created At') }}</th>
@@ -47,19 +50,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($color as $row)
+                            @foreach ($products as $row)
                             <tr>
                                 <td>{{ $row->name }}</td>
+                                <td>{{ $row->buying_price }}</td>
+                                <td>{{ $row->selling_price }}</td>
+                                <td>{{ $row->stock }}</td>
                                 <td>{{ isset($row->userCreated) ? $row->userCreated->name : '-' }}</td>
                                 <td>{{ isset($row->userUpdated) ? $row->userUpdated->name : '-' }}</td>
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
                                 <td class="action-button">
-                                    <form action="{{ route('primer-color.destroy',$row->id) }}" method="POST">
-                                        <a class="btn btn-default" href="{{ route('primer-color.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
+                                    <form action="{{ route('wash-product.destroy',$row->id) }}" method="POST">
+                                        <a class="btn btn-default" href="{{ route('wash-product.edit',$row->id) }}"><i
+                                                class="fas fa-pencil-alt"></i></a>
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                                        <button type="submit" class="btn btn-danger"><i
+                                                class="fas fa-trash"></i></button>
                                     </form>
                                 </td>
                             </tr>
@@ -74,7 +82,7 @@
     </div>
 
     <script>
-        $('#color').DataTable();
+        $('#products').DataTable();
     </script>
 
 

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EstimatorController;
 use App\Http\Controllers\EstimatorInternalController;
+use App\Http\Controllers\UserController;
 //general
 //workshop
 use App\Http\Controllers\Workshop\TypeProductController;
@@ -20,7 +21,8 @@ use App\Http\Controllers\Workshop\CarController;
 use App\Http\Controllers\Workshop\CarBrandController;
 use App\Http\Controllers\Workshop\CarTypeController;
 use App\Http\Controllers\Workshop\ColorController;
-use App\Http\Controllers\Workshop\PrimerColorController;
+use App\Http\Controllers\Workshop\ColorCategoryController;
+use App\Http\Controllers\Workshop\ColorGroupController;
 use App\Http\Controllers\Workshop\StockController;
 use App\Http\Controllers\Workshop\OrderController;
 use App\Http\Controllers\Workshop\InvoiceController;
@@ -46,6 +48,11 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
+
+//wash
+use App\Http\Controllers\Wash\WashServiceController;
+use App\Http\Controllers\Wash\WashAssetController;
+use App\Http\Controllers\Wash\WashProductController;
 
 //hrm
 
@@ -119,7 +126,8 @@ Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
 Route::resource('car-type', CarTypeController::class)->middleware(['auth']);
 Route::resource('color', ColorController::class)->middleware(['auth']);
-Route::resource('primer-color', PrimerColorController::class)->middleware(['auth']);
+Route::resource('color-category', ColorCategoryController::class)->middleware(['auth']);
+Route::resource('color-group', ColorGroupController::class)->middleware(['auth']);
 
 Route::controller(StockController::class)->group(function () {
     Route::get('stock/detailItem', 'detailItem')->name('detailItem')->middleware(['auth']);
@@ -262,3 +270,13 @@ Route::get('generate', function () {
 Route::get('/linkstorage', function () {
     Artisan::call('storage:link');
 });
+
+//user
+Route::resource('user', UserController::class)->middleware(['auth']);
+Route::post('/users/edit', [UserController::class, 'edit'])->name('user.edit');
+
+//wash
+Route::resource('wash-service', WashServiceController::class)->middleware(['auth']);
+Route::resource('wash-product', WashProductController::class)->middleware(['auth']);
+Route::resource('wash-asset', WashAssetController::class)->middleware(['auth']);
+

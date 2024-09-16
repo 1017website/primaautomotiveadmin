@@ -216,6 +216,22 @@
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
 
+        $("input[id*='margin_profit']").keydown(function (event) {
+        if (event.shiftKey == true) {
+        event.preventDefault();
+        }
+        if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
+        } else {
+        event.preventDefault();
+        }
+        if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
+                event.preventDefault();
+        //if a decimal has been added, disable the "."-button
+        });
+        
         $("#calculate").click(function () {
             var hpp = $('#hpp').val();
             var hpp = hpp.replace(/[^\d,-]/g, '');
