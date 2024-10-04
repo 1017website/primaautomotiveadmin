@@ -113,15 +113,30 @@
 $disc = false;
 $discP = false;
 $sub = 0;
-foreach ($invoice->order->detail as $index => $value){
-	if(!empty($value->disc_persen)){
-		$disc = true;
-	}
-}
-foreach ($invoice->order->product as $index => $value){
-	if(!empty($value->disc_persen)){
-		$discP = true;
-	}
+if($invoice->order) {
+    foreach ($invoice->order->detail as $index => $value) {
+        if(!empty($value->disc_persen)){
+            $disc = true;
+        }
+    }
+
+    foreach ($invoice->order->product as $index => $value) {
+        if(!empty($value->disc_persen)){
+            $discP = true;
+        }
+    }
+} elseif($invoice->washOrder) {
+    foreach ($invoice->washOrder->detail as $index => $value) {
+        if(!empty($value->disc_persen)){
+            $disc = true;
+        }
+    }
+
+    foreach ($invoice->washOrder->product as $index => $value) {
+        if(!empty($value->disc_persen)){
+            $discP = true;
+        }
+    }
 }
 ?>
     <div class="page-breadcrumb">
@@ -192,16 +207,36 @@ foreach ($invoice->order->product as $index => $value){
                                     </div>
 
                                     <div class="col-sm-4 to">
+                                        @if($invoice->order)
                                         <p class="lead marginbottom">To : {{ $invoice->order->cust_name }}</p>
+                                        @elseif($invoice->washOrder)
+                                        <p class="lead marginbottom">To : {{ $invoice->washOrder->cust_name }}</p>
+                                        @endif
+                                        @if($invoice->order)
                                         <p>{{ $invoice->order->cust_address }}<p>
+                                        @elseif($invoice->washOrder)
+                                        <p>{{ $invoice->washOrder->cust_address }}<p>
+                                        @endif
+                                        @if($invoice->order)
                                         <p>{{ __('Car') }}: {{ $invoice->order->vehicle_brand }} - {{ $invoice->order->vehicle_name }} {{ $invoice->order->vehicle_plate }}<p>
+                                        @elseif($invoice->washOrder)
+                                        <p>{{ __('Car') }}: {{ $invoice->washOrder->vehicle_brand }} - {{ $invoice->washOrder->vehicle_name }} {{ $invoice->washOrder->vehicle_plate }}<p>
+                                        @endif
+                                        @if($invoice->order)
                                         <p>{{ __('Phone') }}: {{ $invoice->order->cust_phone }}</p>
+                                        @elseif($invoice->washOrder)
+                                        <p>{{ __('Phone') }}: {{ $invoice->washOrder->cust_phone }}</p>
+                                        @endif
                                     </div>
 
                                     <div class="col-sm-4 text-right payment-details">
                                         <p class="lead marginbottom payment-info">Payment details</p>
                                         <p>{{ __('Date') }}: {{ date('d M Y', strtotime($invoice->date)) }}</p>
+                                        @if($invoice->order)
                                         <p>{{ __('Order') }}: {{ $invoice->order->code }} </p>
+                                        @elseif($invoice->washOrder)
+                                        <p>{{ __('Order') }}: {{ $invoice->washOrder->code }} </p>
+                                        @endif
                                         <p>{{ __('Total Amount') }}: {{ __('Rp. ') }}@price($invoice->total)</p>
                                     </div>
 
@@ -222,6 +257,7 @@ foreach ($invoice->order->product as $index => $value){
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @if($invoice->order)
 											<?php
                                             foreach ($invoice->order->detail as $row => $value){ ?>
                                             <tr>
@@ -237,6 +273,23 @@ foreach ($invoice->order->product as $index => $value){
                                             </tr>
 											<?php $sub += $value->service_total;
                                             } ?>
+                                            @elseif($invoice->washOrder)
+                                            <?php
+                                            foreach ($invoice->washOrder->detail as $row => $value){ ?>
+                                            <tr>
+                                                <td class="text-center">{{ ($row+1) }}</td>
+                                                <td class="text-left">{{ $value->service_name }}</td>                                               
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
+                                                <td class="text-left">{{ $value->service_qty }}</td>
+												<?php if($disc){ ?>
+													<td class="text-left">{{ number_format($value->disc_persen,2) . ' %' }}</td>
+													<td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+												<?php } ?>
+                                                <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
+                                            </tr>
+											<?php $sub += $value->service_total;
+                                            } ?>
+                                            @endif
                                             <tr class="last-row"></tr>
                                         </tbody>
                                     </table>
@@ -254,6 +307,7 @@ foreach ($invoice->order->product as $index => $value){
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @if($invoice->order)
 											<?php
                                             foreach ($invoice->order->product as $row => $value){ ?>
                                             <tr>
@@ -269,6 +323,23 @@ foreach ($invoice->order->product as $index => $value){
                                             </tr>
 											<?php $sub += $value->total;
                                             } ?>
+                                            @elseif($invoice->washOrder)
+                                            <?php
+                                            foreach ($invoice->washOrder->product as $row => $value){ ?>
+                                            <tr>
+                                                <td class="text-center">{{ ($row+1) }}</td>
+                                                <td class="text-left">{{ $value->product_name }}</td>                                               
+                                                <td class="text-left">{{ __('Rp. ') }}@price($value->product_price)</td>
+                                                <td class="text-left">{{ $value->product_qty }}</td>
+												<?php if($discP){ ?>
+													<td class="text-left">{{ number_format($value->disc_persen,2) . ' %' }}</td>
+													<td class="text-left">{{ __('Rp. ') }}@price($value->disc)</td>
+												<?php } ?>
+                                                <td class="text-right">{{ __('Rp. ') }}@price($value->total)</td>
+                                            </tr>
+											<?php $sub += $value->total;
+                                            } ?>
+                                            @endif
                                             <tr class="last-row"></tr>
                                         </tbody>
                                     </table>
@@ -276,7 +347,11 @@ foreach ($invoice->order->product as $index => $value){
 
                                 <div class="row">
                                     <div class="col-sm-6 margintop">
+                                        @if($invoice->order)
                                         <p>{{ __('Noted') }} : {{ $invoice->order->description }}</p>
+                                        @elseif($invoice->washOrder)
+                                        <p>{{ __('Noted') }} : {{ $invoice->washOrder->description }}</p>
+                                        @endif
 										<a class="btn btn-primary" href="{{ route('invoice.printProduct', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print Product') }}</a>
                                         <a class="btn btn-primary" href="{{ route('invoice.print', $invoice->id) }}" target="_blank"><i class="fa fa-print"></i>{{ __('Print') }}</a>
                                         <a class="btn btn-primary" href="{{ route('invoice.download', $invoice->id) }}" target="_blank"><i class="fa fa-download"></i>{{ __('Download PDF') }}</a>
@@ -284,12 +359,21 @@ foreach ($invoice->order->product as $index => $value){
                                     </div>
                                     <div class="col-sm-6 text-right pull-right invoice-total">
 										<p>{{ __('Subtotal') }} : {{ __('Rp. ') }}@price($sub)</p>
+                                        @if($invoice->order)
 										<?php if(!empty($invoice->order->disc_persen_header)){ ?>
 											<p>{{ __('Disc') }} {{ number_format($invoice->order->disc_persen_header,2) . ' %'}}: {{ __('Rp. ') }}@price($invoice->order->disc_header)</p
 										<?php } ?>
 										<?php if(!empty($invoice->order->ppn_persen_header)){ ?>
 											<p>{{ __('PPn') }} {{ number_format($invoice->order->ppn_persen_header,2) . ' %'}}: {{ __('Rp. ') }}@price($invoice->order->ppn_header)</p
 										<?php } ?>
+                                        @elseif($invoice->washOrder)
+                                        <?php if(!empty($invoice->washOrder->disc_persen_header)){ ?>
+											<p>{{ __('Disc') }} {{ number_format($invoice->washOrder->disc_persen_header,2) . ' %'}}: {{ __('Rp. ') }}@price($invoice->washOrder->disc_header)</p
+										<?php } ?>
+										<?php if(!empty($invoice->washOrder->ppn_persen_header)){ ?>
+											<p>{{ __('PPn') }} {{ number_format($invoice->washOrder->ppn_persen_header,2) . ' %'}}: {{ __('Rp. ') }}@price($invoice->washOrder->ppn_header)</p
+										<?php } ?>
+                                        @endif
                                         <p>{{ __('Grand Total') }} : {{ __('Rp. ') }}@price($invoice->total)</p>
 
                                         <p>{{ __('Payment') }} : {{ __('Rp. ') }}@price($invoice->dp)</p>                                      
@@ -297,6 +381,7 @@ foreach ($invoice->order->product as $index => $value){
                                         <p>{{ __('Remaining Pay') }} : {{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</p>
 
                                     </div>
+                                    
                                 </div>
 
                             </div>

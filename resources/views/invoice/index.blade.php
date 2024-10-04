@@ -51,16 +51,39 @@
                         <tbody>
                             @foreach ($invoice as $row)
                             <tr>
-                                <td>{{ $row->order->cust_name .' - '. $row->order->cust_phone }}</td>
-                                <td>{{ $row->order->car->name .' - '. $row->order->vehicle_plate }}</td>
+                                <td>
+                                    @if($row->order)
+                                    {{ $row->order->cust_name .' - '. $row->order->cust_phone }}
+                                    @elseif($row->washOrder)
+                                    {{ $row->washOrder->cust_name .' - '. $row->washOrder->cust_phone }}
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if($row->order)
+                                    {{ $row->order->car->name .' - '. $row->order->vehicle_plate }}
+                                    @elseif($row->washOrder)
+                                    {{ $row->washOrder->car->name .' - '. $row->washOrder->vehicle_plate }}
+                                    @endif
+                                </td>
+
                                 <td>{{ $row->code }}</td>
-                                <td>{{ $row->order->code }}</td>          
+
+                                <td>
+                                    @if($row->order)
+                                    {{ $row->order->code }}
+                                    @elseif($row->washOrder)
+                                    {{ $row->washOrder->code }}
+                                    @endif
+                                </td>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
-                                <td align="right" data-order="{{ $row->total }}">{{ __('Rp. ') }}@price($row->total)</td>
+                                <td align="right" data-order="{{ $row->total }}">{{ __('Rp. ') }}@price($row->total)
+                                </td>
                                 <td>{{ $row->getStatus() }}</td>
                                 <td>{{ $row->getStatusPayment() }}</td>
                                 <td class="action-button">
-                                    <a class="btn btn-info" href="{{ route('invoice.show',$row->id) }}"><i class="fas fa-eye"></i></a>
+                                    <a class="btn btn-info" href="{{ route('invoice.show',$row->id) }}"><i
+                                            class="fas fa-eye"></i></a>
                                 </td>
                             </tr>
                             @endforeach

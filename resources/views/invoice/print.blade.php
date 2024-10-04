@@ -180,15 +180,27 @@ $pagesFirst = true;
 
 $disc = false;
 $sub = 0;
-foreach ($invoice->order->detail as $index => $value){
+
+if($invoice->order){
+    foreach ($invoice->order->detail as $index => $value){
 	if(!empty($value->disc_persen)){
 		$disc = true;
 	}
 	$sub += $value->service_total;
+    }
+}elseif($invoice->washOrder){
+    foreach ($invoice->washOrder->detail as $index => $value){
+	if(!empty($value->disc_persen)){
+		$disc = true;
+	}
+	$sub += $value->service_total;
+    }
 }
+
 ?>
 
 <div class="row paper-size">
+    @if($invoice->order)
     <?php foreach ($invoice->order->detail as $index => $value) { ?>
         <?php if ($pages == 1) { ?>
             <!-- COUNTER ITEM -->
@@ -369,6 +381,187 @@ foreach ($invoice->order->detail as $index => $value){
     }
     ?>
     <!-- /endforeach detail item -->
+    @elseif($invoice->washOrder)
+    <?php foreach ($invoice->washOrder->detail as $index => $value) { ?>
+        <?php if ($pages == 1) { ?>
+            <!-- COUNTER ITEM -->
+            <div class="page-layout">
+                <!-- HEADER -->
+                <div class="page-header {{ (!$pagesFirst) ? 'page-first' : '' }}">
+                    <div class="invoice-ribbon">
+                        <div class="ribbon-inner {{ $invoice->getColorPayment() }}">
+                            <b>{{ strtoupper($invoice->getStatusPayment()) }}</b>
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="col-sm-6 top-left">
+                            <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
+                        </div>
+
+                        <div class="col-sm-6 top-right text-center">
+                            <h3 class="marginright">{{ $invoice->code }}</h3>
+                            <span class="marginright">{{ date('d M Y', strtotime($invoice->date)) }}</span>
+                        </div>
+
+                    </div>
+                    <hr>
+                    <div class="row">
+
+                        <div class="col-sm-4 from">
+                            <p class="lead marginbottom">{{ __('From') }} : {{ isset($setting) ? $setting->name : '' }}</p>
+                            <p>{{ isset($setting) ? $setting->address : '' }}</p>
+                            <p>{{ __('Phone') }}: {{ isset($setting) ? $setting->phone : '' }}</p>
+                            <p>{{ __('Email') }}: {{ isset($setting) ? $setting->email : '' }}</p>
+                        </div>
+
+                        <div class="col-sm-4 to">
+                            <p class="lead marginbottom">To : {{ $invoice->washOrder->cust_name }}</p>
+                            <p>{{ $invoice->washOrder->cust_address }}<p>
+                            <p>{{ __('Car') }}: {{ $invoice->washOrder->vehicle_brand }} - {{ $invoice->washOrder->vehicle_name }} {{ $invoice->washOrder->vehicle_plate }}<p>
+                            <p>{{ __('Phone') }}: {{ $invoice->washOrder->cust_phone }}</p>
+                        </div>
+
+                        <div class="col-sm-4 text-right payment-details">
+                            <p class="lead marginbottom payment-info">Payment details</p>
+                            <p>{{ __('Date') }}: {{ date('d M Y', strtotime($invoice->date)) }}</p>
+                            <p>{{ __('Order') }}: {{ $invoice->washOrder->code }} </p>
+                            <p>{{ __('Total Amount') }}: {{ __('Rp. ') }}@price($invoice->total)</p>
+                        </div>
+
+                    </div>
+                </div>
+                <!-- /HEADER -->
+                <!-- FOOTER -->
+                <div class="page-footer">
+                    <?php if ($pagesFirst) { ?>
+                        <div class="row">
+                            <div class="col-sm-4 margintop">
+                                <table>
+                                    <tr style="vertical-align:top;">
+                                        <td colspan="3"><p>{{ __('Pembayaran Mohon Ditunjukan Ke : ') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('BCA') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('5200999721') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('BNI') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('0982099091') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('Mandiri') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('1400000250721') }}</p></td>
+                                    </tr>
+                                    <tr style="vertical-align:top;">
+                                        <td><p>{{ __('A/n') }}</td>
+                                        <td><p>{{ __(':') }}</p></td>
+                                        <td><p>{{ __('CV Prima Karya Otomotif / Muhammad Ryan Ramadhani') }}</p></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-4 margintop">
+                                <table>
+                                    <tr>
+                                        <td style="width:8rem;text-align:center;white-space: nowrap;">Hormat Kami,</td>
+                                        <td style="width:5rem;"></td>
+                                        <td style="width:8rem;text-align:center;white-space: nowrap;">Penerima</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                        <td></td>
+                                        <td style="height:5rem;border-bottom: 1pt solid black;"></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-sm-4 text-right pull-right invoice-total">
+                                <table style="float:right;text-align: right;">
+                                    <tr>
+                                        <td>{{ __('Subtotal') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($sub)</td>
+                                    </tr>
+									<?php if(!empty($invoice->washOrder->disc_persen_header)){ ?>
+                                    <tr>
+                                        <td>{{ __('Disc') }} {{ number_format($invoice->washOrder->disc_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->washOrder->disc_header)</td>
+                                    </tr>
+									<?php } ?>
+									<?php if(!empty($invoice->washOrder->ppn_persen_header)){ ?>
+                                    <tr>
+                                        <td>{{ __('PPn') }} {{ number_format($invoice->washOrder->ppn_persen_header,2) . ' %' }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->washOrder->ppn_header)</td>
+                                    </tr>
+									<?php } ?>
+									
+                                    <tr>
+                                        <td>{{ __('Grand Total') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ __('Payment') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->dp)</td>
+                                    </tr>
+                                    <tr>
+                                        <td>{{ __('Remaining Pay') }}</td><td>:</td><td>{{ __('Rp. ') }}@price($invoice->total - $invoice->dp)</td>
+                                    </tr>
+                                </table>
+                            </div>
+<!--                            <div class="col-sm-12 margintop" style="margin-top:1rem;">
+                                <p>{{ __('Noted') }} : {{ $invoice->washOrder->description }}</p>
+                            </div>-->
+                        </div>
+                    <?php } ?>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <p class="text-right text-muted" style="font-style:italic;"><?= 'Page ' . ($pageof++) . ' Of ' . ceil((count($invoice->washOrder->detail)) / 8) ?></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- /FOOTER -->
+                <!-- CONTENT -->
+                <div class="page-content">
+                    <table class="table-content" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th class="text-center" style="width:5%">#</th>
+                                <th class="text-left" style="width:30%">{{ __('Service') }}</th>
+                                <th class="text-left" style="width:20%">{{ __('Cost') }}</th>
+                                <th class="text-left" style="width:10%">{{ __('Qty') }}</th>                                                
+								<?php if($disc){
+									echo '<th class="text-left" style="width:20%" colspan=2>Disc</th>';
+								} ?>                                                    
+                                <th class="text-right" style="width:15%">{{ __('Total Price') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        <?php } ?>
+                        <tr>
+                            <td class="text-center">{{ ($index+1) }}</td>
+                            <td class="text-left">{{ $value->service_name }}</td>                                               
+                            <td class="text-left">{{ __('Rp. ') }}@price($value->service_price)</td>
+                            <td class="text-left">{{ $value->service_qty }}</td>
+							<?php if($disc){ ?>
+								<td class="text-left">{{ number_format($value->disc_persen,2).' %' }}</td>
+								<td class="text-left">{{ __('Rp. ') }}@price($value->service_disc)</td>
+							<?php } ?>
+                            <td class="text-right">{{ __('Rp. ') }}@price($value->service_total)</td>
+                        </tr>
+                        <?php if ($pages == 8 || $index == (count($invoice->washOrder->detail) - 1)) { ?>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /CONTENT -->
+            </div>
+            <!-- /COUNTER ITEM -->
+        <?php } ?>
+        <!-- /end counter item -->
+        <?php
+        $pages++;
+        $pagesFirst = false;
+        if ($pages > 8) {
+            $pages = 1;
+        }
+    }
+    ?>
+    @endif
 </div>
 
 <script>

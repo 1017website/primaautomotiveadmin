@@ -48,11 +48,14 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
-
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
+use App\Http\Controllers\Wash\WashExpensesController;
 use App\Http\Controllers\Wash\WashProductController;
+use App\Http\Controllers\Wash\WashSalesController;
+use App\Http\Controllers\Wash\InvoiceWashController;
+
 
 //hrm
 
@@ -279,4 +282,22 @@ Route::post('/users/edit', [UserController::class, 'edit'])->name('user.edit');
 Route::resource('wash-service', WashServiceController::class)->middleware(['auth']);
 Route::resource('wash-product', WashProductController::class)->middleware(['auth']);
 Route::resource('wash-asset', WashAssetController::class)->middleware(['auth']);
+Route::controller(WashSalesController::class)->group(function () {
+    Route::post('wash-sale/price', 'price')->name('wash-sale.price')->middleware(['auth']);
+    Route::post('wash-sale/priceProduct', 'priceProduct')->name('wash-sale.priceProduct')->middleware(['auth']);
+    Route::post('wash-sale/addOrder', 'addOrder')->name('wash-sale.addOrder')->middleware(['auth']);
+    Route::get('wash-sale/detailSales', 'detailSales')->name('detailSales')->middleware(['auth']);
+    Route::get('wash-sale/profile', 'profile')->name('profile.car')->middleware(['auth']);
+    Route::get('wash-sale/detailProduct', 'detailProduct')->name('wash-sale.detailProduct')->middleware(['auth']);
+    Route::post('wash-sale/updateOrder', 'updateOrder')->name('wash-sale.updateOrder')->middleware(['auth']);
+    Route::get('wash-sale/allDetail', 'allDetail')->name('wash-sale.allDetail')->middleware(['auth']);
+    Route::post('wash-sale/addOrderProduct', 'addOrderProduct')->name('wash-sale.addOrderProduct')->middleware(['auth']);
+    Route::post('wash-sale/addCar', 'addCar')->name('addCar')->middleware(['auth']);
+    Route::post('wash-sale/deleteOrder', 'deleteOrder')->name('wash-sale.deleteOrder')->middleware(['auth']);
+    Route::post('wash-sale/deleteOrderProduct', 'deleteOrderProduct')->name('wash-sale.deleteOrderProduct')->middleware(['auth']);
+    Route::post('wash-sale/addInvoice', 'addInvoice')->name('wash-sale.addInvoice')->middleware(['auth']);
+});
+
+Route::resource('wash-sale', WashSalesController::class)->middleware(['auth']);
+Route::resource('wash-expense', WashExpensesController::class)->middleware(['auth']);
 

@@ -30,6 +30,10 @@ class Invoice extends Model {
         return $this->hasOne(Order::class, 'id', 'order_id');
     }
 
+    public function washOrder() {
+        return $this->hasOne(WashSale::class, 'id', 'order_id');
+    }
+
     public function getStatus() {
         if ($this->status == '0') {
             return 'Deleted';
