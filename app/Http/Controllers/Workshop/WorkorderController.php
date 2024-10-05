@@ -9,6 +9,7 @@ use App\Models\Workorder;
 use App\Models\WorkorderDetail;
 use App\Models\InventoryProduct;
 use App\Models\InventoryProductHistory;
+use App\Models\WashProduct;
 use App\Models\WorkorderDetailTemp;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -36,8 +37,9 @@ class WorkorderController extends Controller {
 
     public function edit(Workorder $workorder) {
         $items = InventoryProduct::all();
+        $washItems = WashProduct::all();
 
-        return view('workorder.edit', compact('workorder', 'items'));
+        return view('workorder.edit', compact('workorder', 'items', 'washItems'));
     }
 
     public function detailWork() {

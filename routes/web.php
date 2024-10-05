@@ -158,6 +158,7 @@ Route::controller(InvoiceController::class)->group(function () {
     Route::post('invoice/payInvoice', 'payInvoice')->name('payInvoice')->middleware(['auth']);
     Route::post('invoice/workOrder', 'workOrder')->name('workOrder')->middleware(['auth']);
     Route::post('invoice/voidInvoice', 'voidInvoice')->name('voidInvoice')->middleware(['auth']);
+    Route::post('invoice/voidWashInvoice', 'voidWashInvoice')->name('voidWashInvoice')->middleware(['auth']);
     Route::get('invoice/print/{id}', 'print')->name('invoice.print')->middleware(['auth']);
     Route::get('invoice/printProduct/{id}', 'printProduct')->name('invoice.printProduct')->middleware(['auth']);
     Route::get('invoice/download/{id}', 'download')->name('invoice.download')->middleware(['auth']);

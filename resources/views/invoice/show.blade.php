@@ -499,7 +499,11 @@ if($invoice->order) {
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            @if($invoice->order)
                             <button type="button" class="btn btn-danger" id="voidInvoice">Void</button>
+                            @elseif($invoice->washOrder)
+                            <button type="button" class="btn btn-danger" id="voidWashInvoice">Void</button>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -594,6 +598,30 @@ if($invoice->order) {
             if ($('#password').val() != '' && $('#password').val() != null) {
                 $.ajax({
                     url: "{{ route('voidInvoice') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'invoice_id': <?= $invoice->id ?>,
+                        'password': $('#password').val(),
+                    },
+                    success: function (res) {
+                        if (res.success) {
+                            window.location.href = "/invoice";
+                            popup('Void Invoice Success', 'success');
+                        } else {
+                            popup(res.message, 'error');
+                        }
+                    }
+                });
+            } else {
+                popup('Password Required !', 'error');
+            }
+        });
+
+        $("#voidWashInvoice").click(function () {
+            if ($('#password').val() != '' && $('#password').val() != null) {
+                $.ajax({
+                    url: "{{ route('voidWashInvoice') }}",
                     type: 'POST',
                     dataType: 'json',
                     data: {

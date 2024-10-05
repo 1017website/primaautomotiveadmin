@@ -9,6 +9,8 @@ use App\Models\OrderDetail;
 use App\Models\Mechanic;
 use App\Models\Workorder;
 use App\Models\Setting;
+use App\Models\WashSale;
+use App\Models\WashSaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
@@ -193,6 +195,37 @@ class InvoiceController extends Controller {
                 $invoice = Invoice::findorfail($request['invoice_id']);
                 $order = Order::findorfail($invoice->order_id);
                 OrderDetail::where('order_id', '=', $invoice->order_id)->forcedelete();
+                $order->forcedelete();
+                $invoice->forcedelete();
+
+                DB::commit();
+            } catch (\Exception $e) {
+                DB::rollback();
+                $success = false;
+                $message = $e->getMessage();
+            }
+        }
+
+        return json_encode(['success' => $success, 'message' => $message]);
+    }
+
+    public function voidWashInvoice() {
+        $success = true;
+        $message = '';
+        $request = array_merge($_POST, $_GET);
+
+        $user = User::where('is_owner', '1')->first();
+        if (!Hash::check($request['password'], $user->password)) {
+            $success = false;
+            $message = 'Wrong Password !';
+        }
+
+        if ($success) {
+            DB::beginTransaction();
+            try {
+                $invoice = Invoice::findorfail($request['invoice_id']);
+                $order = WashSale::findorfail($invoice->order_id);
+                WashSaleDetail::where('order_id', '=', $invoice->order_id)->forcedelete();
                 $order->forcedelete();
                 $invoice->forcedelete();
 
