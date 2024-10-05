@@ -54,7 +54,7 @@ use App\Http\Controllers\Wash\WashAssetController;
 use App\Http\Controllers\Wash\WashExpensesController;
 use App\Http\Controllers\Wash\WashProductController;
 use App\Http\Controllers\Wash\WashSalesController;
-use App\Http\Controllers\Wash\InvoiceWashController;
+
 
 
 //hrm
@@ -286,7 +286,7 @@ Route::controller(WashSalesController::class)->group(function () {
     Route::post('wash-sale/price', 'price')->name('wash-sale.price')->middleware(['auth']);
     Route::post('wash-sale/priceProduct', 'priceProduct')->name('wash-sale.priceProduct')->middleware(['auth']);
     Route::post('wash-sale/addOrder', 'addOrder')->name('wash-sale.addOrder')->middleware(['auth']);
-    Route::get('wash-sale/detailSales', 'detailSales')->name('detailSales')->middleware(['auth']);
+    Route::get('wash-sale/detailOrder', 'detailOrder')->name('wash-sale.detailOrder')->middleware(['auth']);
     Route::get('wash-sale/profile', 'profile')->name('profile.car')->middleware(['auth']);
     Route::get('wash-sale/detailProduct', 'detailProduct')->name('wash-sale.detailProduct')->middleware(['auth']);
     Route::post('wash-sale/updateOrder', 'updateOrder')->name('wash-sale.updateOrder')->middleware(['auth']);

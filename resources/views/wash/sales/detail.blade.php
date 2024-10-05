@@ -14,8 +14,8 @@
         $grandTotal = 0;
         ?>
         <tbody class="customtable">
-            @if (count($detailSales) > 0)
-            @foreach ($detailSales as $row)
+            @if (count($detailOrder) > 0)
+            @foreach ($detailOrder as $row)
             <tr>
                 <td align='center'>{{ $row->service_name }}</td>
                 <td align='center'>{{ number_format($row->service_qty, 2) }}</td>
@@ -47,7 +47,7 @@
 <script>
     function get_detail() {
     $.ajax({
-    url: "{{ route('detailSales') }}",
+    url: "{{ route('wash-sale.detailOrder') }}",
             type: 'GET',
             dataType: 'html',
             success: function (res) {

@@ -5,7 +5,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('Order') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('Wash Sales') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -21,7 +21,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Order') }}</h5>
+                <h5 class="card-title">{{ __('Wash Sales') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -48,7 +48,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($washSale as $row)
+                            @foreach ($order as $row)
                             <tr>
                                 <td>{{ $row->code }}</td>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
@@ -96,8 +96,7 @@
                                 <select class="select2 form-control custom-select" id="service_id" name="service_id"
                                     style="width: 100%;">
                                     @foreach($service as $row)
-                                    <option data-price='<?= $row->cost ?>' value="{{$row->id}}">
-                                        {{$row->name}}</option>
+                                    <option data-price='<?= $row->cost ?>' value="{{$row->id}}">{{$row->name}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -138,7 +137,8 @@
                                 <select class="select2 form-control custom-select" id="product_id" name="product_id"
                                     style="width: 100%;">
                                     @foreach($product as $row)
-                                    <option data-price='<?= $row->selling_price ?>' value="{{$row->id}}">{{$row->name}}</option>
+                                    <option data-price='<?= $row->selling_price ?>' value="{{$row->id}}">{{$row->name}}
+                                    </option>
                                     @endforeach
                                 </select>
                             </div>
@@ -254,7 +254,7 @@
 
         $(".btn-product").click(function () {
             $.ajax({
-                url: "{{ route('addOrderProduct') }}",
+                url: "{{ route('wash-sale.addOrderProduct') }}",
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -275,7 +275,7 @@
 
         $(".btn-service").click(function () {
             $.ajax({
-                url: "{{ route('addOrder') }}",
+                url: "{{ route('wash-sale.addOrder') }}",
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -358,7 +358,7 @@
 
         function get_detail() {
             $.ajax({
-                url: "{{ route('detailSales') }}",
+                url: "{{ route('wash-sale.detailOrder') }}",
                 type: 'GET',
                 dataType: 'html',
                 success: function (res) {
@@ -383,6 +383,20 @@
                 }
             });
         }
+
+        function deleteTempProduct(id) {
+            $.ajax({
+            url: "{{ route('wash-sale.deleteOrderProduct') }}",
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                    'id': id
+                    },
+                    success: function (res) {
+                    get_product();
+                    }
+            });
+            }
 
         $('#Modal').on('shown.bs.modal', function () {
             get_insert()

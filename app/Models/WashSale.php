@@ -27,6 +27,8 @@ class WashSale extends Model
         'total',
         'ppn_header',
         'ppn_persen_header',
+        'disc_header',
+        'disc_persen_header',
         'vehicle_type',
         'vehicle_brand',
         'vehicle_name',

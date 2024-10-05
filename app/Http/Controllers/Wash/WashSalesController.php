@@ -28,8 +28,8 @@ class WashSalesController extends Controller
         $product = WashProduct::all();
         $service = WashService::all();
 
-        $washSale = WashSale::orderBy('code', 'DESC')->get();
-        return view('wash.sales.index', compact('washSale', 'product', 'service'));
+        $order = WashSale::orderBy('code', 'DESC')->get();
+        return view('wash.sales.index', compact('order', 'product', 'service'));
     }
 
     public function create()
@@ -87,14 +87,16 @@ class WashSalesController extends Controller
                 $validateData['vehicle_name'] = $car->name;
                 $validateData['vehicle_brand'] = $car->brand->name;
                 $validateData['vehicle_type'] = $car->type->name;
-                $disc_header = (float) str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
                 $validateData['disc_persen_header'] = (float) str_replace(',', '.', $request->disc_persen_header);
                 $validateData['ppn_persen_header'] = (float) str_replace(',', '.', $request->ppn_persen_header);
+                $disc_header = (float) str_replace(',', '.', $request->disc_persen_header) * $validateData['total'] / 100;
                 $validateData['total'] -= $disc_header;
                 $validateData['disc_header'] = $disc_header;
                 $ppn_header = (float) str_replace(',', '.', $request->ppn_persen_header) * $validateData['total'] / 100;
                 $validateData['total'] += $ppn_header;
                 $validateData['ppn_header'] = $ppn_header;
+
+                // var_dump($validateData);die;
 
                 $order = WashSale::create($validateData);
 
@@ -323,11 +325,11 @@ class WashSalesController extends Controller
             ->with('success', 'Order <b>' . $washSale->code . '</b> deleted successfully');
     }
 
-    public function detailSales()
+    public function detailOrder()
     {
-        $detailSales = WashSaleDetailTemp::where('user_id', Auth::id())->get();
+        $detailOrder = WashSaleDetailTemp::where('user_id', Auth::id())->get();
 
-        return view('wash.sales.detail', compact('detailSales'));
+        return view('wash.sales.detail', compact('detailOrder'));
     }
 
     public function detailProduct()

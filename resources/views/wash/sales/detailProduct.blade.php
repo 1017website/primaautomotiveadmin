@@ -44,30 +44,3 @@
         </tfoot>
     </table>
 </div>
-
-<script>
-    function get_detail() {
-    $.ajax({
-    url: "{{ route('wash-sale.detailProduct') }}",
-            type: 'GET',
-            dataType: 'html',
-            success: function (res) {
-            $('.detail_product').html(res);
-            }
-    });
-    }
-
-    function deleteTempProduct(id) {
-    $.ajax({
-        url: "{{ route('wash-sale.deleteOrderProduct') }}",
-        type: 'POST',
-        dataType: 'json',
-        data: {
-        'id': id
-        },
-        success: function (res) {
-        get_detail();
-        }
-    });
-    }
-</script>

@@ -6,7 +6,8 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{{ route('wash-sale.index') }}">{{ __('Wash Sale') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('wash-sale.index') }}">{{ __('Wash Sales')
+                                    }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Add') }}</li>
                         </ol>
                     </nav>
@@ -23,7 +24,7 @@
 
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('Add Wash Sale') }}</h5>
+                <h5 class="card-title">{{ __('Add Wash Sales') }}</h5>
                 <div class="border-top"></div>
                 @if ($errors->any())
                 <div class="alert alert-danger">
@@ -100,7 +101,7 @@
                                     </div>
 
                                     <div class="col-sm-6">
-                                        <div class="form-group row hidden">
+                                        {{-- <div class="form-group row hidden">
                                             <label for="cust_id_card"
                                                 class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card')
                                                 }}</label>
@@ -109,7 +110,7 @@
                                                     name="cust_id_card" value="{{ old('cust_id_card') }}"
                                                     placeholder="Ktp/Sim">
                                             </div>
-                                        </div>
+                                        </div> --}}
 
                                         <div class="form-group row">
                                             <label for="cust_address"
@@ -364,7 +365,8 @@
                             <select class="select2 form-control custom-select" id="product_id" name="product_id"
                                 style="width: 100%;">
                                 @foreach($product as $row)
-                                <option data-price='<?= $row->price ?>' value="{{$row->id}}">{{$row->name}}</option>
+                                <option data-price='<?= $row->selling_price ?>' value="{{$row->id}}">{{$row->name}}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -568,7 +570,7 @@
 
 		function get_detail() {
 			$.ajax({
-				url: "{{ route('detailSales') }}",
+				url: "{{ route('wash-sale.detailOrder') }}",
 				type: 'GET',
 				dataType: 'html',
 				success: function (res) {
@@ -712,25 +714,15 @@
         });
 
         $('#product_id').on('change', function () {
-            $.ajax({
-                url: "{{ route('wash-sale.priceProduct') }}",
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    'product_id': this.value
-                },
-                success: function (res) {
-                    $('#price_product').val(res.price);
-                    var price = document.getElementById('price_product');
-                    var formated = formatRupiah($('#price_product').val(), 'Rp. ');
-                    price.value = formated;
-                }
-            });
+			$('#price_product').val($(this).find(':selected').data('price'));
+			var price = document.getElementById('price_product');
+			var formated = formatRupiah($('#price_product').val(), 'Rp. ');
+			$('#price_product').val(formated)
         });
 		
 		function deleteTemp(id) {
 			$.ajax({
-				url: "{{ route('deleteOrder') }}",
+				url: "{{ route('wash-sale.deleteOrder') }}",
 					type: 'POST',
 					dataType: 'json',
 					data: {
