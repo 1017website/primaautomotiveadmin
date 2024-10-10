@@ -47,11 +47,7 @@
                             @foreach ($workorder as $row)
                             <tr>
                                 <td>{{ $row->code }}</td>
-                                @if($row->order)
                                 <td>{{ $row->order->code }}</td>          
-                                @elseif($row->washSale)
-                                <td>{{ $row->washSale->code }}</td>          
-                                @endif
                                 <td>{{ $row->invoice->code }}</td>          
                                 <td>{{ $row->mechanic->name }}</td>          
                                 <td>{{ $row->getStatus() }}</td>

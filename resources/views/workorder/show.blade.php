@@ -60,11 +60,7 @@
                                         <strong>{{ __('Order') }}</strong>
                                     </div>
                                     <div class="col-sm-10">
-                                        @if($workorder->order)
                                         <a target="_blank" href="{{ route('order.show',$workorder->order_id) }}">{{ $workorder->order->code }}</a>
-                                        @elseif($workorder->washSale)
-                                        <a target="_blank" href="{{ route('order.show',$workorder->order_id) }}">{{ $workorder->washSale->code }}</a>
-                                        @endif
                                     </div>
                                 </div>
                             </div>

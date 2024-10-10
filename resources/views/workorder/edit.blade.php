@@ -115,7 +115,6 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    @if($workorder->order)
                     <div class="form-group row">
                         <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Item') }}</label>
                         <div class="col-sm-10">
@@ -127,19 +126,6 @@
                             </select>
                         </div>
                     </div>
-                    @elseif($workorder->washSale)
-                    <div class="form-group row">
-                        <label for="product_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Item') }}</label>
-                        <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="stock_id" name="stock_id" style="width: 100%;">
-                                <option></option>
-                                @foreach($washItems as $item)                                
-                                <option value="{{$item->id}}">{{$item->name}} - {{ number_format($item->qty, 2, ',', '.') }} - {{ __('Rp. ') }}@price($item->selling_price)</option>    
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    @endif
 
                     <div class="form-group row">
                         <label for="qty" class="col-sm-2 text-left control-label col-form-label">{{ __('Qty') }}</label>

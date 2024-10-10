@@ -31,10 +31,6 @@ class Workorder extends Model {
         return $this->hasOne(Order::class, 'id', 'order_id');
     }
 
-    public function washSale() {
-        return $this->hasOne(WashSale::class, 'id', 'order_id');
-    }
-
     public function invoice() {
         return $this->hasOne(Invoice::class, 'id', 'invoice_id');
     }
