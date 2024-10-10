@@ -44,6 +44,7 @@ use App\Http\Controllers\Store\ReportStoreController;
 use App\Http\Controllers\Store\MixController;
 //store
 //hrm
+use App\Http\Controllers\Hrm\FingerprintController;
 use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
@@ -265,6 +266,11 @@ Route::controller(PayrollController::class)->group(function () {
     Route::get('payroll/print/{id}', 'print')->name('payroll.print')->middleware(['auth']);
 });
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
+
+Route::controller(FingerprintController::class)->group(function () {
+    Route::post('fingerprint/save', 'save')->name('save');
+});
+Route::resource('fingerprint', FingerprintController::class);
 //hrm 
 
 Route::get('generate', function () {
