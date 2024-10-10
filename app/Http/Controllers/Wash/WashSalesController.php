@@ -95,10 +95,19 @@ class WashSalesController extends Controller
                 $ppn_header = (float) str_replace(',', '.', $request->ppn_persen_header) * $validateData['total'] / 100;
                 $validateData['total'] += $ppn_header;
                 $validateData['ppn_header'] = $ppn_header;
-
-                // var_dump($validateData);die;
+                $validateData['status'] = '2';
 
                 $order = WashSale::create($validateData);
+
+                $invoice = new Invoice();
+                $invoice->code = $this->generateCodeInv(date('ymd'));
+                $invoice->date = (!empty($request['date']) ? date('Y-m-d', strtotime($request['date'])) : NULL);
+                $invoice->order_id = $order->id;
+                $invoice->total = $order->total;
+                $invoice->dp = 0;
+                $invoice->status = '1';
+                $invoice->status_payment = '2';
+                $invoice->save();
 
                 //save customer if not exist
                 if ($order) {
@@ -200,7 +209,7 @@ class WashSalesController extends Controller
             return Redirect::back()->withErrors(['msg' => $message])->withInput();
         }
 
-        return redirect()->route('wash-sale.index')->with('success', 'Order added successfully.');
+        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Order added successfully.');
     }
 
     public function updateOrder() {

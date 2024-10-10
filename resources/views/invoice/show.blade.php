@@ -157,6 +157,7 @@ if($invoice->order) {
     <div class="container-fluid">
 
         <div class="div-top">
+            @if($invoice->order)
             @if($invoice->status == 1 && $invoice->status_payment == 0)
             <a class="btn btn-danger" data-toggle="modal" data-target="#Modal1"><i class="fas fa-trash"></i>{{ __('Void') }}</a>
             @endif
@@ -165,6 +166,7 @@ if($invoice->order) {
             @endif
             @if($invoice->status_payment == 0 || $invoice->status_payment == 1)
             <a class="btn btn-success" data-toggle="modal" data-target="#Modal2"><i class="fas fa-dollar-sign"></i>{{ __('Pay') }}</a>
+            @endif
             @endif
             <a class="btn btn-default" href="{{ route('invoice.index') }}">{{ __('Back') }}</a>
         </div>
