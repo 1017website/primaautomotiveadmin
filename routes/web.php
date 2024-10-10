@@ -51,7 +51,8 @@ use App\Http\Controllers\Hrm\PayrollController;
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
-use App\Http\Controllers\Wash\WashExpensesController;
+use App\Http\Controllers\Wash\WashExpensesProductController;
+use App\Http\Controllers\Wash\WashExpensesServiceController;
 use App\Http\Controllers\Wash\WashProductController;
 use App\Http\Controllers\Wash\WashSalesController;
 
@@ -300,5 +301,7 @@ Route::controller(WashSalesController::class)->group(function () {
 });
 
 Route::resource('wash-sale', WashSalesController::class)->middleware(['auth']);
-Route::resource('wash-expense', WashExpensesController::class)->middleware(['auth']);
+Route::resource('wash-expense-product', WashExpensesProductController::class)->middleware(['auth']);
+Route::resource('wash-expense-service', WashExpensesServiceController::class)->middleware(['auth']);
+
 

@@ -131,7 +131,12 @@
                         <li class="sidebar-item"><a href="/wash-service" class="sidebar-link"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Services') }}</span></a></li>
                         <li class="sidebar-item"><a href="/wash-product" class="sidebar-link"><i class="mdi mdi-basket"></i><span class="hide-menu">{{ __('Products') }}</span></a></li>
                         <li class="sidebar-item"><a href="/wash-asset" class="sidebar-link"><i class="mdi mdi-archive"></i><span class="hide-menu">{{ __('Assets') }}</span></a></li>
-                        <li class="sidebar-item"><a href="/wash-expense" class="sidebar-link"><i class="mdi mdi-store"></i><span class="hide-menu">{{ __('Expenses') }}</span></a></li>
+                        <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-currency-usd"></i><span class="hide-menu">{{ __('Expenses') }}</span></a>
+                            <ul aria-expanded="false" class="collapse  first-level">
+                                <li class="sidebar-item"><a href="/wash-expense-service" class="sidebar-link"><i class="mdi mdi-cash"></i><span class="hide-menu">{{ __('Service Spending') }}</span></a></li>
+                                <li class="sidebar-item"><a href="/wash-expense-product" class="sidebar-link"><i class="mdi mdi-timer-sand"></i><span class="hide-menu">{{ __('Product Spending') }}</span></a></li>
+                            </ul>
+                        </li>
                         <li class="sidebar-item"><a href="/wash-sale" class="sidebar-link"><i class="mdi mdi-basket"></i><span class="hide-menu">{{ __('Sales') }}</span></a></li>
                     </ul>
                 </li>
