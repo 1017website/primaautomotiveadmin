@@ -207,10 +207,10 @@
                         name: value.image,
                         size: value.size,
                         status: Dropzone.ADDED,
-                        url: value.image_url,
+                        url: "{{ asset('') }}" + value.image_url,
                     };
                     myDropzone.emit("addedfile", mockFile);
-                    myDropzone.emit("thumbnail", mockFile, value.image_url);
+                    myDropzone.emit("thumbnail", mockFile, mockFile.url);
                     myDropzone.emit("complete", mockFile);
                     myDropzone.files.push(mockFile);
                 });

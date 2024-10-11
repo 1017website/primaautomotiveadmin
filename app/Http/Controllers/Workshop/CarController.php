@@ -15,16 +15,19 @@ use App\Models\Service;
 use App\Models\CarProfileTmp;
 use App\Models\CarProfile;
 use Session;
-use File;
+use Illuminate\Support\Facades\File;
 
-class CarController extends Controller {
+class CarController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $car = Car::all();
         return view('master.car.index', compact('car'));
     }
 
-    public function create() {
+    public function create()
+    {
         $carBrand = CarBrand::all();
         $carType = CarType::all();
         $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
@@ -38,7 +41,8 @@ class CarController extends Controller {
         return view('master.car.create', compact('service', 'carBrand', 'carType', 'carImages'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         DB::beginTransaction();
         try {
             $request->validate([
@@ -50,14 +54,22 @@ class CarController extends Controller {
             ]);
 
             $car = Car::create($request->all());
+
             //images
             $carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
+
             foreach ($carImages as $images) {
+                if ($images != '') {
+                    $profileImage = $images->image;
+                    $imageUrl = $images->image_url;
+                    $imageSizes = $images->size;
+                }
+
                 $imageUpload = new CarImage();
                 $imageUpload->car_id = $car->id;
-                $imageUpload->image = $images->image;
-                $imageUpload->image_url = $images->image_url;
-                $imageUpload->size = $images->size;
+                $imageUpload->image = $profileImage;
+                $imageUpload->image_url = $imageUrl;
+                $imageUpload->size = $imageSizes;
                 $imageUpload->save();
             }
             CarImageTemp::where(['user_id' => Auth::id()])->delete();
@@ -80,14 +92,16 @@ class CarController extends Controller {
             DB::rollback();
         }
         return redirect()->route('car.index')
-                        ->with('success', 'Car created successfully.');
+            ->with('success', 'Car created successfully.');
     }
 
-    public function show(Car $car) {
+    public function show(Car $car)
+    {
         return view('master.car.show', compact('car'));
     }
 
-    public function edit(Car $car) {
+    public function edit(Car $car)
+    {
         $carBrand = CarBrand::all();
         $carType = CarType::all();
 
@@ -124,7 +138,8 @@ class CarController extends Controller {
         return view('master.car.edit', compact('service', 'car', 'carBrand', 'carType', 'carImages'));
     }
 
-    public function update(Request $request, Car $car) {
+    public function update(Request $request, Car $car)
+    {
 
         DB::beginTransaction();
         try {
@@ -177,46 +192,61 @@ class CarController extends Controller {
             $message = $e->getMessage();
         }
         return redirect()->route('car.index')
-                        ->with('success', 'Car updated successfully');
+            ->with('success', 'Car updated successfully');
     }
 
-    public function destroy(Car $car) {
+    public function destroy(Car $car)
+    {
         $carImages = CarImage::where(['car_id' => $car->id])->get();
         foreach ($carImages as $images) {
-            if (File::exists('images/car-images/' . $images->image)) {
-                File::delete('images/car-images/' . $images->image);
+            if (isset($images)) {
+                $imagePath = $images->image_url;
+
+                if (file_exists($imagePath)) {
+                    unlink($imagePath);
+                }
+                $images->delete();
             }
             $images->delete();
         }
         $car->delete();
 
         return redirect()->route('car.index')
-                        ->with('success', 'Car <b>' . $car->name . '</b> deleted successfully');
+            ->with('success', 'Car <b>' . $car->name . '</b> deleted successfully');
     }
 
-    public function uploadImages(Request $request) {
+    public function uploadImages(Request $request)
+    {
         $images = $request->file('file');
         foreach ($images as $image) {
             if ($image != '') {
-                $uploadImage = Controller::uploadImage($image, 'images/car-images/');
+                $destinationPath = 'images/car-images/';
+                $profileImage = "carImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $imageSizes = $image->getSize();
+                $image->move($destinationPath, $profileImage);
             }
+
             $imageUpload = new CarImageTemp();
-            $imageUpload->image = $uploadImage['imgName'];
-            $imageUpload->image_url = $uploadImage['imgUrl'];
-            $imageUpload->size = $uploadImage['imgSize'];
+            $imageUpload->image = $profileImage;
+            $imageUpload->image_url = $destinationPath . $profileImage;
+            $imageUpload->size = $imageSizes;
             $imageUpload->user_id = Auth::id();
             $imageUpload->save();
 
-            return response()->json(['success' => $uploadImage['imgName']]);
+            return response()->json(['success' => $profileImage]);
         }
     }
 
-    public function deleteImages(Request $request) {
+    public function deleteImages(Request $request)
+    {
         $filename = $request->get('filename');
         $carImages = CarImageTemp::where(['image' => $filename, 'user_id' => Auth::id()])->first();
+
         if (isset($carImages)) {
-            if (File::exists('images/car-images/' . $carImages->image)) {
-                File::delete('images/car-images/' . $carImages->image);
+            $imagePath = $carImages->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
             }
             $carImages->delete();
         }
@@ -224,14 +254,16 @@ class CarController extends Controller {
         return $filename;
     }
 
-    public function detailCar() {
+    public function detailCar()
+    {
         $request = array_merge($_POST, $_GET);
         $detail = CarProfileTmp::where('session_id', Session()->getid())->get();
 
         return view('master.car.detail', compact('detail'));
     }
 
-    public function addCar() {
+    public function addCar()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
@@ -250,7 +282,8 @@ class CarController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function deleteCar() {
+    public function deleteCar()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
