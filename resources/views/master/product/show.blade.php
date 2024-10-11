@@ -33,7 +33,7 @@
                     </div>
                     <div class="col-sm-10">
                         @if(!empty($product->image))
-                        <img src="{{ $product->image_url }}" class="img-fluid img-view">
+                        <img src="{{ asset($product->image_url) }}" class="img-fluid img-view">
                         @endif
                     </div>
                 </div>

@@ -7,23 +7,26 @@ use App\Models\TypeProduct;
 use Illuminate\Http\Request;
 use App\Models\InventoryProduct;
 use App\Models\InventoryProductHistory;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use File;
+use Illuminate\Support\Facades\File;
 
-class ProductController extends Controller {
+class ProductController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $product = Product::all();
         return view('master.product.index', compact('product'));
     }
 
-    public function create() {
+    public function create()
+    {
         $typeProducts = TypeProduct::all();
         return view('master.product.create', compact('typeProducts'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $success = true;
         $message = "";
 
@@ -37,10 +40,13 @@ class ProductController extends Controller {
 
         try {
             DB::beginTransaction();
-            if ($request->file('image') && request('image') != '') {
-                $uploadImage = Controller::uploadImage($request->file('image'), 'images/product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-                $validateData['image'] = $uploadImage['imgName'];
-                $validateData['image_url'] = $uploadImage['imgUrl'];
+
+            if ($image = $request->file('image')) {
+                $destinationPath = 'images/product-images/';
+                $profileImage = "productImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $profileImage);
+                $validateData['image'] = $profileImage;
+                $validateData['image_url'] = $destinationPath . $profileImage;
             }
 
             $validateData['hpp'] = (float) substr(str_replace('.', '', $request->hpp), 3);
@@ -81,30 +87,34 @@ class ProductController extends Controller {
             if ($success) {
                 DB::commit();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $success = false;
             $message = $e->getMessage();
         }
 
         if (!$success) {
-            return Redirect::back()->withErrors(['msg' => $message]);
+            return redirect()->back()->withErrors(['msg' => $message]);
+            // return Redirect::back()->withErrors(['msg' => $message]);
         }
 
         return redirect()->route('product.index')
-                        ->with('success', 'Product created successfully.');
+            ->with('success', 'Product created successfully.');
     }
 
-    public function show(Product $product) {
+    public function show(Product $product)
+    {
         return view('master.product.show', compact('product'));
     }
 
-    public function edit(Product $product) {
+    public function edit(Product $product)
+    {
         $typeProducts = TypeProduct::all();
         return view('master.product.edit', compact('product', 'typeProducts'));
     }
 
-    public function update(Request $request, Product $product) {
+    public function update(Request $request, Product $product)
+    {
         $validateData = $request->validate([
             //'name' => 'required|max:255|unique:products,name,' . $product->id . ',id,deleted_at,NULL',
             'name' => 'required|max:255',
@@ -112,16 +122,24 @@ class ProductController extends Controller {
             'image' => 'image|file|max:2048',
         ]);
 
-        if ($request->file('image') && request('image') != '') {
-            if (!empty($product->image)) {
-                if (File::exists('images/product-images/' . $product->image)) {
-                    File::delete('images/product-images/' . $product->image);
-                }
+        if (!empty($product->image) && $request->hasFile('image')) {
+            $imagePath = $product->image_url;
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
             }
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/product-images/';
+            $profileImage = "productImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
+        } elseif (!$request->hasFile('image') && !$product->image) {
+            unset($validateData['image_url']);
+        }
+
         $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
         $validateData['price'] = substr(str_replace('.', '', $request->price), 3);
 
@@ -130,7 +148,16 @@ class ProductController extends Controller {
         return redirect()->route('product.index')->with('success', 'Product updated successfully');
     }
 
-    public function destroy(Product $product) {
+    public function destroy(Product $product)
+    {
+        if (!empty($product->image)) {
+            $imagePath = $product->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $product->delete();
 
         return redirect()->route('product.index')->with('success', 'Product <b>' . $product->name . '</b> deleted successfully');
