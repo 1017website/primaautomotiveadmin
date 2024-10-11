@@ -9,21 +9,25 @@ use App\Models\StoreInventoryProductHistory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
-use File;
+use Illuminate\Support\Facades\File;
 
-class StoreProductController extends Controller {
+class StoreProductController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $storeProduct = StoreProduct::all();
         return view('store.product.index', compact('storeProduct'));
     }
 
-    public function create() {
+    public function create()
+    {
         $typeProducts = StoreTypeProduct::all();
         return view('store.product.create', compact('typeProducts'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $success = true;
         $message = "";
 
@@ -31,7 +35,7 @@ class StoreProductController extends Controller {
             $request->barcode = time();
         }
 
-		
+
         $validateData = $request->validate([
             'name' => 'required|max:255|unique:store_products,name,NULL,id,deleted_at,NULL',
             'barcode' => 'required|unique:store_products,barcode,NULL,id,deleted_at,NULL',
@@ -39,29 +43,38 @@ class StoreProductController extends Controller {
             'image' => 'image|file|max:2048',
             'document' => 'file|mimes:zip,rar,pdf,doc,docx,xls,xlsx|max:5120',
             'um' => 'required|max:255',
-			'berat_jenis'=>'nullable','berat_kemasan'=>'nullable','berat_timbang'=>'nullable'
+            'berat_jenis' => 'nullable',
+            'berat_kemasan' => 'nullable',
+            'berat_timbang' => 'nullable'
         ]);
 
         try {
             DB::beginTransaction();
-            if ($request->file('image')) {
-                $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-                $validateData['image'] = $uploadImage['imgName'];
-                $validateData['image_url'] = $uploadImage['imgUrl'];
+
+            if ($image = $request->file('image')) {
+                $destinationPath = 'images/store-product-images/';
+                $profileImage = "storeProductImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $image->move($destinationPath, $profileImage);
+                $validateData['image'] = $profileImage;
+                $validateData['image_url'] = $destinationPath . $profileImage;
             }
-            if ($request->file('document')) {
-                $uploadFile = Controller::uploadImage($request->file('document'), 'images/store-product-files/', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
-                $validateData['document'] = $uploadFile['imgName'];
-                $validateData['document_url'] = $uploadFile['imgUrl'];
+
+            if ($document = $request->file('document')) {
+                $destinationPath = 'documents/store-product-document/';
+                $profileDocument = "storeProductDocuments" . "-" . date('YmdHis') . "." . $document->getClientOriginalExtension();
+                $document->move($destinationPath, $profileDocument);
+                $validateData['document'] = $profileDocument;
+                $validateData['document_url'] = $destinationPath . $profileDocument;
             }
+
             $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
             $validateData['price'] = substr(str_replace('.', '', $request->price), 3);
             $validateData['margin_profit'] = str_replace(',', '.', $request->margin_profit);
 
-			$validateData['berat_jenis'] = str_replace(',','.',str_replace('.', '', $request->berat_jenis));
-			$validateData['berat_kemasan'] = str_replace(',','.',str_replace('.', '', $request->berat_kemasan));
-			$validateData['berat_timbang'] = str_replace(',','.',str_replace('.', '', $request->berat_timbang));
-			
+            $validateData['berat_jenis'] = str_replace(',', '.', str_replace('.', '', $request->berat_jenis));
+            $validateData['berat_kemasan'] = str_replace(',', '.', str_replace('.', '', $request->berat_kemasan));
+            $validateData['berat_timbang'] = str_replace(',', '.', str_replace('.', '', $request->berat_timbang));
+
             $storeProduct = StoreProduct::create($validateData);
             $qty = str_replace(',', '.', $request->qty);
             if ($qty > 0) {
@@ -97,30 +110,33 @@ class StoreProductController extends Controller {
             if ($success) {
                 DB::commit();
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $success = false;
             $message = $e->getMessage();
         }
 
         if (!$success) {
-            return Redirect::back()->withErrors(['msg' => $message]);
+            return redirect()->back()->withErrors(['msg' => $message]);
         }
 
         return redirect()->route('store-product.index')
-                        ->with('success', 'Product created successfully.');
+            ->with('success', 'Product created successfully.');
     }
 
-    public function show(StoreProduct $storeProduct) {
+    public function show(StoreProduct $storeProduct)
+    {
         return view('store.product.show', compact('storeProduct'));
     }
 
-    public function edit(StoreProduct $storeProduct) {
+    public function edit(StoreProduct $storeProduct)
+    {
         $typeProducts = StoreTypeProduct::all();
         return view('store.product.edit', compact('storeProduct', 'typeProducts'));
     }
 
-    public function update(Request $request, StoreProduct $storeProduct) {
+    public function update(Request $request, StoreProduct $storeProduct)
+    {
         $validateData = $request->validate([
             'name' => 'required|max:255|unique:products,name,' . $storeProduct->id . ',id,deleted_at,NULL',
             'type_product_id' => 'required',
@@ -128,26 +144,40 @@ class StoreProductController extends Controller {
             'um' => 'required|max:255',
         ]);
 
-        if ($request->file('image') && request('image') != '') {
-            if (!empty($storeProduct->image)) {
-                if (File::exists('images/store-customer-images/' . $storeProduct->image)) {
-                    File::delete('images/store-customer-images/' . $storeProduct->image);
-                }
+        if (!empty($storeProduct->image) && $request->hasFile('image')) {
+            $imagePath = $storeProduct->image_url;
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
             }
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-product-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
 
-        if ($request->file('document') && request('document') != '') {
-            if (!empty($storeProduct->document)) {
-                if (File::exists('images/store-product-files/' . $storeProduct->document)) {
-                    File::delete('images/store-product-files/' . $storeProduct->document);
-                }
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/store-product-images/';
+            $profileImage = "storeProductImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
+        } elseif (!$request->hasFile('image') && !$storeProduct->image) {
+            unset($validateData['image_url']);
+        }
+
+        if (!empty($storeProduct->document) && $request->hasFile('document')) {
+            $documentPath = $storeProduct->document_url;
+
+            if (File::exists($documentPath)) {
+                File::delete($documentPath);
             }
-            $uploadFile = Controller::uploadImage($request->file('document'), 'images/store-product-files/', date('YmdHis') . '.' . $request->file('document')->getClientOriginalExtension());
-            $validateData['document'] = $uploadFile['imgName'];
-            $validateData['document_url'] = $uploadFile['imgUrl'];
+        }
+
+        if ($document = $request->file('document')) {
+            $destinationPath = 'documents/store-product-document/';
+            $profileDocument = "storeProductDocuments" . "-" . date('YmdHis') . "." . $document->getClientOriginalExtension();
+            $document->move($destinationPath, $profileDocument);
+            $validateData['document'] = $profileDocument;
+            $validateData['document_url'] = $destinationPath . $profileDocument;
+        } elseif (!$request->hasFile('document') && !$storeProduct->document) {
+            unset($validateData['document_url']);
         }
 
         $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
@@ -157,17 +187,35 @@ class StoreProductController extends Controller {
         $storeProduct->update($validateData);
 
         return redirect()->route('store-product.index')
-                        ->with('success', 'Product updated successfully');
+            ->with('success', 'Product updated successfully');
     }
 
-    public function destroy(StoreProduct $storeProduct) {
+    public function destroy(StoreProduct $storeProduct)
+    {
+        if (!empty($storeProduct->image)) {
+            $imagePath = $storeProduct->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
+        if (!empty($storeProduct->document)) {
+            $documentPath = $storeProduct->document_url;
+
+            if (file_exists($documentPath)) {
+                unlink($documentPath);
+            }
+        }
+
         $storeProduct->delete();
 
         return redirect()->route('store-product.index')
-                        ->with('success', 'Product <b>' . $storeProduct->name . '</b> deleted successfully');
+            ->with('success', 'Product <b>' . $storeProduct->name . '</b> deleted successfully');
     }
 
-    public function print($id) {
+    public function print($id)
+    {
         $storeProduct = StoreProduct::findorfail($id);
         return view('store.product.print', compact('storeProduct'));
     }
