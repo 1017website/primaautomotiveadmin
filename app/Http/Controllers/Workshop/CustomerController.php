@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
-use File;
+use Illuminate\Support\Facades\File;
 
 class CustomerController extends Controller {
 
@@ -38,11 +38,15 @@ class CustomerController extends Controller {
         ]);
 
         $success = true;
-        if ($request->file('image')) {
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/customer-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/customer-images/';
+            $profileImage = "customerImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
         }
+
         $validateData['status'] = '1';
 
         DB::beginTransaction();
@@ -102,16 +106,25 @@ class CustomerController extends Controller {
         ]);
 
         $success = true;
-        if ($request->file('image') && request('image') != '') {
-            if (!empty($customer->image)) {
-                if (File::exists('images/customer-images/' . $customer->image)) {
-                    File::delete('images/customer-images/' . $customer->image);
-                }
+
+        if (!empty($customer->image) && $request->hasFile('image')) {
+            $imagePath = $customer->image_url;
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
             }
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/customer-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/customer-images/';
+            $profileImage = "customerImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
+        } elseif (!$request->hasFile('image') && !$customer->image) {
+            unset($validateData['image_url']);
+        }
+
         DB::beginTransaction();
         try {
             $customer->update($validateData);
@@ -175,6 +188,15 @@ class CustomerController extends Controller {
     public function destroy(Customer $customer) {
         $sql = 'DELETE from customer_detail WHERE customer_id = ' . strval($customer->id);
         DB::statement($sql);
+
+        if (!empty($customer->image)) {
+            $imagePath = $customer->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $customer->delete();
 
         return redirect()->route('customer.index')->with('success', 'Customer <b>' . $customer->name . '</b> deleted successfully');
