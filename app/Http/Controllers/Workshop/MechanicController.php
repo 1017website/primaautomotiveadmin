@@ -5,20 +5,24 @@ namespace App\Http\Controllers\Workshop;
 use App\Models\Mechanic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use File;
+use Illuminate\Support\Facades\File;
 
-class MechanicController extends Controller {
+class MechanicController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $mechanic = Mechanic::all();
         return view('master.mechanic.index', compact('mechanic'));
     }
 
-    public function create() {
+    public function create()
+    {
         return view('master.mechanic.create');
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $validateData = $request->validate([
             'name' => 'required|max:255',
             'position' => 'max:255',
@@ -29,11 +33,14 @@ class MechanicController extends Controller {
             'image' => 'image|file|max:2048',
         ]);
 
-        if ($request->file('image')) {
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/mechanic-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/mechanic-images/';
+            $profileImage = "mechanicImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
         }
+
         $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
         $validateData['positional_allowance'] = substr(str_replace('.', '', $request->positional_allowance), 3);
         $validateData['healthy_allowance'] = substr(str_replace('.', '', $request->healthy_allowance), 3);
@@ -46,15 +53,18 @@ class MechanicController extends Controller {
         return redirect()->route('mechanic.index')->with('success', 'Mechanic created successfully.');
     }
 
-    public function show(Mechanic $mechanic) {
+    public function show(Mechanic $mechanic)
+    {
         return view('master.mechanic.show', compact('mechanic'));
     }
 
-    public function edit(Mechanic $mechanic) {
+    public function edit(Mechanic $mechanic)
+    {
         return view('master.mechanic.edit', compact('mechanic'));
     }
 
-    public function update(Request $request, Mechanic $mechanic) {
+    public function update(Request $request, Mechanic $mechanic)
+    {
         $validateData = $request->validate([
             'name' => 'required|max:255',
             'position' => 'max:255',
@@ -65,15 +75,22 @@ class MechanicController extends Controller {
             'image' => 'image|file|max:2048',
         ]);
 
-        if ($request->file('image') && request('image') != '') {
-            if (!empty($mechanic->image)) {
-                if (File::exists('images/mechanic-images/' . $mechanic->image)) {
-                    File::delete('images/mechanic-images/' . $mechanic->image);
-                }
+        if (!empty($mechanic->image) && $request->hasFile('image')) {
+            $imagePath = $mechanic->image_url;
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
             }
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/mechanic-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
+        }
+
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/mechanic-images/';
+            $profileImage = "mechanicImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $validateData['image'] = $profileImage;
+            $validateData['image_url'] = $destinationPath . $profileImage;
+        } elseif (!$request->hasFile('image') && !$mechanic->image) {
+            unset($validateData['image_url']);
         }
 
         $validateData['salary'] = substr(str_replace('.', '', $request->salary), 3);
@@ -87,7 +104,17 @@ class MechanicController extends Controller {
         return redirect()->route('mechanic.index')->with('success', 'Mechanic updated successfully');
     }
 
-    public function destroy(Mechanic $mechanic) {
+    public function destroy(Mechanic $mechanic)
+    {
+
+        if (!empty($mechanic->image)) {
+            $imagePath = $mechanic->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $mechanic->delete();
 
         return redirect()->route('mechanic.index')->with('success', 'Mechanic <b>' . $mechanic->name . '</b> deleted successfully');
