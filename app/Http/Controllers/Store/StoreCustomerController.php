@@ -5,72 +5,109 @@ namespace App\Http\Controllers\Store;
 use App\Models\StoreCustomer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use File;
+use Illuminate\Support\Facades\File;
 
-class StoreCustomerController extends Controller {
 
-    public function index() {
+class StoreCustomerController extends Controller
+{
+
+    public function index()
+    {
         $customer = StoreCustomer::all();
         return view('store.customer.index', compact('customer'));
     }
 
-    public function create() {
+    public function create()
+    {
         return view('store.customer.create');
     }
 
-    public function store(Request $request) {
-        $validateData = $request->validate([
-            'name' => 'required|max:255', 'phone' => 'required|max:255', 'address' => 'required|max:500',
+    public function store(Request $request)
+    {
+        $this->validate($request, [
+            'name' => 'required|max:255',
+            'phone' => 'required|max:255',
+            'address' => 'required|max:500',
             'image' => 'image|file|max:2048',
         ]);
 
-        if ($request->file('image')) {
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-customer-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
-        }
-        $validateData['status'] = '1';
+        $input = $request->all();
 
-        StoreCustomer::create($validateData);
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/store-customer-images/';
+            $profileImage = "storeCustomerImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = $profileImage;
+            $input['image_url'] = $destinationPath . $profileImage;
+        }
+
+        $input['status'] = '1';
+
+        StoreCustomer::create($input);
 
         return redirect()->route('store-customer.index')->with('success', 'Customer created successfully.');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $customer = StoreCustomer::findOrFail($id);
         return view('store.customer.show', compact('customer'));
     }
 
-    public function edit($id) {
+    public function edit($id)
+    {
         $customer = StoreCustomer::findOrFail($id);
         return view('store.customer.edit', compact('customer'));
     }
 
-    public function update(Request $request, $id) {
+    public function update(Request $request, $id)
+    {
         $customer = StoreCustomer::findOrFail($id);
-        $validateData = $request->validate([
-            'name' => 'required|max:255', 'phone' => 'required|max:255', 'address' => 'required|max:500',
+
+        $request->validate([
+            'name' => 'required|max:255',
+            'phone' => 'required|max:255',
+            'address' => 'required|max:500',
             'image' => 'image|file|max:2048',
         ]);
 
-        if ($request->file('image') && request('image') != '') {
-            if (!empty($customer->image)) {
-                if (File::exists('images/store-customer-images/' . $customer->image)) {
-                    File::delete('images/store-customer-images/' . $customer->image);
-                }
+        $input = $request->except(['_token', '_method']);
+
+        if (!empty($customer->image) && $request->hasFile('image')) {
+            $imagePath = $customer->image_url;
+
+            if (File::exists($imagePath)) {
+                File::delete($imagePath);
             }
-            $uploadImage = Controller::uploadImage($request->file('image'), 'images/store-customer-images/', date('YmdHis') . '.' . $request->file('image')->getClientOriginalExtension());
-            $validateData['image'] = $uploadImage['imgName'];
-            $validateData['image_url'] = $uploadImage['imgUrl'];
         }
 
-        $customer->update($validateData);
+        if ($image = $request->file('image')) {
+            $destinationPath = 'images/store-customer-images/';
+            $profileImage = "storeCustomerImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+            $image->move($destinationPath, $profileImage);
+            $input['image'] = $profileImage;
+            $input['image_url'] = $destinationPath . $profileImage;
+        } elseif (!$request->hasFile('image') && !$customer->image) {
+            unset($input['image_url']);
+        }
+
+        $customer->update($input);
 
         return redirect()->route('store-customer.index')->with('success', 'Customer Store updated successfully');
     }
 
-    public function destroy($id) {
+    public function destroy($id)
+    {
         $customer = StoreCustomer::findOrFail($id);
+
+        if (!empty($customer->image)) {
+            $imagePath = $customer->image_url;
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+        }
+
         $customer->delete();
 
         return redirect()->route('store-customer.index')->with('success', 'Customer <b>' . $customer->name . '</b> deleted successfully');

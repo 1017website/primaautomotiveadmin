@@ -68,7 +68,7 @@
 
                                                     <!-- Current Profile Photo -->
                                                     <div class="mt-2" x-show="! photoPreview">
-                                                        <img src="{{ !empty($customer->image) ? $customer->image_url : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
+                                                        <img src="{{ !empty($customer->image) ? asset($customer->image_url) : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
                                                     </div>
 
                                                     <!-- New Profile Photo Preview -->
