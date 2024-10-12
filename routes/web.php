@@ -56,8 +56,7 @@ use App\Http\Controllers\Wash\WashExpensesProductController;
 use App\Http\Controllers\Wash\WashExpensesServiceController;
 use App\Http\Controllers\Wash\WashProductController;
 use App\Http\Controllers\Wash\WashSalesController;
-
-
+use App\Http\Controllers\Workshop\ColorDatabaseController;
 
 //hrm
 
@@ -310,4 +309,8 @@ Route::resource('wash-sale', WashSalesController::class)->middleware(['auth']);
 Route::resource('wash-expense-product', WashExpensesProductController::class)->middleware(['auth']);
 Route::resource('wash-expense-service', WashExpensesServiceController::class)->middleware(['auth']);
 
-
+Route::controller(ColorDatabaseController::class)->group(function () {
+    Route::get('color-database/getColorGroups', 'getColorGroups')->name('color-database.getColorGroups')->middleware(['auth']);
+    Route::post('color-database/saveMaster', 'saveMaster')->name('color-database.saveMaster')->middleware(['auth']);
+});
+Route::resource('color-database', ColorDatabaseController::class)->middleware(['auth']);
