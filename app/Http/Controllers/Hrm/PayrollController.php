@@ -76,7 +76,7 @@ class PayrollController extends Controller {
                     }
                 }
             }
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             DB::rollback();
             $success = false;
             $message = $e->getMessage();
