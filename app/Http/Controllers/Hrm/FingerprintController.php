@@ -28,7 +28,7 @@ class FingerprintController extends Controller
                 $created_at = date('Y-m-d H:i:s');
                 $values = array('cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $encoded_data);
                 DB::table('t_log')->insert($values);
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $success = false;
                 $message = $e->getMessage();
             }
