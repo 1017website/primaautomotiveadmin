@@ -67,7 +67,7 @@
                             <div class="form-group row">
                                 <label for="birth_date" class="col-sm-2 text-left control-label col-form-label">{{ __('Birth Date') }}</label>
                                 <div class="col-sm-10 input-group">
-                                    <input type="text" class="form-control mydatepicker" id="birth_date" name="birth_date" value="{{ old('birth_date') }}"  placeholder="dd/mm/yyyy">
+                                    <input type="text" class="form-control mydatepicker" id="birth_date" name="birth_date" value="{{ old('birth_date') }}" placeholder="dd/mm/yyyy">
                                     <div class="input-group-append">
                                         <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -85,6 +85,13 @@
                                 <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" id="address" name="address" placeholder="Address">{{ old('address') }}</textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="pin" class="col-sm-2 text-left control-label col-form-label">{{ __('Pin') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="pin" name="pin" value="{{ $mechanic->pin }}" required>
                                 </div>
                             </div>
 
@@ -128,9 +135,9 @@
                                     <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
                                         <!-- Profile Photo File Input -->
                                         <input type="file" class="hidden" name="image"
-                                               wire:model="photo"
-                                               x-ref="photo"
-                                               x-on:change="
+                                            wire:model="photo"
+                                            x-ref="photo"
+                                            x-on:change="
                                                photoName = $refs.photo.files[0].name;
                                                const reader = new FileReader();
                                                reader.onload = (e) => {
@@ -147,7 +154,7 @@
                                         <!-- New Profile Photo Preview -->
                                         <div class="mt-2" x-show="photoPreview" style="display: none;">
                                             <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center ml-auto mr-auto"
-                                                  x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                                x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                                             </span>
                                         </div>
 
@@ -174,49 +181,48 @@
     </div>
 
     <script>
-
         var salary = document.getElementById('salary');
-        $(document).ready(function () {
+        $(document).ready(function() {
             var formated = formatRupiah($('#salary').val(), 'Rp. ');
             salary.value = formated;
         });
-        salary.addEventListener('keyup', function (e) {
+        salary.addEventListener('keyup', function(e) {
             salary.value = formatRupiah(this.value, 'Rp. ');
         });
 
         var positional_allowance = document.getElementById('positional_allowance');
-        $(document).ready(function () {
+        $(document).ready(function() {
             var formated = formatRupiah($('#positional_allowance').val(), 'Rp. ');
             positional_allowance.value = formated;
         });
-        positional_allowance.addEventListener('keyup', function (e) {
+        positional_allowance.addEventListener('keyup', function(e) {
             positional_allowance.value = formatRupiah(this.value, 'Rp. ');
         });
 
         var healthy_allowance = document.getElementById('healthy_allowance');
-        $(document).ready(function () {
+        $(document).ready(function() {
             var formated = formatRupiah($('#healthy_allowance').val(), 'Rp. ');
             healthy_allowance.value = formated;
         });
-        healthy_allowance.addEventListener('keyup', function (e) {
+        healthy_allowance.addEventListener('keyup', function(e) {
             healthy_allowance.value = formatRupiah(this.value, 'Rp. ');
         });
 
         var other_allowance = document.getElementById('other_allowance');
-        $(document).ready(function () {
+        $(document).ready(function() {
             var formated = formatRupiah($('#other_allowance').val(), 'Rp. ');
             other_allowance.value = formated;
         });
-        other_allowance.addEventListener('keyup', function (e) {
+        other_allowance.addEventListener('keyup', function(e) {
             other_allowance.value = formatRupiah(this.value, 'Rp. ');
         });
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                    split = number_string.split(','),
-                    sisa = split[0].length % 3,
-                    rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
                 separator = sisa ? '.' : '';
@@ -226,7 +232,6 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
-
     </script>
 
 </x-app-layout>

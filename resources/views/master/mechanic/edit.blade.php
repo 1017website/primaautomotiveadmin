@@ -89,6 +89,13 @@
                                 </div>
                             </div>
 
+                            <div class="form-group row">
+                                <label for="pin" class="col-sm-2 text-left control-label col-form-label">{{ __('Pin') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="pin" name="pin" value="{{ $mechanic->pin }}" required>
+                                </div>
+                            </div>
+
                             <h5 class="card-title">{{ __('Wages') }}</h5>
                             <div class="border-top"></div>
 
@@ -117,13 +124,6 @@
                                 <label for="other_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Other Allowance') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="other_allowance" name="other_allowance" value="{{ $mechanic->other_allowance }}" required>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="pin" class="col-sm-2 text-left control-label col-form-label">{{ __('Pin') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="pin" name="pin" value="{{ $mechanic->pin }}" required>
                                 </div>
                             </div>
 
