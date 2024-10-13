@@ -65,7 +65,6 @@ class MechanicController extends Controller
         curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         $result = curl_exec($ch);
         curl_close($ch);
-        print_r($result);
 
         return redirect()->route('mechanic.index')->with('success', 'Mechanic created successfully.');
     }
