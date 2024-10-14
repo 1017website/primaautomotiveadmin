@@ -6,6 +6,8 @@ use App\Models\Mechanic;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 
 class MechanicController extends Controller
 {
@@ -49,24 +51,37 @@ class MechanicController extends Controller
         $validateData['birth_date'] = (!empty($request->birth_date) ? date('Y-m-d', strtotime($request->birth_date)) : NULL);
 
         $create = Mechanic::create($validateData);
-
-        //register fingerprint
-        $url = 'https://developer.fingerspot.io/api/reg_online';
-        $data = '{"trans_id":"' . $create->id . '", "cloud_id":"C2630451071B1E34", "pin":"' . $create->pin . '", "verification":"0"}';
-        $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
-
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
-        $result = curl_exec($ch);
-        curl_close($ch);
+        if ($create) {
+            //register fingerprint
+            $url = 'https://developer.fingerspot.io/api/set_userinfo';
+            $randKey = $this->rand_char(25);
+            $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "data":{"pin":"' . $create->id . '", "name":"' . $create->name . '", "privilege":"1", "password":"123456"}}';
+            $authorization = "Authorization: Bearer [api_token]";
+            $ch = curl_init($url);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+            curl_setopt($ch, CURLOPT_POST, 1);
+            curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json', $authorization));
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+            $response = curl_exec($ch);
+            curl_close($ch);
+            //add to logs
+            $data = ['unique_id' => $randKey, 'type' => 'set_user_info', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            DB::table('finger_logs')->insert($data);
+        }
 
         return redirect()->route('mechanic.index')->with('success', 'Mechanic created successfully.');
+    }
+
+    function rand_char($length)
+    {
+        $random = '';
+        for ($i = 0; $i < $length; $i++) {
+            $random .= chr(mt_rand(33, 126));
+        }
+        return $random;
     }
 
     public function show(Mechanic $mechanic)
