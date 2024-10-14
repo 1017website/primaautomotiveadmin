@@ -11,7 +11,7 @@ use Maatwebsite\Excel\Facades\Excel;
 class FingerprintController extends Controller
 {
 
-    public function index()
+    public function callback()
     {
         $success = true;
         $message = "";

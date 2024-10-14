@@ -267,10 +267,10 @@ Route::controller(PayrollController::class)->group(function () {
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 
 Route::controller(FingerprintController::class)->group(function () {
-    Route::post('fingerprint/save', 'save')->name('save');
+    Route::post('fingerprint/callback', 'callback')->name('callback');
 });
 Route::resource('fingerprint', FingerprintController::class);
-//hrm 
+//hrm
 
 Route::get('generate', function () {
     \Illuminate\Support\Facades\Artisan::call('storage:link');
