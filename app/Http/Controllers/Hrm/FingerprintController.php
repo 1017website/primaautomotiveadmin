@@ -36,4 +36,5 @@ class FingerprintController extends Controller
 
         return ['success' => $success, 'message' => $message];
     }
+    
 }
