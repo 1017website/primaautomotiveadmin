@@ -15,6 +15,8 @@ class VerifyCsrfToken extends Middleware
         '/fingerprint/callback',
         '/fingerprint/get-log',
         '/fingerprint/get-user',
+        '/fingerprint/get-user-all',
+        '/fingerprint/delete-user',
         '/fingerprint/set-timezone',
         '/fingerprint/restart',
     ];

@@ -267,11 +267,13 @@ Route::controller(PayrollController::class)->group(function () {
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 
 Route::controller(FingerprintController::class)->group(function () {
-    Route::post('fingerprint/callback', 'callback')->name('callback');
-    Route::post('fingerprint/get-log', 'get-log')->name('get-log');
-    Route::post('fingerprint/get-user', 'get-user')->name('get-user');
-    Route::post('fingerprint/set-timezone', 'set-timezone')->name('set-timezone');
-    Route::post('fingerprint/restart', 'restart')->name('restart');
+    Route::post('fingerprint/callback', 'callback');
+    Route::post('fingerprint/get-log', 'getLog');
+    Route::post('fingerprint/get-user', 'getUser');
+    Route::post('fingerprint/get-user-all', 'getUserAll');
+    Route::post('fingerprint/delete-user', 'deleteUser');
+    Route::post('fingerprint/set-timezone', 'setTimezone');
+    Route::post('fingerprint/restart', 'restart');
 });
 Route::resource('fingerprint', FingerprintController::class);
 //hrm
