@@ -56,7 +56,7 @@ class MechanicController extends Controller
             $url = 'https://developer.fingerspot.io/api/set_userinfo';
             $randKey = $this->rand_char(25);
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "data":{"pin":"' . $create->id . '", "name":"' . $create->name . '", "privilege":"1", "password":"123456"}}';
-            $authorization = "Authorization: Bearer [api_token]";
+            $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
             $ch = curl_init($url);
             curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);

@@ -12,6 +12,10 @@ class VerifyCsrfToken extends Middleware
      * @var array<int, string>
      */
     protected $except = [
-        '/fingerprint/callback'
+        '/fingerprint/callback',
+        '/fingerprint/get-log',
+        '/fingerprint/get-user',
+        '/fingerprint/set-timezone',
+        '/fingerprint/restart',
     ];
 }
