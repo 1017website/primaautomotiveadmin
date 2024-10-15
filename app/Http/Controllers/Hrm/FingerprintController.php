@@ -12,6 +12,15 @@ use Illuminate\Support\Facades\Auth;
 class FingerprintController extends Controller
 {
 
+    function rand_char($length)
+    {
+        $random = '';
+        for ($i = 0; $i < $length; $i++) {
+            $random .= chr(mt_rand(33, 126));
+        }
+        return $random;
+    }
+
     public function callback()
     {
         $success = true;
