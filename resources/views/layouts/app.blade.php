@@ -64,7 +64,7 @@
             <div class="page-wrapper">
                 {{ $slot }}
                 <footer class="footer text-center">
-                    All Rights Reserved by <a href="#" target="_blank"><strong>{{ config('app.name') }}</strong></a>. Designed and Developed by <a target="_blank" href="https://1017studio.com"><strong>1017Studio</strong></a>.
+                    All Rights Reserved by <a href="#" target="_blank"><strong>{{ config('app.name') }}</strong></a>. Designed and Developed by <a target="_blank" href="https://primaautomotive.id"><strong>Prima Automotive</strong></a>.
                 </footer>
             </div>
         </div>
