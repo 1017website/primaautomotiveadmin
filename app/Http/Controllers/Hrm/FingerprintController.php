@@ -14,10 +14,7 @@ class FingerprintController extends Controller
 
     function rand_char($length)
     {
-        $random = '';
-        for ($i = 0; $i < $length; $i++) {
-            $random .= chr(mt_rand(33, 126));
-        }
+        $random = bin2hex(random_bytes($length));
         return $random;
     }
 
