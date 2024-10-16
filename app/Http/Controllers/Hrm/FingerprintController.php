@@ -27,18 +27,15 @@ class FingerprintController extends Controller
         $decoded_data   = json_decode($original_data, true);
         $encoded_data   = json_encode($decoded_data);
 
-        if (isset($decoded_data['type']) and isset($decoded_data['cloud_id'])) {
-
-            try {
-                $type       = $decoded_data['type'];
-                $cloud_id   = $decoded_data['cloud_id'];
-                $created_at = date('Y-m-d H:i:s');
-                $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $encoded_data];
-                DB::table('finger_callbacks')->insert($values);
-            } catch (\Exception $e) {
-                $success = false;
-                $message = $e->getMessage();
-            }
+        try {
+            $type       = isset($decoded_data['type']) ? $decoded_data['type'] : null;
+            $cloud_id   = isset($decoded_data['cloud_id']) ? $decoded_data['cloud_id'] : null;
+            $created_at = date('Y-m-d H:i:s');
+            $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $encoded_data];
+            DB::table('finger_callbacks')->insert($values);
+        } catch (\Exception $e) {
+            $success = false;
+            $message = $e->getMessage();
         }
 
         return ['success' => $success, 'message' => $message];
