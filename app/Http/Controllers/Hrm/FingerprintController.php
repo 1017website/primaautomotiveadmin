@@ -31,7 +31,7 @@ class FingerprintController extends Controller
             $type       = isset($decoded_data['type']) ? $decoded_data['type'] : null;
             $cloud_id   = isset($decoded_data['cloud_id']) ? $decoded_data['cloud_id'] : null;
             $created_at = date('Y-m-d H:i:s');
-            $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $encoded_data];
+            $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $original_data];
             DB::table('finger_callbacks')->insert($values);
         } catch (\Exception $e) {
             $success = false;
