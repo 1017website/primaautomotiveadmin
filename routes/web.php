@@ -267,7 +267,7 @@ Route::controller(PayrollController::class)->group(function () {
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 
 Route::controller(FingerprintController::class)->group(function () {
-    Route::get('fingerprint/callback', 'callback');
+    Route::post('fingerprint/callback', 'callback');
     Route::post('fingerprint/get-log', 'getLog');
     Route::post('fingerprint/get-user', 'getUser');
     Route::post('fingerprint/get-user-all', 'getUserAll');
