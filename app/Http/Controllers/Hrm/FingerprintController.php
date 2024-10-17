@@ -26,14 +26,7 @@ class FingerprintController extends Controller
         $original_data  = file_get_contents('php://input');
         $decoded_data   = json_decode($original_data, true);
         $encoded_data   = json_encode($decoded_data);
-
-        $body = file_get_contents('php://input');
-        #simpan data body ke file .txt
-        $file = "data.txt";
-        $data = file_get_contents($file);
-        $data .= $body . "\n";
-        file_put_contents($file, $data);
-
+        
         try {
             $type       = null;
             $cloud_id   = null;
