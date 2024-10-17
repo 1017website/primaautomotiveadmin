@@ -18,15 +18,14 @@ class FingerprintController extends Controller
         return $random;
     }
 
-    public function callback(Request $request)
+    public function callback()
     {
         $success = true;
         $message = "";
 
-        //$original_data  = file_get_contents('php://input');
-        $original_data = $request->getContent();
-        //$decoded_data   = json_decode($original_data, true);
-        //$encoded_data   = json_encode($decoded_data);
+        $original_data  = file_get_contents('php://input');
+        $decoded_data   = json_decode($original_data, true);
+        $encoded_data   = json_encode($decoded_data);
 
         try {
             $type       = null;
@@ -62,7 +61,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'get_attlog', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'get_attlog', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
@@ -92,7 +91,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'get_userinfo', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'get_userinfo', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
@@ -122,7 +121,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'delete_user', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'delete_user', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
@@ -152,7 +151,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'get_userall', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'get_userall', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
@@ -182,7 +181,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'set_timezone', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'set_timezone', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
@@ -212,7 +211,7 @@ class FingerprintController extends Controller
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
             $response = curl_exec($ch);
             curl_close($ch);
-            $data = ['unique_id' => $randKey, 'type' => 'restart', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
+            $data = ['unique_id' => $randKey, 'type' => 'restart', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
         } catch (\Exception $e) {
             $success = false;
