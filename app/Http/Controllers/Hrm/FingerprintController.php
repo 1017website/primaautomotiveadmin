@@ -18,12 +18,13 @@ class FingerprintController extends Controller
         return $random;
     }
 
-    public function callback()
+    public function callback(Request $request)
     {
         $success = true;
         $message = "";
 
-        $original_data  = file_get_contents('php://input');
+        //$original_data  = file_get_contents('php://input');
+        $original_data = $request->getContent();
         $decoded_data   = json_decode($original_data, true);
         $encoded_data   = json_encode($decoded_data);
 
@@ -31,7 +32,7 @@ class FingerprintController extends Controller
             $type       = isset($decoded_data['type']) ? $decoded_data['type'] : null;
             $cloud_id   = isset($decoded_data['cloud_id']) ? $decoded_data['cloud_id'] : null;
             $created_at = date('Y-m-d H:i:s');
-            $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => $original_data];
+            $values = ['cloud_id' => $cloud_id, 'type' => $type, 'created_at' => $created_at, 'original_data' => json_encode($original_data)];
             DB::table('finger_callbacks')->insert($values);
         } catch (\Exception $e) {
             $success = false;
