@@ -52,6 +52,13 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="id_finger" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Finger') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="id_finger" name="id_finger" value="{{ $mechanic->id_finger }}" placeholder="Id Absen Finger">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="name" name="name" value="{{ $mechanic->name }}" placeholder="Name" required="true">
@@ -86,13 +93,6 @@
                                 <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
                                 <div class="col-sm-10">
                                     <textarea class="form-control" id="address" name="address" placeholder="Address">{{ $mechanic->address }}</textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="pin" class="col-sm-2 text-left control-label col-form-label">{{ __('Pin') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="pin" name="pin" value="{{ $mechanic->pin }}" required>
                                 </div>
                             </div>
 

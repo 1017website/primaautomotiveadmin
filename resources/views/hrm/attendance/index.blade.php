@@ -18,7 +18,8 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <a class="btn btn-default" href="{{ route('attendance.import') }}">{{ __('Import Excel') }}</a>
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_import">{{ __('Get Data') }}</button>
+            <a class="btn btn-default hidden" href="{{ route('attendance.import') }}">{{ __('Import Excel') }}</a>
             <a class="btn btn-default" href="{{ route('attendance.create') }}">{{ __('Manual') }}</a>
         </div>
 
@@ -73,8 +74,69 @@
 
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal_import" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Get Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="form-group row">
+                        <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Date') }}</label>
+                        <div class="col-sm-9 input-group">
+                            <input type="text" class="form-control mydatepicker" id="date" name="date" value="{{ !empty(old('date'))?old('date'):date('d-m-Y') }}" placeholder="dd/mm/yyyy" autocomplete="off" required>
+                            <div class="input-group-append">
+                                <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-default add" id="import_data">Import</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal -->
+
     <script>
         $('#attendance').DataTable();
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('#import_data').on('click', function() {
+            if ($('#date').val() == '') {
+                popup('Date cannot empty', 'error');
+            } else {
+                $.ajax({
+                    url: "{{ route('importAttendance') }}",
+                    type: 'POST',
+                    data: {
+                        'date': $('#date').val(),
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.success) {
+                            location.reload();
+                        } else {
+                            popup(res.message, 'error');
+                        }
+                    }
+                });
+            }
+
+        });
     </script>
 
 

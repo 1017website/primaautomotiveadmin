@@ -29,6 +29,7 @@ class MechanicController extends Controller
             'name' => 'required|max:255',
             'position' => 'max:255',
             'id_card' => 'max:255',
+            'id_finger' => 'required|integer|unique:mechanic,id_finger,NULL,id,deleted_at,NULL',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',
             'address' => 'max:500',
@@ -51,7 +52,7 @@ class MechanicController extends Controller
         $validateData['birth_date'] = (!empty($request->birth_date) ? date('Y-m-d', strtotime($request->birth_date)) : NULL);
 
         $create = Mechanic::create($validateData);
-        if ($create) {
+        /*if ($create) {
             //register fingerprint
             $url = 'https://developer.fingerspot.io/api/set_userinfo';
             $randKey = $this->rand_char(25);
@@ -70,7 +71,7 @@ class MechanicController extends Controller
             //add to logs
             $data = ['unique_id' => $randKey, 'type' => 'set_user_info', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => time()];
             DB::table('finger_logs')->insert($data);
-        }
+        }*/
 
         return redirect()->route('mechanic.index')->with('success', 'Mechanic created successfully.');
     }
@@ -100,6 +101,7 @@ class MechanicController extends Controller
             'name' => 'required|max:255',
             'position' => 'max:255',
             'id_card' => 'max:255',
+            'id_finger' => 'required|integer|unique:mechanic,id_finger,' . $mechanic->id . ',id,deleted_at,NULL',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',
             'address' => 'max:500',

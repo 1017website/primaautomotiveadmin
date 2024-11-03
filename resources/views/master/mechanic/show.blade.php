@@ -53,6 +53,16 @@
                         <div class="border-top"></div>
                         <div class="row p-3">
                             <div class="col-sm-3">
+                                <strong>{{ __('Id Finger') }}</strong>
+                            </div>
+                            <div class="col-sm-9">
+                                {{ $mechanic->id_finger }}
+                            </div>
+                        </div>
+
+                        <div class="border-top"></div>
+                        <div class="row p-3">
+                            <div class="col-sm-3">
                                 <strong>{{ __('Name') }}</strong>
                             </div>
                             <div class="col-sm-9">

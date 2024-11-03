@@ -250,6 +250,7 @@ Route::controller(AttendanceController::class)->group(function () {
     Route::get('attendance/import', 'import')->name('attendance.import')->middleware(['auth']);
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate')->middleware(['auth']);
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
+    Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance')->middleware(['auth']);
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
@@ -267,7 +268,7 @@ Route::controller(PayrollController::class)->group(function () {
 Route::resource('payroll', PayrollController::class)->middleware(['auth']);
 
 Route::controller(FingerprintController::class)->group(function () {
-    Route::get('fingerprint/callback', 'callback');
+    Route::post('fingerprint/callback', 'callback');
     Route::post('fingerprint/get-log', 'getLog');
     Route::post('fingerprint/get-user', 'getUser');
     Route::post('fingerprint/get-user-all', 'getUserAll');
