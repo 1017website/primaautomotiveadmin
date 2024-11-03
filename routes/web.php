@@ -62,6 +62,10 @@ use App\Http\Controllers\Workshop\ColorDatabaseController;
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
+Route::controller(SettingController::class)->group(function () {
+    Route::post('attendance/set-timezone', 'setTimezone')->name('setTimezone')->middleware(['auth']);
+    Route::post('attendance/restart-finger', 'restartFinger')->name('restartFinger')->middleware(['auth']);
+});
 Route::resource('setting', SettingController::class)->middleware(['auth']);
 Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/changeColor', 'changeColor')->name('changeColor');

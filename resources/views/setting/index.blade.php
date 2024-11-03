@@ -56,7 +56,7 @@
                             <input type="text" class="form-control" id="backend_url" name="backend_url" value="{{ isset($setting) ? $setting->backend_url : '' }}">
                         </div>
                     </div>
-                    
+
                     <div class="form-group row">
                         <label for="frontend_url" class="col-sm-2 text-left control-label col-form-label">{{ __('Frontend Url') }}</label>
                         <div class="col-sm-10">
@@ -101,7 +101,7 @@
                             <input type="text" class="form-control" id="disclaimer" name="disclaimer" value="{{ isset($setting) ? $setting->disclaimer : '' }}" placeholder="Disclaimer">
                         </div>
                     </div>
-					
+
                     <h5 class="card-title">{{ __('Setting Bonus') }}</h5>
                     <div class="border-top"></div>
 
@@ -126,6 +126,23 @@
                         </div>
                     </div>
 
+                    <h5 class="card-title">{{ __('Setting Finger') }}</h5>
+                    <div class="border-top"></div>
+
+                    <div class="form-group row">
+                        <label for="bonus_panel" class="col-sm-2 text-left control-label col-form-label">{{ __('Set Timezone') }}</label>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-default add" id="set_timezone">Set Timezone</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="bonus_panel" class="col-sm-2 text-left control-label col-form-label">{{ __('Restart Finger') }}</label>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-default add" id="restart_finger">Restart</button>
+                        </div>
+                    </div>
+
                     <div class="border-top"></div>
                     <button type="submit" class="btn btn-default btn-action">Save</button>
                 </form>
@@ -135,16 +152,15 @@
     </div>
 
     <script>
-        $(function () {
-            $("input[class*='numb']").keydown(function (event) {
+        $(function() {
+            $("input[class*='numb']").keydown(function(event) {
                 if (event.shiftKey == true) {
                     event.preventDefault();
                 }
                 if ((event.keyCode >= 48 && event.keyCode <= 57) ||
-                        (event.keyCode >= 96 && event.keyCode <= 105) ||
-                        event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
-                        event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {
-                } else {
+                    (event.keyCode >= 96 && event.keyCode <= 105) ||
+                    event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                    event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 188) {} else {
                     event.preventDefault();
                 }
                 if ($(this).val().indexOf(',') !== -1 && event.keyCode == 188)
@@ -154,31 +170,31 @@
         });
 
         var harga1 = document.getElementById('target_revenue');
-        $(document).ready(function () {
+        $(document).ready(function() {
             console.log(harga1.value);
             var formated = formatRupiah($('#target_revenue').val(), 'Rp. ');
             harga1.value = formated;
         });
-        harga1.addEventListener('keyup', function (e) {
+        harga1.addEventListener('keyup', function(e) {
             harga1.value = formatRupiah(this.value, 'Rp. ');
         });
 
         var harga2 = document.getElementById('bonus_panel');
-        $(document).ready(function () {
+        $(document).ready(function() {
             console.log(harga2.value);
             var formated = formatRupiah($('#bonus_panel').val(), 'Rp. ');
             harga2.value = formated;
         });
-        harga2.addEventListener('keyup', function (e) {
+        harga2.addEventListener('keyup', function(e) {
             harga2.value = formatRupiah(this.value, 'Rp. ');
         });
 
         function formatRupiah(angka, prefix) {
             var number_string = angka.replace(/[^,\d]/g, '').toString(),
-                    split = number_string.split(','),
-                    sisa = split[0].length % 3,
-                    rupiah = split[0].substr(0, sisa),
-                    ribuan = split[0].substr(sisa).match(/\d{3}/gi);
+                split = number_string.split(','),
+                sisa = split[0].length % 3,
+                rupiah = split[0].substr(0, sisa),
+                ribuan = split[0].substr(sisa).match(/\d{3}/gi);
 
             if (ribuan) {
                 separator = sisa ? '.' : '';
@@ -188,5 +204,41 @@
             rupiah = split[1] != undefined ? rupiah + ',' + split[1] : rupiah;
             return prefix == undefined ? rupiah : (rupiah ? 'Rp. ' + rupiah : '');
         }
+
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+            }
+        });
+
+        $('#set_timezone').on('click', function() {
+            $.ajax({
+                url: "{{ route('setTimezone') }}",
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        popup('Set timezone success', 'success');
+                    } else {
+                        popup(res.message, 'error');
+                    }
+                }
+            });
+        });
+
+        $('#restart_finger').on('click', function() {
+            $.ajax({
+                url: "{{ route('restartFinger') }}",
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        popup('Restart finger success', 'success');
+                    } else {
+                        popup(res.message, 'error');
+                    }
+                }
+            });
+        });
     </script>
 </x-app-layout>
