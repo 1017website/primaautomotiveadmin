@@ -11,6 +11,10 @@ use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Imports\AttendanceImport;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Carbon\Carbon;
+use App\Exports\AttendanceExport;
+
 
 class AttendanceController extends Controller
 {
@@ -103,7 +107,8 @@ class AttendanceController extends Controller
         $message = "";
         try {
             $url = 'https://developer.fingerspot.io/api/get_attlog';
-            $randKey = bin2hex(random_bytes(25));;
+            $randKey = bin2hex(random_bytes(25));
+            ;
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "start_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '", "end_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
@@ -120,7 +125,7 @@ class AttendanceController extends Controller
             $data = ['unique_id' => $randKey, 'type' => 'get_attlog', 'request' => $request, 'response' => $response, 'created_by' => Auth::id(), 'created_at' => date('Y-m-d H:i:s')];
             DB::table('finger_logs')->insert($data);
             //import to system
-            $data = (array)json_decode($response);
+            $data = (array) json_decode($response);
             $listAttendance = $data['data'];
             if (!empty($listAttendance)) {
                 //delete old data
@@ -132,7 +137,7 @@ class AttendanceController extends Controller
                 $query->delete();
 
                 foreach ($listAttendance as $r => $v) {
-                    $v = (array)$v;
+                    $v = (array) $v;
                     $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
                     if (isset($mechanic)) {
                         $model = new Attendance();
@@ -185,5 +190,43 @@ class AttendanceController extends Controller
         );
 
         return response()->download($file, 'import_attendance.xlsx', $headers);
+    }
+
+    public function reportAttendance(Request $request)
+    {
+        $date = $request->input('date');
+        $status = $request->input('status');
+
+        if (empty($date)) {
+            return redirect()->back()->with('error', 'Date is required.');
+        }
+
+        try {
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Invalid date format.');
+        }
+
+        $attendanceData = Attendance::where('date', $formattedDate)->where('status', $status)
+            ->get(['employee_id', 'date', 'time', 'status', 'type']);
+
+        if ($attendanceData->isEmpty()) {
+            return redirect()->back()->with('error', 'No attendance data found for the selected date.');
+        }
+
+        return view('hrm.attendance.report', compact('attendanceData'));
+    }
+
+    public function exportAttendance(Request $request)
+    {
+        $date = $request->input('date');
+        $status = $request->input('status');
+        try {
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Invalid date format.']);
+        }
+
+        return Excel::download(new AttendanceExport($formattedDate, $status), 'attendance-report.xlsx');
     }
 }

@@ -59,6 +59,10 @@ use App\Http\Controllers\Wash\WashSalesController;
 use App\Http\Controllers\Workshop\ColorDatabaseController;
 
 //hrm
+use App\Exports\AttendanceExport;
+use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
@@ -251,6 +255,9 @@ Route::controller(AttendanceController::class)->group(function () {
     Route::get('attendance/import', 'import')->name('attendance.import')->middleware(['auth']);
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate')->middleware(['auth']);
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
+    Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance')->middleware(['auth']);
+    Route::post('attendance/report-attendance', 'reportAttendance')->name('reportAttendance')->middleware(['auth']);
+    Route::post('attendance/export-attendance', 'exportAttendance')->name('exportAttendance')->middleware(['auth']);
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
