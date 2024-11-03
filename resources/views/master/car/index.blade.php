@@ -61,6 +61,8 @@
                                 <td>{{ $row->created_at }}</td>
                                 <td>{{ $row->updated_at }}</td>
                                 <td class="action-button">
+                                    <a class="btn btn-info" href="{{ route('car.show',$row->id) }}"><i
+                                        class="fas fa-eye"></i></a>
                                     <form action="{{ route('car.destroy',$row->id) }}" method="POST">
                                         <a class="btn btn-default" href="{{ route('car.edit',$row->id) }}"><i class="fas fa-pencil-alt"></i></a>
                                         @csrf

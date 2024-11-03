@@ -97,7 +97,10 @@ class CarController extends Controller
 
     public function show(Car $car)
     {
-        return view('master.car.show', compact('car'));
+        $carImages = CarImage::where(['car_id' => $car->id])->get();
+        // var_dump($carImages);die;
+
+        return view('master.car.show', compact('car', 'carImages'));
     }
 
     public function edit(Car $car)
@@ -260,6 +263,14 @@ class CarController extends Controller
         $detail = CarProfileTmp::where('session_id', Session()->getid())->get();
 
         return view('master.car.detail', compact('detail'));
+    }
+
+    public function detailCarShow()
+    {
+        $request = array_merge($_POST, $_GET);
+        $detail = CarProfileTmp::where('session_id', Session()->getid())->get();
+
+        return view('master.car.detailShow', compact('detail'));
     }
 
     public function addCar()

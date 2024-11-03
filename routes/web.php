@@ -62,10 +62,6 @@ use App\Http\Controllers\Workshop\ColorDatabaseController;
 
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
-Route::controller(SettingController::class)->group(function () {
-    Route::post('attendance/set-timezone', 'setTimezone')->name('setTimezone')->middleware(['auth']);
-    Route::post('attendance/restart-finger', 'restartFinger')->name('restartFinger')->middleware(['auth']);
-});
 Route::resource('setting', SettingController::class)->middleware(['auth']);
 Route::controller(EstimatorController::class)->group(function () {
     Route::post('estimator/changeColor', 'changeColor')->name('changeColor');
@@ -129,6 +125,7 @@ Route::controller(CarController::class)->group(function () {
     Route::post('car/addCar', 'addCar')->name('car.addCar')->middleware(['auth']);
     Route::post('car/deleteCar', 'deleteCar')->name('car.deleteCar')->middleware(['auth']);
     Route::get('car/detailCar', 'detailCar')->name('detailCar')->middleware(['auth']);
+    Route::get('car/detailCarShow', 'detailCarShow')->name('detailCarShow')->middleware(['auth']);
 });
 Route::resource('car', CarController::class)->middleware(['auth']);
 Route::resource('car-brand', CarBrandController::class)->middleware(['auth']);
@@ -254,7 +251,6 @@ Route::controller(AttendanceController::class)->group(function () {
     Route::get('attendance/import', 'import')->name('attendance.import')->middleware(['auth']);
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate')->middleware(['auth']);
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
-    Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance')->middleware(['auth']);
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
