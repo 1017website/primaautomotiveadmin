@@ -46,7 +46,13 @@
                             <div class="form-group row">
                                 <label for="id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="id_card" name="id_card" value="{{ old('id_card') }}" placeholder="Ktp/Sim">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="id_card" name="id_card">
+                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>
+                                        @error('id_card')
+                                        <div class="invalid-feedback">{{ $message }}k</div>
+                                        @enderror
+                                    </div>
                                 </div>
                             </div>
 

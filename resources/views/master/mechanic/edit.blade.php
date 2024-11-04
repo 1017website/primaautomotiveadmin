@@ -7,7 +7,8 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Master') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Employee') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('mechanic.index') }}">{{ __('Employee') }}</a>
+                            </li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
                         </ol>
                     </nav>
@@ -37,62 +38,110 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('mechanic.update', $mechanic->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('mechanic.update', $mechanic->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="row">
                         <div class="col-sm-6">
-
                             <div class="form-group row">
-                                <label for="id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Card') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="id_card" name="id_card" value="{{ $mechanic->id_card }}" placeholder="Ktp/Sim">
-                                </div>
-                            </div>
+                                <label for="id_card" class="col-sm-2 text-left control-label col-form-label">{{ __('Id
+                                    Card') }}</label>
+                                <div class="col-sm-10" style="text-align: center;">
+                                    <div x-data="{photoName: null, photoPreview: null}"
+                                        class="col-span-6 sm:col-span-4">
+                                        <!-- Profile Photo File Input -->
+                                        <input type="file" class="hidden" name="id_card" wire:model="photo"
+                                            x-ref="photo" x-on:change="
+                                           photoName = $refs.photo.files[0].name;
+                                           const reader = new FileReader();
+                                           reader.onload = (e) => {
+                                           photoPreview = e.target.result;
+                                           };
+                                           reader.readAsDataURL($refs.photo.files[0]);
+                                           " />
 
-                            <div class="form-group row">
-                                <label for="id_finger" class="col-sm-2 text-left control-label col-form-label">{{ __('Id Finger') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="id_finger" name="id_finger" value="{{ $mechanic->id_finger }}" placeholder="Id Absen Finger">
-                                </div>
-                            </div>
+                                        <!-- Current Profile Photo -->
+                                        <div class="mt-2" x-show="! photoPreview">
+                                            <img src="{{ !empty($mechanic->id_card) ? asset($mechanic->id_card) : asset('plugins/images/users/default-user.png') }}"
+                                                alt="" class="img-fluid img-view">
+                                        </div>
 
-                            <div class="form-group row">
-                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ $mechanic->name }}" placeholder="Name" required="true">
-                                </div>
-                            </div>
+                                        <!-- New Profile Photo Preview -->
+                                        <div class="mt-2" x-show="photoPreview" style="display: none;">
+                                            <span
+                                                class="block w-full h-20 bg-cover bg-no-repeat bg-center ml-auto mr-auto"
+                                                x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
+                                            </span>
+                                        </div>
 
-                            <div class="form-group row">
-                                <label for="position" class="col-sm-2 text-left control-label col-form-label">{{ __('Position') }}</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="position" name="position" value="{{ $mechanic->position }}" placeholder="Position" required="true">
-                                </div>
-                            </div>
+                                        <x-jet-secondary-button class="mt-2 mr-2" type="button"
+                                            x-on:click.prevent="$refs.photo.click()">
+                                            {{ __('Select A New Photo') }}
+                                        </x-jet-secondary-button>
 
-                            <div class="form-group row">
-                                <label for="birth_date" class="col-sm-2 text-left control-label col-form-label">{{ __('Birth Date') }}</label>
-                                <div class="col-sm-10 input-group">
-                                    <input type="text" class="form-control mydatepicker" id="birth_date" name="birth_date" value="{{ date('d-m-Y', strtotime($mechanic->birth_date)) }}" placeholder="dd/mm/yyyy">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
+                                        <x-jet-input-error for="photo" class="mt-2" />
                                     </div>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Phone') }}</label>
+                                <label for="id_finger" class="col-sm-2 text-left control-label col-form-label">{{ __('Id
+                                    Finger') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control phone" id="phone" name="phone" value="{{ $mechanic->phone }}" placeholder="081xxx">
+                                    <input type="text" class="form-control" id="id_finger" name="id_finger"
+                                        value="{{ $mechanic->id_finger }}" placeholder="Id Absen Finger">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{ __('Address') }}</label>
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <textarea class="form-control" id="address" name="address" placeholder="Address">{{ $mechanic->address }}</textarea>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ $mechanic->name }}" placeholder="Name" required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="position" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Position') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="position" name="position"
+                                        value="{{ $mechanic->position }}" placeholder="Position" required="true">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="birth_date" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Birth Date') }}</label>
+                                <div class="col-sm-10 input-group">
+                                    <input type="text" class="form-control mydatepicker" id="birth_date"
+                                        name="birth_date" value="{{ date('d-m-Y', strtotime($mechanic->birth_date)) }}"
+                                        placeholder="dd/mm/yyyy">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text form-control"><i
+                                                class="fa fa-calendar"></i></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Phone') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control phone" id="phone" name="phone"
+                                        value="{{ $mechanic->phone }}" placeholder="081xxx">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="phone" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Address') }}</label>
+                                <div class="col-sm-10">
+                                    <textarea class="form-control" id="address" name="address"
+                                        placeholder="Address">{{ $mechanic->address }}</textarea>
                                 </div>
                             </div>
 
@@ -100,30 +149,41 @@
                             <div class="border-top"></div>
 
                             <div class="form-group row">
-                                <label for="salary" class="col-sm-2 text-left control-label col-form-label">{{ __('Salary/Day') }}</label>
+                                <label for="salary" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Salary/Day') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="salary" name="salary" placeholder="" value="{{ $mechanic->salary }}" required>
+                                    <input type="text" class="form-control" id="salary" name="salary" placeholder=""
+                                        value="{{ $mechanic->salary }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="positional_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Position Allowance') }}</label>
+                                <label for="positional_allowance"
+                                    class="col-sm-2 text-left control-label col-form-label">{{ __('Position Allowance')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="positional_allowance" name="positional_allowance" value="{{ $mechanic->positional_allowance }}" required>
+                                    <input type="text" class="form-control" id="positional_allowance"
+                                        name="positional_allowance" value="{{ $mechanic->positional_allowance }}"
+                                        required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="healthy_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Healthy Allowance') }}</label>
+                                <label for="healthy_allowance"
+                                    class="col-sm-2 text-left control-label col-form-label">{{ __('Healthy Allowance')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="healthy_allowance" name="healthy_allowance" value="{{ $mechanic->healthy_allowance }}" required>
+                                    <input type="text" class="form-control" id="healthy_allowance"
+                                        name="healthy_allowance" value="{{ $mechanic->healthy_allowance }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="other_allowance" class="col-sm-2 text-left control-label col-form-label">{{ __('Other Allowance') }}</label>
+                                <label for="other_allowance" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Other Allowance') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="other_allowance" name="other_allowance" value="{{ $mechanic->other_allowance }}" required>
+                                    <input type="text" class="form-control" id="other_allowance" name="other_allowance"
+                                        value="{{ $mechanic->other_allowance }}" required>
                                 </div>
                             </div>
 
@@ -133,11 +193,10 @@
                             <div class="form-group row">
 
                                 <div class="col-sm-12" style="text-align: center;">
-                                    <div x-data="{photoName: null, photoPreview: null}" class="col-span-6 sm:col-span-4">
+                                    <div x-data="{photoName: null, photoPreview: null}"
+                                        class="col-span-6 sm:col-span-4">
                                         <!-- Profile Photo File Input -->
-                                        <input type="file" class="hidden" name="image"
-                                            wire:model="photo"
-                                            x-ref="photo"
+                                        <input type="file" class="hidden" name="image" wire:model="photo" x-ref="photo"
                                             x-on:change="
                                                photoName = $refs.photo.files[0].name;
                                                const reader = new FileReader();
@@ -149,17 +208,20 @@
 
                                         <!-- Current Profile Photo -->
                                         <div class="mt-2" x-show="! photoPreview">
-                                            <img src="{{ !empty($mechanic->image) ? asset($mechanic->image_url) : asset('plugins/images/users/default-user.png') }}" alt="" class="rounded-full h-20 w-20 object-cover">
+                                            <img src="{{ !empty($mechanic->image) ? asset($mechanic->image_url) : asset('plugins/images/users/default-user.png') }}"
+                                                alt="" class="rounded-full h-20 w-20 object-cover">
                                         </div>
 
                                         <!-- New Profile Photo Preview -->
                                         <div class="mt-2" x-show="photoPreview" style="display: none;">
-                                            <span class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center ml-auto mr-auto"
+                                            <span
+                                                class="block rounded-full w-20 h-20 bg-cover bg-no-repeat bg-center ml-auto mr-auto"
                                                 x-bind:style="'background-image: url(\'' + photoPreview + '\');'">
                                             </span>
                                         </div>
 
-                                        <x-jet-secondary-button class="mt-2 mr-2" type="button" x-on:click.prevent="$refs.photo.click()">
+                                        <x-jet-secondary-button class="mt-2 mr-2" type="button"
+                                            x-on:click.prevent="$refs.photo.click()">
                                             {{ __('Select A New Photo') }}
                                         </x-jet-secondary-button>
 

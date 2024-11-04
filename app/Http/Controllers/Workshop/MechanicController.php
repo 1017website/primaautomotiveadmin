@@ -28,13 +28,20 @@ class MechanicController extends Controller
         $validateData = $request->validate([
             'name' => 'required|max:255',
             'position' => 'max:255',
-            'id_card' => 'max:255',
+            'id_card' => 'image|file|max:2048',
             'id_finger' => 'required|integer|unique:mechanic,id_finger,NULL,id,deleted_at,NULL',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',
             'address' => 'max:500',
             'image' => 'image|file|max:2048',
         ]);
+
+        if ($id_card = $request->file('id_card')) {
+            $destinationPath2 = 'images/mechanic-images/';
+            $profileImage2 = "mechanicIDCard" . "-" . date('YmdHis') . "." . $id_card->getClientOriginalExtension();
+            $id_card->move($destinationPath2, $profileImage2);
+            $validateData['id_card'] = $destinationPath2 . $profileImage2;
+        }
 
         if ($image = $request->file('image')) {
             $destinationPath = 'images/mechanic-images/';
@@ -100,7 +107,7 @@ class MechanicController extends Controller
         $validateData = $request->validate([
             'name' => 'required|max:255',
             'position' => 'max:255',
-            'id_card' => 'max:255',
+            'id_card' => 'image|file|max:2048',
             'id_finger' => 'required|integer|unique:mechanic,id_finger,' . $mechanic->id . ',id,deleted_at,NULL',
             'birth_date' => 'date_format:d-m-Y',
             'phone' => 'max:255',
@@ -108,12 +115,29 @@ class MechanicController extends Controller
             'image' => 'image|file|max:2048',
         ]);
 
+        if (!empty($mechanic->id_card) && $request->hasFile('id_card')) {
+            $imagePath2 = $mechanic->id_card;
+
+            if (File::exists($imagePath2)) {
+                File::delete($imagePath2);
+            }
+        }
+
         if (!empty($mechanic->image) && $request->hasFile('image')) {
             $imagePath = $mechanic->image_url;
 
             if (File::exists($imagePath)) {
                 File::delete($imagePath);
             }
+        }
+
+        if ($id_card = $request->file('id_card')) {
+            $destinationPath2 = 'images/mechanic-images/';
+            $profileImage2 = "mechanicIDCard" . "-" . date('YmdHis') . "." . $id_card->getClientOriginalExtension();
+            $id_card->move($destinationPath2, $profileImage2);
+            $validateData['id_card'] = $destinationPath2 . $profileImage2;
+        } elseif (!$request->hasFile('id_card') && !$mechanic->id_card) {
+            unset($validateData['id_card']);
         }
 
         if ($image = $request->file('image')) {
@@ -139,6 +163,13 @@ class MechanicController extends Controller
 
     public function destroy(Mechanic $mechanic)
     {
+        if (!empty($mechanic->id_card)) {
+            $imagePath2 = $mechanic->id_card;
+
+            if (file_exists($imagePath2)) {
+                unlink($imagePath2);
+            }
+        }
 
         if (!empty($mechanic->image)) {
             $imagePath = $mechanic->image_url;

@@ -46,7 +46,9 @@
                                 <strong>{{ __('Id Card') }}</strong>
                             </div>
                             <div class="col-sm-9">
-                                {{ $mechanic->id_card }}
+                                @if(!empty($mechanic->id_card))
+                                <img src="{{ asset($mechanic->id_card) }}" class="img-fluid img-view">
+                                @endif
                             </div>
                         </div>
 
