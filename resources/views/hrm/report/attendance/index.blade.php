@@ -38,20 +38,6 @@
                         </div>
                     </div>
 
-                    <!--type item-->
-                    <div class="form-group row">
-                        <label for="status" class="col-sm-2 text-left control-label col-form-label">{{ __('Status')
-                            }}</label>
-                        <div class="col-sm-3 input-group">
-                            <select class="select2 form-control custom-select" id="status" name="status"
-                                style="width: 100%;">
-                                <option value="all">All</option>
-                                <option value="in">In</option>
-                                <option value="out">Out</option>
-                            </select>
-                        </div>
-                    </div>
-
                     <div class="form-group row">
                         <div class="col-sm-3 input-group">
                             <button type="button" class="btn btn-default" id="search">Show</button>
@@ -78,7 +64,6 @@
                 dataType: 'json',
                 data: {
                     'date': $('#date').val(),
-                    'status': $('#status').val()
                 },
                 success: function (res) {
                     console.log(res);

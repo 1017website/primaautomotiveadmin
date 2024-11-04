@@ -24,42 +24,38 @@ class ReportHRMController extends Controller
         $request = array_merge($_POST, $_GET);
 
         $date = $request['date'];
-        $status = $request['status'];
 
-        if ($request['status'] == 'all') {
-            if (empty($date)) {
-                return redirect()->back()->with('error', 'Date is required.');
-            }
+        if (empty($date)) {
+            return redirect()->back()->with('error', 'Date is required.');
+        }
 
-            try {
-                $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Invalid date format.');
-            }
+        try {
+            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Invalid date format.');
+        }
 
-            $attendanceData = Attendance::where('date', $formattedDate)
-                ->get(['employee_id', 'date', 'time', 'status', 'type']);
+        $attendanceData = Attendance::where('date', $formattedDate)
+            ->get(['employee_id', 'date', 'time', 'status', 'type'])
+            ->groupBy('employee_id');
 
-        } else {
-            if (empty($date)) {
-                return redirect()->back()->with('error', 'Date is required.');
-            }
+        $attendanceRecords = [];
+        foreach ($attendanceData as $employeeId => $records) {
+            $checkIn = $records->firstWhere('status', 'in')->time ?? '-';
+            $checkOut = $records->firstWhere('status', 'out')->time ?? '-';
 
-            try {
-                $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', 'Invalid date format.');
-            }
-
-            $attendanceData = Attendance::where('date', $formattedDate)->where('status', $status)
-                ->get(['employee_id', 'date', 'time', 'status', 'type']);
+            $attendanceRecords[] = [
+                'employee' => $records->first()->employee, 
+                'check_in' => $checkIn,
+                'check_out' => $checkOut
+            ];
         }
 
         $data = [
             'success' => $success,
             'message' => $message,
             'filter' => $request,
-            'html' => view('hrm.report.attendance.view', compact('attendanceData'))->render()
+            'html' => view('hrm.report.attendance.view', compact('attendanceRecords'))->render()
         ];
 
         return json_encode($data);
