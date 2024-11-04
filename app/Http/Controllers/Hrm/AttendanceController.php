@@ -8,12 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Imports\AttendanceImport;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Log;
-use Carbon\Carbon;
-use App\Exports\AttendanceExport;
 
 
 class AttendanceController extends Controller
@@ -190,43 +185,5 @@ class AttendanceController extends Controller
         );
 
         return response()->download($file, 'import_attendance.xlsx', $headers);
-    }
-
-    public function reportAttendance(Request $request)
-    {
-        $date = $request->input('date');
-        $status = $request->input('status');
-
-        if (empty($date)) {
-            return redirect()->back()->with('error', 'Date is required.');
-        }
-
-        try {
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Invalid date format.');
-        }
-
-        $attendanceData = Attendance::where('date', $formattedDate)->where('status', $status)
-            ->get(['employee_id', 'date', 'time', 'status', 'type']);
-
-        if ($attendanceData->isEmpty()) {
-            return redirect()->back()->with('error', 'No attendance data found for the selected date.');
-        }
-
-        return view('hrm.attendance.report', compact('attendanceData'));
-    }
-
-    public function exportAttendance(Request $request)
-    {
-        $date = $request->input('date');
-        $status = $request->input('status');
-        try {
-            $formattedDate = Carbon::createFromFormat('d-m-Y', $date)->format('Y-m-d');
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Invalid date format.']);
-        }
-
-        return Excel::download(new AttendanceExport($formattedDate, $status), 'attendance-report.xlsx');
     }
 }

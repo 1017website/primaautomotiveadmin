@@ -18,8 +18,6 @@
     <div class="container-fluid">
 
         <div class="div-top">
-            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_report">{{ __('Report
-                Attendance') }}</button>
             <button type="button" class="btn btn-default" data-toggle="modal" data-target="#modal_import">{{ __('Get
                 Data') }}</button>
             <a class="btn btn-default hidden" href="{{ route('attendance.import') }}">{{ __('Import Excel') }}</a>
@@ -32,6 +30,14 @@
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
+                    {!! $message !!}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                @endif
+                @if($message = Session::get('error'))
+                <div class="alert alert-warning" role="alert">
                     {!! $message !!}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -113,50 +119,6 @@
     </div>
     <!-- Modal -->
 
-    <!-- Modal -->
-    <div class="modal fade" id="modal_report" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Report Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form id="dateForm" action="{{ route('reportAttendance') }}" method="POST">
-                    @csrf
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Date')
-                                }}</label>
-                            <div class="col-sm-9 input-group">
-                                <input type="text" class="form-control mydatepicker" id="date" name="date"
-                                    value="{{ !empty(old('date'))?old('date'):date('d-m-Y') }}" placeholder="dd/mm/yyyy"
-                                    autocomplete="off" required>
-                                <div class="input-group-append">
-                                    <span class="input-group-text form-control"><i class="fa fa-calendar"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for="status" class="col-sm-3 text-left control-label col-form-label">{{ __('Status') }}</label>
-                            <div class="col-sm-9 input-group">
-                                <select class="select2 form-control custom-select" id="status" name="status" style="width: 100%;">                              
-                                    <option value="in">In</option>
-                                    <option value="out">Out</option>
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" id="report_data" class="btn btn-default add">Generate Report</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Modal -->
-
     <script>
         $('#attendance').DataTable();
 
@@ -185,14 +147,6 @@
                         }
                     }
                 });
-            }
-        });
-
-        $('#report_data').on('click', function() {
-            if ($('#date').val() == '' && $('#status').val() == '' ) {
-                popup('Date cannot be empty', 'error');
-            } else {
-                $('#dateForm').submit();
             }
         });
 

@@ -49,6 +49,7 @@ use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
+use App\Http\Controllers\Hrm\ReportHrmController;
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
@@ -59,11 +60,6 @@ use App\Http\Controllers\Wash\WashSalesController;
 use App\Http\Controllers\Workshop\ColorDatabaseController;
 
 //hrm
-use App\Exports\AttendanceExport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
-use Carbon\Carbon;
-
 Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
 Route::resource('/', DashboardController::class)->middleware(['auth']);
 Route::resource('setting', SettingController::class)->middleware(['auth']);
@@ -256,13 +252,15 @@ Route::controller(AttendanceController::class)->group(function () {
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate')->middleware(['auth']);
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
     Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance')->middleware(['auth']);
-    Route::post('attendance/report-attendance', 'reportAttendance')->name('reportAttendance')->middleware(['auth']);
-    Route::post('attendance/export-attendance', 'exportAttendance')->name('exportAttendance')->middleware(['auth']);
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
 Route::resource('attendance-permit', AttendancePermitController::class)->middleware(['auth']);
 
+Route::controller(ReportHrmController::class)->group(function () {
+    Route::get('report/attendance-view', 'attendanceView')->name('attendanceView')->middleware(['auth']);
+    Route::get('report/attendance', 'index')->name('attendanceHome')->middleware(['auth']);
+});
 Route::controller(EmployeeCreditController::class)->group(function () {
     Route::post('employee-credit/paid', 'paid')->name('employee-credit.paid')->middleware(['auth']);
 });
