@@ -6,7 +6,7 @@
                 <div class="ml-auto text-right">
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
-                            <li class="breadcrumb-item active" aria-current="page">{{ __('User') }}</li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ __('User Role') }}</li>
                         </ol>
                     </nav>
                 </div>
@@ -17,7 +17,7 @@
     <div class="container-fluid">
         <div class="card bg-white shadow default-border-radius">
             <div class="card-body">
-                <h5 class="card-title">{{ __('User') }}</h5>
+                <h5 class="card-title">{{ __('User Role') }}</h5>
                 <div class="border-top"></div>
                 @if ($message = Session::get('success'))
                 <div class="alert alert-success" role="alert">
@@ -28,7 +28,7 @@
                 </div>
                 @endif
 
-                <form action="{{ route('user.edit') }}" method="POST">
+                <form action="{{ route('user_role.edit') }}" method="POST">
                     @csrf
                     <div class="table-responsive">
                         <table id="user" class="table table-striped table-bordered">

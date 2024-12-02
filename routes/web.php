@@ -7,7 +7,9 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\EstimatorController;
 use App\Http\Controllers\EstimatorInternalController;
+use App\Http\Controllers\UserRolesController;
 use App\Http\Controllers\UserController;
+
 //general
 //workshop
 use App\Http\Controllers\Workshop\TypeProductController;
@@ -50,6 +52,7 @@ use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
 use App\Http\Controllers\Hrm\ReportHrmController;
+
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
@@ -298,8 +301,11 @@ Route::get('/linkstorage', function () {
 });
 
 //user
+Route::resource('user_role', UserRolesController::class)->middleware(['auth']);
+Route::post('/user_role/edit', [UserRolesController::class, 'edit'])->name('user_role.edit');
+
+Route::put('user/changePassword', [UserController::class, 'changePassword'])->name('user.changePassword')->middleware(['auth']);
 Route::resource('user', UserController::class)->middleware(['auth']);
-Route::post('/users/edit', [UserController::class, 'edit'])->name('user.edit');
 
 //wash
 Route::resource('wash-service', WashServiceController::class)->middleware(['auth']);

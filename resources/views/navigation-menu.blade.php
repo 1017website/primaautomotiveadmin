@@ -162,7 +162,12 @@
                 <li class="sidebar-item"><a class="sidebar-link" href="/setting" aria-expanded="false"><i class="mdi mdi-wrench"></i><span class="hide-menu">{{ __('Setting') }}</span></a></li>
                 @endif
                 @if(Auth::user()->is_user == 1 || Auth::user()->is_owner == 1)
-                <li class="sidebar-item"><a class="sidebar-link" href="/user" aria-expanded="false"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('User') }}</span></a></li>
+                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Users') }}</span></a>
+                    <ul aria-expanded="false" class="collapse  first-level">
+                        <li class="sidebar-item"><a href="/user" class="sidebar-link"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('User List') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/user_role" class="sidebar-link"><i class="mdi mdi-account"></i><span class="hide-menu">{{ __('User Role') }}</span></a></li>
+                    </ul>
+                </li>
                 @endif
                 @if(Auth::user()->is_estimator == 1 || Auth::user()->is_owner == 1)
                 <li class="sidebar-item"> <a class="sidebar-link waves-effect waves-dark sidebar-link" href="/estimator-internal" aria-expanded="false"><i class="mdi mdi-account-settings-variant"></i><span class="hide-menu">{{ __('Estimator Internal') }}</span></a></li>
