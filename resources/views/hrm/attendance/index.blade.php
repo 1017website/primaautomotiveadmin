@@ -61,7 +61,7 @@
                             @foreach ($attendance as $row)
                             <tr>
                                 <td>{{ isset($row->employee) ? $row->employee->name : '-' }}</td>
-                                <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
+                                <td data-order="{{ $row->date }}">{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ $row->time }}</td>
                                 <td>{{ ucfirst($row->status) }}</td>
                                 <td>{{ ucfirst($row->type) }}</td>
