@@ -383,7 +383,7 @@
             }
         }).autocomplete("instance")._renderItem = function (ul, item) {
             return $("<li>")
-                    .append("<div>" + "<span style='font-size:12px'>" + item.label + "</span>&nbsp;- <span style='font-size:12px'>Phone : " + item.phone + "</span></div>")
+                    .append("<div class='row'><div class='col-sm-4'><div class='border border-4 rounded-3 py-2 px-2' style='background-color:white;display:block'>" + "<span style='font-size:12px'>" + item.label + "</span>&nbsp;- <span style='font-size:12px'>Phone : " + item.phone + "</span></div></div></div>")
                     .appendTo(ul);
         };
 

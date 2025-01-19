@@ -18,22 +18,26 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\DB;
 use PDF;
 
-class StoreChasierController extends Controller {
+class StoreChasierController extends Controller
+{
 
-    public function index() {
+    public function index()
+    {
         $invoice = StoreChasier::all();
         return view('store.chasier.index', compact('invoice'));
     }
 
-    public function create() {
-        $product = StoreInventoryProduct::whereHas('product', function($query){
+    public function create()
+    {
+        $product = StoreInventoryProduct::whereHas('product', function ($query) {
             $query->whereNull('deleted_at');
         })->get();
         $customer = StoreCustomer::all();
         return view('store.chasier.create', compact('product', 'customer'));
     }
 
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         $success = true;
         $message = "";
 
@@ -74,9 +78,9 @@ class StoreChasierController extends Controller {
                 $validateData['type'] = $request->type;
                 $validateData['status'] = 1;
                 $validateData['status_payment'] = 2;
-                $validateData['disc_persen_header'] = (float)str_replace(',', '.', $request->disc_persen_header);
+                $validateData['disc_persen_header'] = (float) str_replace(',', '.', $request->disc_persen_header);
                 $validateData['disc_header'] = $disc_header;
-                $validateData['ppn_persen_header'] = (float)str_replace(',', '.', $request->ppn_persen_header);
+                $validateData['ppn_persen_header'] = (float) str_replace(',', '.', $request->ppn_persen_header);
                 $validateData['ppn_header'] = $ppn_header;
 
                 if (strlen($validateData['cust_phone']) > 0) {
@@ -199,7 +203,8 @@ class StoreChasierController extends Controller {
         return redirect()->route('store-chasier.show', $order->id)->with('success', 'Chasier added successfully.');
     }
 
-    public function show($id) {
+    public function show($id)
+    {
         $invoice = StoreChasier::findorfail($id);
         $sisa = 0;
         $date = date('d-m-Y');
@@ -213,22 +218,24 @@ class StoreChasierController extends Controller {
         return view('store.chasier.show', compact('invoice', 'sisa', 'date', 'setting'));
     }
 
-    public function destroy(Invoice $invoice) {
+    public function destroy(Invoice $invoice)
+    {
         $invoice->status = '0';
         $invoice->save();
 
         return redirect()->route('invoice.index')
-                        ->with('success', 'Order <b>' . $invoice->code . '</b> deleted successfully');
+            ->with('success', 'Order <b>' . $invoice->code . '</b> deleted successfully');
     }
 
-    public function payInvoice() {
+    public function payInvoice()
+    {
         $success = true;
         $message = '';
 
         $request = array_merge($_POST, $_GET);
         try {
             $invoice = StoreChasier::findorfail($request['invoice_id']);
-            $dp = substr((float)str_replace('.', '', $request['dp']), 3);
+            $dp = substr((float) str_replace('.', '', $request['dp']), 3);
             if (!empty($invoice->dp)) {
                 $dp += $invoice->dp;
             }
@@ -255,13 +262,22 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function print($id) {
+    public function print($id)
+    {
         $invoice = StoreChasier::findorfail($id);
         $setting = Setting::where('id', '1')->first();
         return view('store.chasier.print', compact('invoice', 'setting'));
     }
 
-    public function download($id) {
+    public function printTest($id)
+    {
+        $invoice = StoreChasier::findorfail($id);
+        $setting = Setting::where('id', '1')->first();
+        return view('store.chasier.print2', compact('invoice', 'setting'));
+    }
+
+    public function download($id)
+    {
         ini_set('max_execution_time', 300);
         ini_set("memory_limit", "512M");
 
@@ -281,7 +297,8 @@ class StoreChasierController extends Controller {
         //return $pdf->download('DOC INV-' . $invoice->code . '.pdf');
     }
 
-    public function workOrder() {
+    public function workOrder()
+    {
         $success = true;
         $message = '';
 
@@ -311,12 +328,14 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function detail() {
+    public function detail()
+    {
         $detailItem = StoreChasierDetailTemp::where('user_id', Auth::id())->get();
         return view('store.chasier.detail', compact('detailItem'));
     }
 
-    public function deleteProduct() {
+    public function deleteProduct()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
@@ -332,7 +351,8 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function price() {
+    public function price()
+    {
         $request = array_merge($_POST, $_GET);
         $price = 0;
 
@@ -344,43 +364,48 @@ class StoreChasierController extends Controller {
         return json_encode(['price' => $price]);
     }
 
-    public function customer() {
+    public function customer()
+    {
         $request = array_merge($_POST, $_GET);
         $phone = '';
         $address = '';
         $card = '';
 
         $cust = DB::table('store_customer as a')
-                ->selectRaw("
+            ->selectRaw("
 					a.phone as id, a.name as label, a.phone, a.id_card, a.address
 				")
-                ->whereRaw("a.name like '%" . $request['term'] . "%'")
-                ->get();
+            ->whereRaw("a.name like '%" . $request['term'] . "%'")
+            ->whereNull("a.deleted_at")
+            ->get();
 
         return json_encode($cust);
     }
 
-    public function add() {
+    public function add()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
-
         try {
             $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
-            if ($stock->qty < (float)str_replace(',', '.', $request['qty'])) {
+
+            if ($stock->qty < (float) str_replace(',', '.', $request['qty'])) {
                 $success = false;
                 $message = 'Insufficient Stock.';
             } else {
                 $temp = StoreChasierDetailTemp::where([
-                            'user_id' => Auth::id(),
-                            'stock_id' => $request['stock_id'],
-                            'product_price' => substr((float)str_replace('.', '', $request['price']), 3)
-                        ])->first();
+                    'user_id' => Auth::id(),
+                    'stock_id' => $request['stock_id'],
+                    'product_price' => substr((float) str_replace('.', '', $request['price']), 3)
+                ])->first();
+
+
                 if (isset($temp)) {
-                    $temp->qty = $temp->qty + (float)str_replace(',', '.', $request['qty']);
+                    $temp->qty = $temp->qty + (float) str_replace(',', '.', $request['qty']);
                     if (strlen($request['disc_persen']) > 0) {
                         $temp->disc = round(($temp->product_price * $temp->qty) * str_replace(',', '.', $request['disc_persen']) / 100);
-                        $temp->disc_persen = (float)str_replace(',', '.', $request['disc_persen']);
+                        $temp->disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
                         $temp->disc_persen = 0;
@@ -400,15 +425,21 @@ class StoreChasierController extends Controller {
 
                     $temp->type_product_id = $product->type_product_id;
                     $temp->product_name = $product->name;
-                    $temp->qty = (float)str_replace(',', '.', $request['qty']);
-                    $temp->product_price = substr((float)str_replace('.', '', $request['price']), 3);
+                    $temp->qty = (float) str_replace(',', '.', $request['qty']);
+                    $temp->product_price = (float) str_replace(['Rp.', ' ', '.'], '', $request['price']);
                     if (strlen($request['disc_persen']) > 0) {
-                        $temp->disc = round(($temp->product_price * $temp->qty) * (float)str_replace(',', '.', $request['disc_persen']) / 100);
-                        $temp->disc_persen = (float)str_replace(',', '.', $request['disc_persen']);
+                        $disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
+                        $qty = (float) str_replace(',', '.', $request['qty']);
+                        $product_price = (float) str_replace(['Rp.', ' ', '.'], '', $request['price']);
+
+                        $temp->disc = ($product_price * $qty) * ( $disc_persen / 100 );
+                        // dd($temp->disc);
+                        $temp->disc_persen = (float) str_replace(',', '.', $request['disc_persen']);
                     } else {
                         $temp->disc = 0;
                         $temp->disc_persen = 0;
                     }
+
                     $temp->save();
                 }
             }
@@ -420,7 +451,8 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function barcode() {
+    public function barcode()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
@@ -431,10 +463,10 @@ class StoreChasierController extends Controller {
             if (isset($stock)) {
                 try {
                     $temp = StoreChasierDetailTemp::where([
-                                'user_id' => Auth::id(),
-                                'stock_id' => $stock->id,
-                                'product_price' => $stock->price,
-                            ])->first();
+                        'user_id' => Auth::id(),
+                        'stock_id' => $stock->id,
+                        'product_price' => $stock->price,
+                    ])->first();
                     if (isset($temp)) {
                         $temp->qty = $temp->qty + 1;
                         $temp->save();
@@ -465,20 +497,21 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public function save() {
+    public function save()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
 
         try {
             $stock = StoreInventoryProduct::findOrFail($request['stock_id']);
-            if ($stock->qty < (float)str_replace(',', '.', $request['qty'])) {
+            if ($stock->qty < (float) str_replace(',', '.', $request['qty'])) {
                 $success = false;
                 $message = 'Insufficient Stock.';
             } else {
                 $temp = StoreChasierDetailTemp::findOrFail($request['id']);
                 if (isset($temp)) {
-                    $temp->qty = (float)str_replace(',', '.', $request['qty']);
+                    $temp->qty = (float) str_replace(',', '.', $request['qty']);
                     $temp->disc = round(($temp->product_price * $temp->qty) * $temp->disc_persen / 100);
 
                     $temp->save();
@@ -495,7 +528,8 @@ class StoreChasierController extends Controller {
         return json_encode(['success' => $success, 'message' => $message]);
     }
 
-    public static function generateCode($date) {
+    public static function generateCode($date)
+    {
         $count = StoreChasier::where('code', 'LIKE', '%STR' . $date . '%')->count();
         $n = 0;
         if ($count > 0) {
@@ -505,7 +539,8 @@ class StoreChasierController extends Controller {
         return (string) 'STR' . $date . sprintf('%04s', ($n + 1));
     }
 
-    public static function generateCodeWo($date) {
+    public static function generateCodeWo($date)
+    {
         $count = Workorder::where('code', 'LIKE', '%WRK' . $date . '%')->count();
         $n = 0;
         if ($count > 0) {

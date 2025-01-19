@@ -201,7 +201,7 @@ foreach ($invoice->detail as $index => $value){
                     <div class="row">
 
                         <div class="col-sm-6 top-left">
-                            <img src="{{asset('plugins/images/logo-inv.png')}}" class="img-fluid">
+                            <img style="width:30%" src="{{asset('plugins/images/logo-color.PNG')}}" class="img-fluid">
                         </div>
 
                         <div class="col-sm-6 top-right text-center">
