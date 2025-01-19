@@ -7,7 +7,8 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">{{ __('Store') }}</a></li>
-                            <li class="breadcrumb-item"><a href="{{ route('store-product.index') }}">{{ __('Product') }}</a></li>
+                            <li class="breadcrumb-item"><a href="{{ route('store-product.index') }}">{{ __('Product')
+                                    }}</a></li>
                             <li class="breadcrumb-item active" aria-current="page">{{ __('Edit') }}</li>
                         </ol>
                     </nav>
@@ -38,7 +39,8 @@
                 </div>
                 @endif
 
-                <form class="form-horizontal" action="{{ route('store-product.update', $storeProduct->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('store-product.update', $storeProduct->id) }}"
+                    method="POST" enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
@@ -46,39 +48,47 @@
                         <div class="col-sm-6">
 
                             <div class="form-group row">
-                                <label for="type_product" class="col-sm-2 text-left control-label col-form-label">{{ __('Type Item') }}</label>
+                                <label for="type_product" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Type Item') }}</label>
                                 <div class="col-sm-10">
-                                    <select class="select2 form-control custom-select" id="type_product_id" name="type_product_id" style="width: 100%;">
-                                        @foreach($typeProducts as $typeProduct)                                
-                                        <option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>    
+                                    <select class="select2 form-control custom-select" id="type_product_id"
+                                        name="type_product_id" style="width: 100%;">
+                                        @foreach($typeProducts as $typeProduct)
+                                        <option value="{{$typeProduct->id}}">{{$typeProduct->name}}</option>
                                         @endforeach
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="barcode" class="col-sm-2 text-left control-label col-form-label">{{ __('Barcode') }}</label>
+                                <label for="barcode" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Barcode') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="barcode" name="barcode" placeholder="" value="{{ $storeProduct->barcode }}" readonly>
+                                    <input type="text" class="form-control" id="barcode" name="barcode" placeholder=""
+                                        value="{{ $storeProduct->barcode }}" readonly>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="name" name="name" placeholder="Name Product" value="{{ $storeProduct->name }}" required>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        placeholder="Name Product" value="{{ $storeProduct->name }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image') }}</label>
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Image')
+                                    }}</label>
                                 <div class="col-sm-10">
                                     @if(!empty($storeProduct->image))
                                     <img src="{{ asset($storeProduct->image_url) }}" class="mb-2 img-fluid img-view">
                                     @endif
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="image" name="image">
-                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>
+                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose
+                                            file...') }}</label>
                                         @error('image')
                                         <div class="invalid-feedback">{{ $message }}k</div>
                                         @enderror
@@ -87,14 +97,17 @@
                             </div>
 
                             <div class="form-group row">
-                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Document') }}</label>
+                                <label for="name" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Document') }}</label>
                                 <div class="col-sm-10">
                                     @if(!empty($storeProduct->document))
-                                    <a href="{{ asset($storeProduct->document_url) }}" target="_blank"><b><i>Download Current File</i></b></a>
+                                    <a href="{{ asset($storeProduct->document_url) }}" target="_blank"><b><i>Download
+                                                Current File</i></b></a>
                                     @endif
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="document" name="document">
-                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose file...') }}</label>
+                                        <label class="custom-file-label" for="validatedCustomFile">{{ __('Choose
+                                            file...') }}</label>
                                         @error('document')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                         @enderror
@@ -107,37 +120,55 @@
                         <div class="col-sm-6">
 
                             <div class="form-group row">
-                                <label for="um" class="col-sm-2 text-left control-label col-form-label">{{ __('Unit') }}</label>
+                                <label for="um" class="col-sm-2 text-left control-label col-form-label">{{ __('Unit')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="um" name="um" placeholder="Unit" value="{{ $storeProduct->um }}" required>
+                                    <input type="text" class="form-control" id="um" name="um" placeholder="Unit"
+                                        value="{{ $storeProduct->um }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP') }}</label>
+                                <label for="density" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Density') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="hpp" name="hpp" placeholder="" value="{{ $storeProduct->hpp }}" required>
+                                    <input type="text" class="form-control" id="density" name="density"
+                                        placeholder="Density" value="{{ $storeProduct->density}}">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="margin_profit" class="col-sm-2 text-left control-label col-form-label">{{ __('Margin Profit (%)') }}</label>
+                                <label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP')
+                                    }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="margin_profit" name="margin_profit" placeholder="" value="{{ $storeProduct->margin_profit }}" required>
+                                    <input type="text" class="form-control" id="hpp" name="hpp" placeholder=""
+                                        value="{{ $storeProduct->hpp }}" required>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('') }}</label>
+                                <label for="margin_profit" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Margin Profit (%)') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="margin_profit" name="margin_profit"
+                                        placeholder="" value="{{ $storeProduct->margin_profit }}" required>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('')
+                                    }}</label>
                                 <div class="col-sm-10">
                                     <button type="button" id="calculate" class="btn btn-default">Calculate</button>
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="price" class="col-sm-2 text-left control-label col-form-label">{{ __('Price') }}</label>
+                                <label for="price" class="col-sm-2 text-left control-label col-form-label">{{
+                                    __('Price') }}</label>
                                 <div class="col-sm-10">
-                                    <input type="text" class="form-control" id="price" name="price" placeholder="" value="{{ $storeProduct->price }}" readonly>
+                                    <input type="text" class="form-control" id="price" name="price" placeholder=""
+                                        value="{{ $storeProduct->price }}" readonly>
                                 </div>
                             </div>
 

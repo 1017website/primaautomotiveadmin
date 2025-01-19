@@ -74,6 +74,7 @@ class StoreProductController extends Controller
             $validateData['berat_jenis'] = str_replace(',', '.', str_replace('.', '', $request->berat_jenis));
             $validateData['berat_kemasan'] = str_replace(',', '.', str_replace('.', '', $request->berat_kemasan));
             $validateData['berat_timbang'] = str_replace(',', '.', str_replace('.', '', $request->berat_timbang));
+            $validateData['density'] = $request['density'];
 
             $storeProduct = StoreProduct::create($validateData);
             $qty = str_replace(',', '.', $request->qty);
@@ -183,6 +184,7 @@ class StoreProductController extends Controller
         $validateData['hpp'] = substr(str_replace('.', '', $request->hpp), 3);
         $validateData['price'] = substr(str_replace('.', '', $request->price), 3);
         $validateData['margin_profit'] = str_replace(',', '.', $request->margin_profit);
+        $validateData['density'] = $request['density'];
 
         $storeProduct->update($validateData);
 

@@ -108,6 +108,16 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
                 <div class="border-top"></div>
                 <div class="row p-3">
                     <div class="col-sm-2">
+                        <strong>{{ __('Density') }}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        {{ $storeProduct->density }}
+                    </div>
+                </div>
+
+                <div class="border-top"></div>
+                <div class="row p-3">
+                    <div class="col-sm-2">
                         <strong>{{ __('Document') }}</strong>
                     </div>
                     <div class="col-sm-10">

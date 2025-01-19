@@ -132,6 +132,13 @@
                             </div>
 
                             <div class="form-group row">
+                                <label for="density" class="col-sm-2 text-left control-label col-form-label">{{ __('Density') }}</label>
+                                <div class="col-sm-10">
+                                    <input type="text" class="form-control" id="density" name="density" placeholder="Density" value="{{ old('density') }}">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
                                 <label for="hpp" class="col-sm-2 text-left control-label col-form-label">{{ __('HPP') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="hpp" name="hpp" placeholder="" value="{{ old('hpp') }}" required>
