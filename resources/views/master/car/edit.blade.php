@@ -40,80 +40,91 @@
                 <div class="form-group row">
                     <label for="images" class="col-sm-2 control-label">Images</label>
                     <div class="col-sm-10">
-                        <form method="post" action="{{url('/car/uploadImages')}}" enctype="multipart/form-data" class="dropzone" id="dropzoneImages">
+                        <form method="post" action="{{url('/car/uploadImages')}}" enctype="multipart/form-data"
+                            class="dropzone" id="dropzoneImages">
                             {{ csrf_field() }}
-                        </form>   
+                        </form>
                     </div>
                 </div>
 
-                <form class="form-horizontal" action="{{ route('car.update', $car->id) }}" method="POST" enctype="multipart/form-data">
+                <form class="form-horizontal" action="{{ route('car.update', $car->id) }}" method="POST"
+                    enctype="multipart/form-data">
                     @csrf
                     @method('PUT')
 
                     <div class="form-group row">
-                        <label for="car_type_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type') }}</label>
+                        <label for="car_type_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Type')
+                            }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="car_type_id" name="car_type_id" style="width: 100%;">
-                                @foreach($carType as $row)                                
-                                <option value="{{$row->id}}">{{$row->name}}</option>    
+                            <select class="select2 form-control custom-select" id="car_type_id" name="car_type_id"
+                                style="width: 100%;">
+                                @foreach($carType as $row)
+                                <option value="{{$row->id}}">{{$row->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="car_type_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand') }}</label>
+                        <label for="car_type_id" class="col-sm-2 text-left control-label col-form-label">{{ __('Brand')
+                            }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="car_brand_id" name="car_brand_id" style="width: 100%;">
-                                @foreach($carBrand as $row)                                
-                                <option value="{{$row->id}}">{{$row->name}}</option>    
+                            <select class="select2 form-control custom-select" id="car_brand_id" name="car_brand_id"
+                                style="width: 100%;">
+                                @foreach($carBrand as $row)
+                                <option value="{{$row->id}}">{{$row->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name') }}</label>
+                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
+                            }}</label>
                         <div class="col-sm-10">
-                            <input value="{{ $car->name }}" type="text" class="form-control" id="name" name="name" placeholder="Name Car" required="true">
+                            <input value="{{ $car->name }}" type="text" class="form-control" id="name" name="name"
+                                placeholder="Name Car" required="true">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="year" class="col-sm-2 text-left control-label col-form-label">{{ __('Year') }}</label>
+                        <label for="year" class="col-sm-2 text-left control-label col-form-label">{{ __('Year')
+                            }}</label>
                         <div class="col-sm-10">
-                            <input value="{{ $car->year }}" type="text" class="form-control" id="year" name="year" placeholder="Year Car" required="true">
+                            <input value="{{ $car->year }}" type="text" class="form-control" id="year" name="year"
+                                placeholder="Year Car" required="true">
                         </div>
                     </div>
 
                     <div class="border-top"></div>
-					<div class="form-group row">
-					<div class="col-sm-12 pull-right">
-						<button type="submit" class="btn btn-default btn-action">Save</button>
-                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm-12 pull-right">
+                            <button type="submit" class="btn btn-default btn-action">Save</button>
+                        </div>
                     </div>
                 </form>
-				<fieldset class="border p-2">
-					<legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('Profile Car') }}</legend>
-					<div class="row">
-						<div class="col-sm-5">
-							<select class="select2 form-control custom-select" id="service_id" name="service_id" style="width: 100%;">                              
-								@foreach($service as $row)                                
-								<option value="{{$row->id}}">{{$row->name}}</option>    
-								@endforeach
-							</select>
-						</div>					
-						<div class="col-sm-1">
-							<button type="button" class="btn btn-default btn-action add">{{ __('Add') }}</button>
-						</div>
-					</div>
-					<div class="row" style="margin-top:10px;">
-						<div class="col-sm-6">
-						<div class="detail">
+                <fieldset class="border p-2">
+                    <legend style="font-size: 15px; font-style: italic" class="w-auto">{{ __('Profile Car') }}</legend>
+                    <div class="row">
+                        <div class="col-sm-5">
+                            <select class="select2 form-control custom-select" id="service_id" name="service_id"
+                                style="width: 100%;">
+                                @foreach($service as $row)
+                                <option value="{{$row->id}}">{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-sm-1">
+                            <button type="button" class="btn btn-default btn-action add">{{ __('Add') }}</button>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top:10px;">
+                        <div class="col-sm-6">
+                            <div class="detail">
 
-						</div>
-						</div>
-				</fieldset>
+                            </div>
+                        </div>
+                </fieldset>
             </div>
         </div>
 
@@ -186,79 +197,68 @@ $(document).ready(function(){
 		}
 		
         //process upload
-        // Dropzone.options.dropzoneImages = {
-            // thumbnailWidth: null,
-            // thumbnailHeight: null,
-            // uploadMultiple: true,
-            // maxFilesize: 1,
-            // maxFiles: 5,
-            // parallelUploads: 1,
-            // renameFile: function (file) {
-                // var dt = new Date();
-                // var time = dt.getTime();
-                // let newName = time + '_' + file.name;
-                // file.newName = newName;
-                // return newName;
-            // },
-            // acceptedFiles: ".jpeg,.jpg,.png",
-            // addRemoveLinks: true,
-            // timeout: 50000,
-            // init: function () {
-                // var existingFiles = <?php echo json_encode($carImages); ?>;
-                // myDropzone = this;
-                // $.each(existingFiles, function (key, value) {
-                    // var mockFile = {
-                        // name: value.image,
-                        // size: value.size,
-                        // status: Dropzone.ADDED,
-                        // url: value.image_url,
-                    // };
-                    // myDropzone.emit("addedfile", mockFile);
-                    // myDropzone.emit("thumbnail", mockFile, value.image_url);
-                    // myDropzone.emit("complete", mockFile);
-                    // myDropzone.files.push(mockFile);
-                // });
+        Dropzone.options.dropzoneImages = {
+            thumbnailWidth: null,
+            thumbnailHeight: null,
+            uploadMultiple: true,
+            maxFilesize: 1, // 1MB limit
+            maxFiles: 5,
+            parallelUploads: 1,
+            renameFile: function(file) {
+                const timestamp = Date.now();
+                const newName = `${timestamp}_${file.name}`;
+                file.newName = newName;
+                return newName;
+            },
+            acceptedFiles: ".jpeg,.jpg,.png",
+            addRemoveLinks: true,
+            timeout: 50000,
+            init: function() {
+                const existingFiles = @json($carImages);
+                const dropzoneInstance = this;
 
-                // this.on("sending", function (file, xhr, formData) {
-                    // formData.append("filesize", file.size);
-                // });
-            // },
-            // removedfile: function (file)
-            // {
-                // if (file.newName) {
-                    // var name = file.newName;
-                // } else {
-                    // var name = file.name;
-                // }
-                // $.ajax({
-                    // headers: {
-                        // 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    // },
-                    // type: 'POST',
-                    // url: '{{ url("car/deleteImages") }}',
-                    // data: {
-                        // _token: "{{ csrf_token() }}",
-                        // filename: name
-                    // },
-                    // success: function (data) {
-                        // Command: toastr["success"]("File has been successfully removed")
-                    // },
-                    // error: function (e) {
-                        // console.log(e);
-                    // }});
-                // var fileRef;
-                // return (fileRef = file.previewElement) != null ?
-                        // fileRef.parentNode.removeChild(file.previewElement) : void 0;
-            // },
-            // success: function (file, response)
-            // {
-                // Command: toastr["success"]("File has been successfully added")
-            // },
-            // error: function (file, response)
-            // {
-                // Command: toastr["error"](response)
-            // }
-        // };
+                existingFiles.forEach(function(file) {
+                    const mockFile = {
+                        name: file.image,
+                        size: file.size,
+                        url: `{{ asset('') }}${file.image_url}`,
+                    };
+                    dropzoneInstance.emit("addedfile", mockFile);
+                    dropzoneInstance.emit("thumbnail", mockFile, mockFile.url);
+                    dropzoneInstance.emit("complete", mockFile);
+                    dropzoneInstance.files.push(mockFile);
+                });
+
+                this.on("sending", function(file, xhr, formData) {
+                    formData.append("filesize", file.size);
+                });
+            },
+            removedfile: function(file) {
+                const fileName = file.newName || file.name;
+                $.ajax({
+                    headers: { 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content') },
+                    type: 'POST',
+                    url: '{{ url("car/deleteImages") }}',
+                    data: { _token: "{{ csrf_token() }}", filename: fileName },
+                    success: function() {
+                        toastr.success("File has been successfully removed");
+                    },
+                    error: function(error) {
+                        console.error(error);
+                        toastr.error("Failed to remove file.");
+                    },
+                });
+
+                const fileRef = file.previewElement;
+                if (fileRef) fileRef.parentNode.removeChild(fileRef);
+            },
+            success: function(file, response) {
+                toastr.success("File has been successfully added");
+            },
+            error: function(file, response) {
+                toastr.error(response);
+            },
+        };
     </script>
 
 </x-app-layout>
