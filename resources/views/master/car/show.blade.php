@@ -64,8 +64,8 @@
                         <div class="car-images">
                             <div class="row">
                                 @foreach($carImages as $images)
-                                <div class="col-sm-3">
-                                    <img src="{{asset($images->image_url)}}" class="default-border-radius" style="height:20rem;width:100%;object-fit: cover"/>
+                                <div class="col-sm-4">
+                                    <img src="{{asset($images->image_url)}}" class="default-border-radius" style="height:auto;width:100%;object-fit: cover"/>
                                 </div>
                                 @endforeach
                             </div>
@@ -185,7 +185,7 @@
 				url: "{{ route('detailCarShow') }}",
 				type: 'GET',
 				data: {
-					'car_id': '0'
+					'car_id': '<?= $car->id ?>'
 				},
 				dataType: 'html',
 				success: function (res) {
