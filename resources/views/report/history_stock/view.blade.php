@@ -17,8 +17,8 @@
                 <?php $no = 1; foreach ($models as $row => $value) { ?>
                     <tr>
                         <td align="center">{{ $no++ }}</td>
-                        <td align="left">{{ $value->typeProduct->name }}</td>
-                        <td align="left">{{ $value->product->name }}</td>
+                        <td align="left">{{ $value->TypeProduct ? $value->typeProduct->name : 'Deleted Data' }}</td>
+                        <td align="left">{{ $value->product ? $value->product->name : 'Deleted Product' }}</td>
                         <td align="left">{{ $value->description }}</td>
                         <td align="left">{{ date('d-m-Y', strtotime($value->created_at)) }}</td>
                         <td align="right">{{ __('Rp. ') }}@price($value->price)</td>

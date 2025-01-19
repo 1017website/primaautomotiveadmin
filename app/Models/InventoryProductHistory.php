@@ -25,11 +25,11 @@ class InventoryProductHistory extends Model {
     }
 
     public function product() {
-        return $this->hasOne(StoreProduct::class, 'id', 'product_id');
+        return $this->hasOne(StoreProduct::class, 'id', 'product_id')->withTrashed();
     }
 
     public function typeProduct() {
-        return $this->hasOne(StoreTypeProduct::class, 'id', 'type_product_id');
+        return $this->hasOne(StoreTypeProduct::class, 'id', 'type_product_id')->withTrashed();
     }
 
 }

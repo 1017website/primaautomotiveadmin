@@ -12,13 +12,13 @@
             </thead>
             <tbody>
                 <?php $no = 1; foreach ($models as $row => $value) { ?>
-                    <tr>
-                        <td align="center">{{ $no++ }}</td>
-                        <td align="left">{{ $value->typeProduct->name }}</td>
-                        <td align="left">{{ $value->product->name }}</td>
-                        <td align="right">{{ __('Rp. ') }}@price($value->price)</td>
-                        <td align="right">{{ number_format($value->qty, 0, ',', '.') }}</td>
-                    </tr>
+                <tr>
+                    <td align="center">{{ $no++ }}</td>
+                    <td align="left">{{ $value->typeProduct ? $value->typeProduct->name : 'Deleted Data' }}</td>
+                    <td align="left"> {{ $value->product ? $value->product->name : 'Deleted Product' }}</td>
+                    <td align="right">{{ __('Rp. ') }}@price($value->price)</td>
+                    <td align="right">{{ number_format($value->qty, 0, ',', '.') }}</td>
+                </tr>
                 <?php } ?>
             </tbody>
             <tfoot>
@@ -27,4 +27,3 @@
         </table>
     </div>
 </div>
-
