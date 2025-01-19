@@ -98,9 +98,11 @@ class CarController extends Controller
     public function show(Car $car)
     {
         $carImages = CarImage::where(['car_id' => $car->id])->get();
+        $detail = CarProfile::where(['car_id' => $car->id])->get();
+        // dd($detail);
         // var_dump($carImages);die;
 
-        return view('master.car.show', compact('car', 'carImages'));
+        return view('master.car.show', compact('car', 'carImages', 'detail'));
     }
 
     public function edit(Car $car)
@@ -108,32 +110,44 @@ class CarController extends Controller
         $carBrand = CarBrand::all();
         $carType = CarType::all();
 
-        //move image to temp
+        // Move image to temp if not already present
         $carImage = CarImage::where(['car_id' => $car->id])->get();
         foreach ($carImage as $images) {
-            $imageUpload = new CarImageTemp();
-            $imageUpload->user_id = Auth::id();
-            $imageUpload->image = $images->image;
-            $imageUpload->image_url = $images->image_url;
-            $imageUpload->size = $images->size;
-            $imageUpload->save();
+            $exists = CarImageTemp::where([
+                'user_id' => Auth::id(),
+                'image' => $images->image,
+                'image_url' => $images->image_url,
+                'size' => $images->size,
+            ])->exists();
+
+            if (!$exists) {
+                $imageUpload = new CarImageTemp();
+                $imageUpload->user_id = Auth::id();
+                $imageUpload->image = $images->image;
+                $imageUpload->image_url = $images->image_url;
+                $imageUpload->size = $images->size;
+                $imageUpload->save();
+            }
         }
-        //move image to temp
+
         $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
 
+        // Clear temporary car profile data
         $sql = "
-            delete from car_profile_tmp where 
-            session_id = '" . Session()->getid() . "'
-        ";
+        delete from car_profile_tmp where 
+        session_id = '" . Session()->getid() . "'
+    ";
         DB::statement($sql);
 
+        // Move car profile data to temporary table
         $detail = CarProfile::where(['car_id' => $car->id])->get();
+        // $detailTemp = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
         foreach ($detail as $row) {
-            $detail = new CarProfileTmp();
-            $detail->session_id = Session()->getid();
-            $detail->car_id = $car->id;
-            $detail->service_id = $row->service_id;
-            $detail->save();
+            $detailTmp = new CarProfileTmp();
+            $detailTmp->session_id = Session()->getid();
+            $detailTmp->car_id = $car->id;
+            $detailTmp->service_id = $row->service_id;
+            $detailTmp->save();
         }
 
         $service = Service::whereRaw('deleted_at is null')->get();
@@ -141,33 +155,45 @@ class CarController extends Controller
         return view('master.car.edit', compact('service', 'car', 'carBrand', 'carType', 'carImages'));
     }
 
-    public function update(Request $request, Car $car)
-    {
 
+    public function update(Request $request, $carId)
+    {
         DB::beginTransaction();
         try {
             $request->validate([
                 'car_brand_id' => 'required',
                 'car_type_id' => 'required',
                 'year' => 'required',
-                //'name' => 'required|max:255|unique:cars,name,' . $car->id . ',id,year,deleted_at,NULL',
                 'name' => 'required|max:255',
             ]);
 
+            // Find the car or throw an error if not found
+            $car = Car::findOrFail($carId);
             $car->update($request->all());
-            //images
-            CarImage::where(['car_id' => $car->id])->delete();
-            $carImages = CarImageTemp::where(['user_id' => Auth::id()])->get();
-            foreach ($carImages as $images) {
-                $imageUpload = new CarImage();
-                $imageUpload->car_id = $car->id;
-                $imageUpload->image = $images->image;
-                $imageUpload->image_url = $images->image_url;
-                $imageUpload->size = $images->size;
-                $imageUpload->save();
+
+            // Update Images
+            $carImagesTemp = CarImageTemp::where('user_id', Auth::id())->get();
+
+            foreach ($carImagesTemp as $tempImage) {
+                // Check if the image already exists in CarImage
+                $exists = CarImage::where([
+                    'car_id' => $car->id,
+                    'image' => $tempImage->image,
+                ])->exists();
+
+                if (!$exists) {
+                    // Only add new images
+                    CarImage::create([
+                        'car_id' => $car->id,
+                        'image' => $tempImage->image,
+                        'image_url' => $tempImage->image_url,
+                        'size' => $tempImage->size,
+                    ]);
+                }
             }
-            CarImageTemp::where(['user_id' => Auth::id()])->delete();
-            //images
+
+            // Clear temporary images
+            CarImageTemp::where('user_id', Auth::id())->delete();
 
             $sql = "
                 delete from car_profile where 
@@ -176,11 +202,21 @@ class CarController extends Controller
             DB::statement($sql);
 
             $detail = CarProfileTmp::where(['session_id' => Session()->getid()])->get();
+
             foreach ($detail as $row) {
-                $detail = new CarProfile();
-                $detail->car_id = $car->id;
-                $detail->service_id = $row->service_id;
-                $detail->save();
+                // Check if the service already exists in CarProfile
+                $exists = CarProfile::where([
+                    'car_id' => $car->id,
+                    'service_id' => $row->service_id,
+                ])->exists();
+
+                if (!$exists) {
+                    // Only add new service
+                    CarProfile::create([
+                        'car_id' => $car->id,
+                        'service_id' => $row->service_id,
+                    ]);
+                }
             }
 
             $sql = "
@@ -195,7 +231,7 @@ class CarController extends Controller
             $message = $e->getMessage();
         }
         return redirect()->route('car.index')
-            ->with('success', 'Car updated successfully');
+            ->with('success', 'Car updated successfully.');
     }
 
     public function destroy(Car $car)
@@ -268,7 +304,7 @@ class CarController extends Controller
     public function detailCarShow()
     {
         $request = array_merge($_POST, $_GET);
-        $detail = CarProfileTmp::where('session_id', Session()->getid())->get();
+        $detail = CarProfile::where(['car_id' => $request['car_id']])->get();
 
         return view('master.car.detailShow', compact('detail'));
     }
