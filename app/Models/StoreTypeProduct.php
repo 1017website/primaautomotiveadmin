@@ -7,21 +7,25 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Wildside\Userstamps\Userstamps;
 
-class StoreTypeProduct extends Model {
+class StoreTypeProduct extends Model
+{
 
     use HasFactory,
         SoftDeletes,
         Userstamps;
+    protected $table = 'store_type_products';
 
     protected $fillable = [
         'name'
     ];
 
-    public function userCreated() {
+    public function userCreated()
+    {
         return $this->hasOne(User::class, 'id', 'created_by');
     }
 
-    public function userUpdated() {
+    public function userUpdated()
+    {
         return $this->hasOne(User::class, 'id', 'updated_by');
     }
 
