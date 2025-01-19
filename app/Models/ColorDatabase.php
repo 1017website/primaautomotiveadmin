@@ -16,9 +16,12 @@ class ColorDatabase extends Model
     protected $table = 'color_database';
 
     protected $fillable = [
-        'id_color_code',
-        'id_color_group',
-        'id_color_category',
+        // 'id_color_code',
+        // 'id_color_group',
+        // 'id_color_category',
+        'color_code',
+        'color_group',
+        'color_category',
         'id_car_brands',
         'name',
         'code_price',

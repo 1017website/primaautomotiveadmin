@@ -54,10 +54,10 @@
                         <tbody>
                             @foreach ($colorDatabase as $row)
                             <tr>
-                                <td>{{ $row->code->name }}</td>
+                                <td>{{ $row->color_code }}</td>
                                 <td>{{ $row->name }}</td>
-                                <td>{{ $row->group->name }}</td>
-                                <td>{{ $row->category->name }}</td>
+                                <td>{{ $row->color_group }}</td>
+                                <td>{{ $row->color_category }}</td>
                                 <td>{{ $row->brand->name }}</td>
                                 <td>{{ $row->code_price }}</td>
                                 {{-- @if($row->id_color_group != 0)

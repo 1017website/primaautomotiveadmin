@@ -41,21 +41,12 @@
                 <form class="form-horizontal" action="{{ route('color-database.store') }}" method="POST">
                     @csrf
                     <div class="form-group row">
-                        <label for="id_color_code" class="col-sm-2 text-left control-label col-form-label">{{ __('Color
+                        <label for="color_code" class="col-sm-2 text-left control-label col-form-label">{{ __('Color
                             Code')
                             }}</label>
                         <div class="col-sm-7">
-                            <select class="select2 form-control custom-select" id="id_color_code" name="id_color_code"
-                                style="width: 100%;">
-                                <option></option>
-                                @foreach($colorCode as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                data-target="#modal_color">New</button>
+                            <input type="text" class="form-control" id="color_code" name="color_code"
+                                value="{{ old('color_code') }}" placeholder="" required="true">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -67,39 +58,21 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="id_color_group" class="col-sm-2 text-left control-label col-form-label">{{ __('Color
+                        <label for="color_group" class="col-sm-2 text-left control-label col-form-label">{{ __('Color
                             Group')
                             }}</label>
                         <div class="col-sm-7">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                data-target="#modal_color_group">New</button>
+                            <input type="text" class="form-control" id="color_group" name="color_group"
+                                value="{{ old('color_group') }}" placeholder="" required="true">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label for="id_color_category" class="col-sm-2 text-left control-label col-form-label">{{
-                            __('Color Category')
+                        <label for="color_category" class="col-sm-2 text-left control-label col-form-label">{{ __('Color
+                            Category')
                             }}</label>
                         <div class="col-sm-7">
-                            <select class="select2 form-control custom-select" id="id_color_category"
-                                name="id_color_category" style="width: 100%;">
-                                <option></option>
-                                @foreach($colorCategory as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-sm-3">
-                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                data-target="#modal_color_category">New</button>
+                            <input type="text" class="form-control" id="color_category" name="color_category"
+                                value="{{ old('color_category') }}" placeholder="" required="true">
                         </div>
                     </div>
                     <div class="form-group row">
@@ -133,116 +106,6 @@
             </div>
         </div>
 
-        <!-- Modal for Add Color Code -->
-        <div class="modal fade" id="modal_color" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add New Color Code</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-
-                        <div class="form-group row">
-                            <label for=".name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
-                                }}</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control name" required="true">
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for=".id_color_group" class="col-sm-2 text-left control-label col-form-label">{{
-                                __('Color
-                                Group')
-                                }}</label>
-                            <div class="col-sm-10">
-                                <select class="select2 form-control custom-select id_color_group" id="id_color_group"
-                                    name="id_color_group" style="width: 100%;">
-                                    <option></option>
-                                    @foreach($colorGroup as $row)
-                                    <option value="{{$row->id}}">{{$row->name}}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default add" data-update="color">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal for Add Color Group -->
-        <div class="modal fade" id="modal_color_group" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add New Color Group</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label for=".name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
-                                }}</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control name" required="true">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default add" data-update="colorGroup">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal for Add Color Category -->
-        <div class="modal fade" id="modal_color_category" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Add New Color Category</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="form-group row">
-                            <label for=".name" class="col-sm-2 text-left control-label col-form-label">{{ __('Name')
-                                }}</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control name" required="true">
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label for=".cost" class="col-sm-2 text-left control-label col-form-label">{{ __('Cost (%)')
-                                }}</label>
-                            <div class="col-sm-10">
-                                <input type="number" class="form-control cost" id="cost" name="cost" placeholder=""
-                                    required="true" step="0.01">
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-default add" data-update="colorCategory">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 
     <script type="text/javascript">
@@ -266,74 +129,6 @@
                 }
                 if ($(this).val().indexOf(',') !== - 1 && event.keyCode == 188)
                         event.preventDefault();
-            });
-			
-
-            $('#id_color_code').on('change', function() {
-                let selectedValue = $(this).val();
-                if (selectedValue) {
-                    $.ajax({
-                        url: "{{ route('color-database.getColorGroups') }}",
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            'id_color_code': selectedValue
-                        },
-                        success: function(data) {
-                            $('#id_color_group').append('<option></option>'); 
-                            
-                            $('#id_color_group').append('<option selected value="'+ data.id +'">'+ data.name +'</option>');
-                            
-                            if (data.length > 0) {
-                                $('#id_color_group').val(data[0].id); 
-                            }
-                        },
-                        error: function(err) {
-                            console.error("Error fetching color groups:", err);
-                        }
-                    });
-                } else {
-                    $('#id_color_group').empty();
-                    $('#id_color_group').append('<option></option>'); 
-                }
-            });
-
-            $('.add').on('click', function () {
-                data = {};
-                data.value = $(this).parent().parent().find('.name').val();
-                data.type = $(this).data('update');
-                data.color = $(this).closest('.modal-content').find('.name').val();
-                data.colorGroup = $(this).closest('.modal-content').find('.id_color_group').val();
-                data.cost = $(this).closest('.modal-content').find('.cost').val();
-                $.ajax({
-                    url: "{{ route('color-database.saveMaster') }}",
-                    type: 'POST',
-                    dataType: 'json',
-                    data: data,
-                    success: function (res) {
-                        console.log(data);
-                        if (res.success) {
-                            if (data.type == 'color') {
-                                popup(res.message, 'success');
-                                console.log(res.html);
-                                $('#id_color_code').append(res.html)
-                            }
-                            if (data.type == 'colorGroup') {
-                                popup(res.message, 'success');
-                                console.log(res.html);
-                                $('#id_color_group').append(res.html)
-                            }
-                            if (data.type == 'colorCategory') {
-                                popup(res.message, 'success');
-                                console.log(res.html);
-                                $('#id_color_category').append(res.html)
-                            }
-                            $(".modal:visible").modal('toggle');
-                        } else {
-                            popup(res.message, 'error');
-                        }
-                    }
-                });
             });
         });    
 

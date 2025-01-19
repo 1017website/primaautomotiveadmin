@@ -42,25 +42,11 @@
                     @method('PUT')
 
                     <div class="form-group row">
-                        <label for="id_color_code" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Code')
+                        <label for="color_code" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Code')
                             }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_code" name="id_color_code"
-                                style="width: 100%;">
-                                @if($colorDatabase->id_color_code != 0)
-                                <option value="{{$colorDatabase->id_color_code}}">{{$colorDatabase->code->name}}</option>
-                                @foreach($colorCode as $row)
-                                @if ($row->id != $colorDatabase->code->id)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endif
-                                @endforeach
-                                @else
-                                <option></option>
-                                @foreach($colorCode as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                                @endif
-                            </select>
+                            <input value="{{ $colorDatabase->color_code }}" type="text" class="form-control" id="color_code" name="color_code"
+                                placeholder="" required="true">
                         </div>
                     </div>
 
@@ -74,48 +60,20 @@
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
+                        <label for="color_group" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Group')
                             }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_group" name="id_color_group"
-                                style="width: 100%;">
-                                @if($colorDatabase->id_color_group != 0)
-                                <option value="{{$colorDatabase->id_color_group}}">{{$colorDatabase->group->name}}</option>
-                                @foreach($colorGroup as $row)
-                                @if ($row->id != $colorDatabase->group->id)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endif
-                                @endforeach
-                                @else
-                                <option></option>
-                                @foreach($colorGroup as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                                @endif
-                            </select>
+                            <input value="{{ $colorDatabase->color_group }}" type="text" class="form-control" id="color_group" name="color_group"
+                                placeholder="" required="true">
                         </div>
                     </div>
 
                     <div class="form-group row">
-                        <label for="name" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Category')
+                        <label for="color_category" class="col-sm-2 text-left control-label col-form-label">{{ __('Color Category')
                             }}</label>
                         <div class="col-sm-10">
-                            <select class="select2 form-control custom-select" id="id_color_category" name="id_color_category"
-                                style="width: 100%;">
-                                @if($colorDatabase->id_color_category != 0)
-                                <option value="{{$colorDatabase->id_color_category}}">{{$colorDatabase->category->name}}</option>
-                                @foreach($colorCategory as $row)
-                                @if ($row->id != $colorDatabase->category->id)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endif
-                                @endforeach
-                                @else
-                                <option></option>
-                                @foreach($colorCategory as $row)
-                                <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                                @endif
-                            </select>
+                            <input value="{{ $colorDatabase->color_category }}" type="text" class="form-control" id="color_category" name="color_category"
+                                placeholder="" required="true">
                         </div>
                     </div>
 
@@ -166,36 +124,6 @@
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                }
-            });
-			
-
-            $('#id_color_code').on('change', function() {
-                let selectedValue = $(this).val();
-                if (selectedValue) {
-                    $.ajax({
-                        url: "{{ route('color-database.getColorGroups') }}",
-                        type: 'GET',
-                        dataType: 'json',
-                        data: {
-                            'id_color_code': selectedValue
-                        },
-                        success: function(data) {
-                            $('#id_color_group').append('<option></option>'); 
-                            
-                            $('#id_color_group').append('<option selected value="'+ data.id +'">'+ data.name +'</option>');
-                            
-                            if (data.length > 0) {
-                                $('#id_color_group').val(data[0].id); 
-                            }
-                        },
-                        error: function(err) {
-                            console.error("Error fetching color groups:", err);
-                        }
-                    });
-                } else {
-                    $('#id_color_group').empty();
-                    $('#id_color_group').append('<option></option>'); 
                 }
             });
         });

@@ -38,9 +38,9 @@ class ColorDatabaseController extends Controller
         $request->validate([
             'name' => 'required|max:255|unique:colors,name,NULL,id,deleted_at,NULL',
             'code_price' => 'required|integer',
-            'id_color_code' => 'required',
-            'id_color_group' => 'required',
-            'id_color_category' => 'required',
+            'color_code' => 'required|max:55',
+            'color_group' => 'required|max:55',
+            'color_category' => 'required|max:55',
             'id_car_brands' => 'required'
         ]);
 
@@ -65,9 +65,9 @@ class ColorDatabaseController extends Controller
         $request->validate([
             'name' => 'required|max:255|unique:colors,name,' . $colorDatabase->id . ',id,deleted_at,NULL',
             'code_price' => 'required|integer',
-            'id_color_code' => 'required',
-            'id_color_group' => 'required',
-            'id_color_category' => 'required',
+            'color_code' => 'required|max:55',
+            'color_group' => 'required|max:55',
+            'color_category' => 'required|max:55',
             'id_car_brands' => 'required'
         ]);
 
