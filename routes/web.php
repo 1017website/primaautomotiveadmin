@@ -61,10 +61,19 @@ use App\Http\Controllers\Wash\WashExpensesServiceController;
 use App\Http\Controllers\Wash\WashProductController;
 use App\Http\Controllers\Wash\WashSalesController;
 use App\Http\Controllers\Workshop\ColorDatabaseController;
+use App\Http\Middleware\CheckDashboardAccess;
 
 //hrm
-Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
-Route::resource('/', DashboardController::class)->middleware(['auth']);
+// Route::resource('dashboard', DashboardController::class)->middleware(['auth']);
+
+// Separates Dashboard
+Route::middleware(['auth', CheckDashboardAccess::class])->group(function () {
+    Route::resource('dashboard', DashboardController::class);
+    Route::resource('/', DashboardController::class)->middleware(['auth']);
+});
+
+Route::get('dashboard-guest', [DashboardController::class, 'dashboardGuest'])->name('dashboard-guest')->middleware(['auth']);
+
 Route::controller(SettingController::class)->group(function () {
     Route::post('attendance/set-timezone', 'setTimezone')->name('setTimezone')->middleware(['auth']);
     Route::post('attendance/restart-finger', 'restartFinger')->name('restartFinger')->middleware(['auth']);

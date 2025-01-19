@@ -18,6 +18,10 @@ class DashboardController extends Controller {
         return view('dashboard', compact('dataWorkshop', 'dataStore'));
     }
 
+    public function dashboardGuest(){
+        return view('dashboard-guest');
+    }
+
     private function getDataStore() {
         $dataStore = [];
 
