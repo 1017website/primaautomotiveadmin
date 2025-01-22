@@ -52,7 +52,7 @@ use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
 use App\Http\Controllers\Hrm\ReportHrmController;
-
+use App\Http\Controllers\Store\MaterialUsageController;
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
@@ -345,3 +345,10 @@ Route::controller(ColorDatabaseController::class)->group(function () {
     Route::post('color-database/saveMaster', 'saveMaster')->name('color-database.saveMaster')->middleware(['auth']);
 });
 Route::resource('color-database', ColorDatabaseController::class)->middleware(['auth']);
+
+
+Route::controller(MaterialUsageController::class)->group(function () {
+    Route::post('material-usage/price', 'price')->name('material-usage.price')->middleware(['auth']);
+    Route::post('material-usage/total', 'total')->name('material-usage.totalPrice')->middleware(['auth']);
+});
+Route::resource('material-usage', MaterialUsageController::class)->middleware(['auth']);

@@ -60,6 +60,8 @@
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="/master-rack" class="sidebar-link"><i class="mdi mdi-table-large"></i><span class="hide-menu">{{ __('Mixing Rack') }}</span></a></li>
                         <li class="sidebar-item"><a href="/mix" class="sidebar-link"><i class="mdi mdi-format-color-fill"></i><span class="hide-menu">{{ __('Mix') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/material-usage" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Material Usage') }}</span></a></li>
+                        <li class="sidebar-item"><a href="/material-usage-history" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Material Usage History') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-type-product" class="sidebar-link"><i class="mdi mdi-note-outline"></i><span class="hide-menu">{{ __('Type Items') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-product" class="sidebar-link"><i class="mdi mdi-barcode"></i><span class="hide-menu">{{ __('Product') }}</span></a></li>
                         <li class="sidebar-item"><a href="/store-stock" class="sidebar-link"><i class="mdi mdi-scale-balance"></i><span class="hide-menu">{{ __('Stock') }}</span></a></li>
