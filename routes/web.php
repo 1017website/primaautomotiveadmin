@@ -44,6 +44,8 @@ use App\Http\Controllers\Store\StoreSpendingController;
 use App\Http\Controllers\Store\StoreInvestmentController;
 use App\Http\Controllers\Store\ReportStoreController;
 use App\Http\Controllers\Store\MixController;
+use App\Http\Controllers\Store\MaterialUsageHistoryController;
+use App\Http\Controllers\Store\MaterialUsageController;
 //store
 //hrm
 use App\Http\Controllers\Hrm\FingerprintController;
@@ -52,7 +54,6 @@ use App\Http\Controllers\Hrm\AttendancePermitController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
 use App\Http\Controllers\Hrm\ReportHrmController;
-use App\Http\Controllers\Store\MaterialUsageController;
 //wash
 use App\Http\Controllers\Wash\WashServiceController;
 use App\Http\Controllers\Wash\WashAssetController;
@@ -352,3 +353,8 @@ Route::controller(MaterialUsageController::class)->group(function () {
     Route::post('material-usage/total', 'total')->name('material-usage.totalPrice')->middleware(['auth']);
 });
 Route::resource('material-usage', MaterialUsageController::class)->middleware(['auth']);
+
+Route::controller(MaterialUsageHistoryController::class)->group(function () {
+    Route::get('/report-store/material-usage-history/history-view', 'historyMaterialUsage')->name('historyMaterialUsage')->middleware(['auth']);
+});
+Route::resource('/report-store/material-usage-history', MaterialUsageHistoryController::class)->middleware(['auth']);
