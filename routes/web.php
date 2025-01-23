@@ -51,6 +51,7 @@ use App\Http\Controllers\Store\MaterialUsageController;
 use App\Http\Controllers\Hrm\FingerprintController;
 use App\Http\Controllers\Hrm\AttendanceController;
 use App\Http\Controllers\Hrm\AttendancePermitController;
+use App\Http\Controllers\Hrm\AttendanceSystemController;
 use App\Http\Controllers\Hrm\EmployeeCreditController;
 use App\Http\Controllers\Hrm\PayrollController;
 use App\Http\Controllers\Hrm\ReportHrmController;
@@ -270,6 +271,10 @@ Route::controller(AttendanceController::class)->group(function () {
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload')->middleware(['auth']);
     Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance')->middleware(['auth']);
 });
+
+//system
+Route::get('attendance/import-attendance-system', [AttendanceSystemController::class, 'importAttendanceSystem'])->withoutMiddleware(['auth'])->name('importAttendanceSystem');
+
 Route::resource('attendance', AttendanceController::class)->middleware(['auth']);
 
 Route::resource('attendance-permit', AttendancePermitController::class)->middleware(['auth']);
