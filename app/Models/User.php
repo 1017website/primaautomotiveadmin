@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\Controllers\UserRolesController;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -9,6 +10,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Collection;
 
 class User extends Authenticatable
 {
@@ -60,4 +62,14 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+    public function userRoles()
+    {
+        return $this->hasMany(UserRole::class, 'id_user', 'id');
+    }
+
+    public function menus()
+    {
+        return $this->belongsToMany(Menu::class, 'user_roles', 'id_user', 'id_menu');
+    }
 }
