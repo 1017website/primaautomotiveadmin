@@ -53,7 +53,7 @@
                             <tr>
                                 <td>{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ $row->mechanic->name }}</td>
-                                <td>{{ $row->product->name }}</td>
+                                <td>{{ $row->product ? $row->product->name : '-' }}</td>
                                 <td>{{ $row->typeProduct ? $row->typeProduct->name : '-' }}</td>
                                 <td>{{ $row->product ? $row->product->price : '-' }}</td>
                                 <td>{{ $row->qty }}</td>
