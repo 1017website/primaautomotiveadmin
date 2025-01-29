@@ -7,6 +7,7 @@ use App\Models\MaterialUsage;
 use App\Models\Mechanic;
 use App\Models\StoreInventoryProduct;
 use App\Models\StoreInventoryProductHistory;
+use App\Models\StoreProduct;
 use App\Models\StoreTypeProduct;
 use App\Models\TypeProduct;
 use Illuminate\Support\Facades\Redirect;
@@ -61,6 +62,7 @@ class MaterialUsageController extends Controller
                 $validateData['id_type_product'] = $productType->product->type_product_id;
 
                 // yg aku edit
+                $validateData['id_product'] = $stock->product->id;
                 $validateData['price'] = substr(str_replace('.', '', $request['price']), 3);
                 $validateData['total'] = substr(str_replace('.', '', $request['total']), 3);
                 $material_usage = MaterialUsage::create($validateData);
