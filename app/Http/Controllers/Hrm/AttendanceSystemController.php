@@ -18,7 +18,7 @@ class AttendanceSystemController extends Controller
             $url = 'https://developer.fingerspot.io/api/get_attlog';
             $randKey = bin2hex(random_bytes(25));
             ;
-            $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "start_date":"' . date('Y-m-d', strtotime(date('Y-m-d'))) . '", "end_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '"}';
+            $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "start_date":"' . date('Y-m-d', strtotime(date('Y-m-d'))) . '", "end_date":"' . date('Y-m-d') . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
             $ch = curl_init($url);
@@ -53,8 +53,8 @@ class AttendanceSystemController extends Controller
                         $date = strtotime($v['scan_date']);
                         $model->employee_id = $mechanic->id;
                         $model->finger_id = $v['pin'];
-                        $model->date = date('Y-m-d');
-                        $model->time = date('H:i:s');
+                        $model->date = date('Y-m-d', $date);
+                        $model->time = date('H:i:s', $date);
                         $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
                         $type = "";
                         if ($v['verify'] == 1) {
