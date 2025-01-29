@@ -67,7 +67,7 @@ class MaterialUsageController extends Controller
 
                 //history
                 $inventoryHistory = new StoreInventoryProductHistory();
-                $inventoryHistory->product_id = $request['id_product'];
+                $inventoryHistory->product_id = $validateData['id_product'];
                 // dd($material_usage->product->type_product_id);
                 $inventoryHistory->type_product_id = $material_usage->product->type_product_id;
                 $inventoryHistory->price = $material_usage->price;
