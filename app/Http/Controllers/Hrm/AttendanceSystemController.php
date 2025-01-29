@@ -53,8 +53,8 @@ class AttendanceSystemController extends Controller
                         $date = strtotime($v['scan_date']);
                         $model->employee_id = $mechanic->id;
                         $model->finger_id = $v['pin'];
-                        $model->date = date('Y-m-d', $date);
-                        $model->time = date('H:i:s', $date);
+                        $model->date = date('Y-m-d');
+                        $model->time = date('H:i:s');
                         $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
                         $type = "";
                         if ($v['verify'] == 1) {
