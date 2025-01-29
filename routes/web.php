@@ -133,6 +133,7 @@ Route::resource('customer', CustomerController::class)->middleware(['auth', 'rol
 // Car
 Route::controller(CarController::class)->middleware(['auth', 'role:29'])->group(function () {
     Route::post('car/uploadImages', 'uploadImages')->name('uploadImages');
+    Route::post('car/uploadTempImages', 'uploadTempImages')->name('uploadTempImages');
     Route::post('car/deleteImages', 'deleteImages')->name('deleteImages');
     Route::post('car/addCar', 'addCar')->name('car.addCar');
     Route::post('car/deleteCar', 'deleteCar')->name('car.deleteCar');

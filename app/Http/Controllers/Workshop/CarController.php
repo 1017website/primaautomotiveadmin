@@ -30,7 +30,8 @@ class CarController extends Controller
     {
         $carBrand = CarBrand::all();
         $carType = CarType::all();
-        $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
+        $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->where('car_id', null)
+            ->get();
 
         $sql = "
             delete from car_profile_tmp where 
@@ -110,7 +111,6 @@ class CarController extends Controller
         $carBrand = CarBrand::all();
         $carType = CarType::all();
 
-        // Move image to temp if not already present
         $carImage = CarImage::where(['car_id' => $car->id])->get();
         foreach ($carImage as $images) {
             $exists = CarImageTemp::where([
@@ -118,6 +118,7 @@ class CarController extends Controller
                 'image' => $images->image,
                 'image_url' => $images->image_url,
                 'size' => $images->size,
+                'car_id' => $images->car_id
             ])->exists();
 
             if (!$exists) {
@@ -126,11 +127,15 @@ class CarController extends Controller
                 $imageUpload->image = $images->image;
                 $imageUpload->image_url = $images->image_url;
                 $imageUpload->size = $images->size;
+                $imageUpload->car_id = $images->car_id;
                 $imageUpload->save();
             }
         }
 
-        $carImages = DB::table('car_image_temps')->where('user_id', Auth::id())->get();
+        $carImages = DB::table('car_image_temps')
+            ->where('user_id', Auth::id())
+            ->where('car_id', $car->id)
+            ->get();
 
         // Clear temporary car profile data
         $sql = "
@@ -172,7 +177,9 @@ class CarController extends Controller
             $car->update($request->all());
 
             // Update Images
-            $carImagesTemp = CarImageTemp::where('user_id', Auth::id())->get();
+            $carImagesTemp = CarImageTemp::where('user_id', Auth::id())
+                ->where('car_id', $carId)
+                ->get();
 
             foreach ($carImagesTemp as $tempImage) {
                 // Check if the image already exists in CarImage
@@ -257,38 +264,80 @@ class CarController extends Controller
     public function uploadImages(Request $request)
     {
         $images = $request->file('file');
+        $carId = $request->car_id; // Get car_id from request
+
+        if (!$carId) {
+            return response()->json(['error' => 'Car ID is missing'], 400);
+        }
+
         foreach ($images as $image) {
-            if ($image != '') {
+            if ($image) {
                 $destinationPath = 'images/car-images/';
                 $profileImage = "carImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
                 $imageSizes = $image->getSize();
                 $image->move($destinationPath, $profileImage);
+
+                // Save image with car_id
+                $imageUpload = new CarImageTemp();
+                $imageUpload->car_id = $carId;
+                $imageUpload->image = $profileImage;
+                $imageUpload->image_url = $destinationPath . $profileImage;
+                $imageUpload->size = $imageSizes;
+                $imageUpload->user_id = Auth::id();
+                $imageUpload->save();
             }
-
-            $imageUpload = new CarImageTemp();
-            $imageUpload->image = $profileImage;
-            $imageUpload->image_url = $destinationPath . $profileImage;
-            $imageUpload->size = $imageSizes;
-            $imageUpload->user_id = Auth::id();
-            $imageUpload->save();
-
-            return response()->json(['success' => $profileImage]);
         }
+
+        return response()->json(['success' => true]);
+    }
+
+    public function uploadTempImages(Request $request)
+    {
+        $images = $request->file('file');
+        $userId = Auth::id();
+
+        if (!$images) {
+            return response()->json(['error' => 'No images uploaded'], 400);
+        }
+
+        foreach ($images as $image) {
+            if ($image) {
+                $destinationPath = 'images/car-images/';
+                $profileImage = "carImages" . "-" . date('YmdHis') . "." . $image->getClientOriginalExtension();
+                $imageSizes = $image->getSize();
+                $image->move($destinationPath, $profileImage);
+
+                $imageUpload = new CarImageTemp();
+                $imageUpload->car_id = null;
+                $imageUpload->image = $profileImage;
+                $imageUpload->image_url = $destinationPath . $profileImage;
+                $imageUpload->size = $imageSizes;
+                $imageUpload->user_id = $userId;
+                $imageUpload->save();
+            }
+        }
+
+        return response()->json(['success' => true]);
     }
 
     public function deleteImages(Request $request)
     {
         $filename = $request->get('filename');
         $carImages = CarImageTemp::where(['image' => $filename, 'user_id' => Auth::id()])->first();
+        $car = CarImage::where(['image' => $filename])->first();
 
         if (isset($carImages)) {
-            $imagePath = $carImages->image_url;
+            $carImages->delete();
+        }
+        if (isset($car)) {
+            $imagePath = $car->image_url;
 
             if (file_exists($imagePath)) {
                 unlink($imagePath);
             }
-            $carImages->delete();
+            $car->delete();
         }
+        $car->delete();
 
         return $filename;
     }

@@ -231,6 +231,7 @@ $(document).ready(function(){
 
                 this.on("sending", function(file, xhr, formData) {
                     formData.append("filesize", file.size);
+                    formData.append("car_id", "{{ $car->id }}"); 
                 });
             },
             removedfile: function(file) {
