@@ -8,20 +8,30 @@ use App\Models\StoreTypeProduct;
 use App\Models\Invoice;
 use App\Models\ExpenseSpending;
 
-class ReportController extends Controller {
+class ReportController extends Controller
+{
 
-    public function currentStock() {
+    public function currentStock()
+    {
         $typeProducts = StoreTypeProduct::all();
 
         return view('report.current_stock.index', compact('typeProducts'));
     }
 
-    public function currentStockView() {
+    public function currentStockView()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $model = InventoryProduct::where('status', '1');
+        $model = InventoryProduct::whereHas('typeProduct', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+            ->whereHas('product', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->where('status', '1');
+
         if (isset($request['type_product_id']) && $request['type_product_id'] != 'ALL') {
             $model = $model->where('type_product_id', $request['type_product_id']);
         }
@@ -37,13 +47,15 @@ class ReportController extends Controller {
         return json_encode($data);
     }
 
-    public function historyStock() {
+    public function historyStock()
+    {
         $typeProducts = StoreTypeProduct::all();
 
         return view('report.history_stock.index', compact('typeProducts'));
     }
 
-    public function historyStockView() {
+    public function historyStockView()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
@@ -70,12 +82,14 @@ class ReportController extends Controller {
         return json_encode($data);
     }
 
-    public function revenue() {
+    public function revenue()
+    {
 
         return view('report.revenue.index');
     }
 
-    public function revenueView() {
+    public function revenueView()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
@@ -99,12 +113,14 @@ class ReportController extends Controller {
         return json_encode($data);
     }
 
-    public function expense() {
+    public function expense()
+    {
 
         return view('report.expense.index');
     }
 
-    public function expenseView() {
+    public function expenseView()
+    {
         $success = true;
         $message = '';
         $request = array_merge($_POST, $_GET);
