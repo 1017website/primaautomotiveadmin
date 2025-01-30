@@ -12,7 +12,7 @@ class UserRolesController extends Controller
 {
     public function index()
     {
-        $users = User::with('userRoles')->get();
+        $users = User::with('userRoles')->where('is_owner', '!=', 1)->get();
         $menus = Menu::all();
 
         return view('user.user_roles.index', compact('users', 'menus'));
