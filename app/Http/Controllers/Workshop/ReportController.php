@@ -60,7 +60,14 @@ class ReportController extends Controller
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $model = InventoryProductHistory::where('status', '1');
+        $model = InventoryProductHistory::whereHas('typeProduct', function ($query) {
+            $query->whereNull('deleted_at');
+        })
+            ->whereHas('product', function ($query) {
+                $query->whereNull('deleted_at');
+            })
+            ->where('status', '1');
+            
         if (isset($request['type_product_id']) && $request['type_product_id'] != 'ALL') {
             $model = $model->where('type_product_id', $request['type_product_id']);
         }
