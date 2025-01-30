@@ -25,7 +25,9 @@ class MaterialUsageController extends Controller
 
     public function create()
     {
-        $storeProduct = StoreInventoryProduct::all();
+        $storeProduct = StoreInventoryProduct::whereHas('product', function ($query) {
+            $query->whereNull('deleted_at');
+        })->get();
         $mechanic = Mechanic::all();
         $typeProduct = StoreTypeProduct::all();
 
@@ -40,7 +42,7 @@ class MaterialUsageController extends Controller
         $validateData = $request->validate([
             'id_product' => 'required',
             'id_mechanic' => 'required',
-            'description' => 'required|max:500',
+            'description' => 'nullable|max:500',
             'date' => 'required|date_format:d-m-Y',
             'qty' => 'required|integer',
             'price' => 'required',

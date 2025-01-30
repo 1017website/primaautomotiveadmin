@@ -94,7 +94,7 @@
                                             __('Quantity')
                                             }}</label>
                                         <div class="col-sm-10">
-                                            <input type="number" class="form-control" id="qty" name="qty"
+                                            <input type="number" class="form-control" id="qty" name="qty" placeholder="0"
                                                 value="{{ old('qty') }}" />
                                         </div>
                                     </div>
@@ -202,9 +202,9 @@
             });
         });
 
-        $('#qty').on('change', function () {
+        $('#qty, #id_product').on('change', function () {
             let idProduct = $('#id_product').val();
-            let quantity = $(this).val();
+            let quantity = $('#qty').val();
 
             if (idProduct && quantity) {
                 $.ajax({
