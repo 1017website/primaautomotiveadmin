@@ -72,7 +72,7 @@
                         @foreach ($menus->where('parent', $childMenu->id) as $grandChildMenu)
                         <div class="py-1 pl-5 border ml-1 grandChildDropdown_{{ $childMenu->id }}"
                             style="display: none; margin-left: 20px;">
-                            <label><input type="checkbox" value="{{ $grandChildMenu->id }}" name="menus[]" {{
+                            <label><input class="grandChildCheckbox" type="checkbox" value="{{ $grandChildMenu->id }}" name="menus[]" {{
                                     in_array($grandChildMenu->id, $user->assignedMenus ?? []) ?
                                 'checked' : '' }}>
                                 {{ $grandChildMenu->name }}</label><br>
@@ -92,7 +92,7 @@
             function loadUserMenus() {
                 var userId = $('#id_user').val(); 
 
-                $('.parentCheckbox, .childCheckbox').prop('checked', false);
+                $('.parentCheckbox, .childCheckbox, .grandChildCheckbox').prop('checked', false);
                 $('.childDropdown, .grandChildDropdown').hide(); 
                 
                 if (userId) {
@@ -130,12 +130,24 @@
 
             $('.parentCheckbox').change(function () {
                 var parentId = $(this).val();
+                var isChecked = $(this).prop('checked');
+
+                // Toggle child dropdown visibility
                 $('.childDropdown_' + parentId).toggle(this.checked);
+
+                // Check/uncheck all child checkboxes
+                $('.childDropdown_' + parentId).find('input.childCheckbox').prop('checked', isChecked).trigger('change');
             });
 
             $('.childCheckbox').change(function () {
                 var childId = $(this).val();
+                var isChecked = $(this).prop('checked');
+
+                // Toggle grandchild dropdown visibility
                 $('.grandChildDropdown_' + childId).toggle(this.checked);
+
+                // Check/uncheck all grandchild checkboxes
+                $('.grandChildDropdown_' + childId).find('input.grandChildCheckbox').prop('checked', isChecked);
             });
 
             $('#selectAllButton').click(function () {
