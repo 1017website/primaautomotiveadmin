@@ -305,7 +305,11 @@ Route::resource('attendance-permit', AttendancePermitController::class)->middlew
 // Report HRM 
 Route::controller(ReportHrmController::class)->middleware(['auth', 'role:64'])->group(function () {
     Route::get('report/attendance-view', 'attendanceView')->name('attendanceView');
+    Route::get('report/attendance-view-month', 'attendanceViewMonth')->name('attendanceViewMonth');
+    Route::get('report/attendance-view-week', 'attendanceViewWeek')->name('attendanceViewWeek');
     Route::get('report/attendance', 'index')->name('attendanceHome');
+    Route::get('report/monthly-attendance', 'indexMonth')->name('indexMonth');
+    Route::get('report/weekly-attendance', 'indexWeek')->name('indexWeek');
 });
 
 // Employee Credit
