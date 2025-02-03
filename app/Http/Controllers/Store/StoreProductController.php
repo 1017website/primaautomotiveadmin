@@ -17,7 +17,8 @@ class StoreProductController extends Controller
     public function index()
     {
         $storeProduct = StoreProduct::all();
-        return view('store.product.index', compact('storeProduct'));
+        $typeProducts = StoreTypeProduct::all();
+        return view('store.product.index', compact('storeProduct', 'typeProducts'));
     }
 
     public function create()
