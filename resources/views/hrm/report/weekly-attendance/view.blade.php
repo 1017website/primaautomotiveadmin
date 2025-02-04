@@ -26,8 +26,14 @@
                     @php $totalAttendance = 0; @endphp
                     @foreach($datesInWeek as $date)
                     <td>
-                        {{ $record['attendance'][$date] }}
-                        @if($record['attendance'][$date] == '✓')
+                        <div>
+                            <strong>In:</strong> {{ $record['attendance'][$date]['checkIn'] }}
+                        </div>
+                        <div>
+                            <strong>Out:</strong> {{ $record['attendance'][$date]['checkOut'] }}
+                        </div>
+                        @if($record['attendance'][$date]['checkIn'] != '-' && $record['attendance'][$date]['checkOut']
+                        != '-')
                         @php $totalAttendance++; @endphp
                         @endif
                     </td>

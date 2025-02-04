@@ -156,9 +156,8 @@ class ReportHRMController extends Controller
 
         $mechanics = Mechanic::all();
         $attendanceData = Attendance::whereBetween('date', [$startDate, $endDate])
-            ->where('status', 'in')
-            ->get(['employee_id', 'date'])
-            ->groupBy('employee_id');
+            ->get(['employee_id', 'date', 'time', 'status', 'type'])
+            ->groupBy(['employee_id', 'date']);
 
         $datesInWeek = [];
         for ($day = 0; $day < 7; $day++) {
@@ -169,10 +168,17 @@ class ReportHRMController extends Controller
 
         foreach ($mechanics as $mechanic) {
             $attendance = [];
-            $records = $attendanceData->get($mechanic->id, collect());
 
             foreach ($datesInWeek as $date) {
-                $attendance[$date] = $records->contains('date', $date) ? '✓' : '-';
+                $records = $attendanceData->get($mechanic->id, collect())->get($date, collect());
+
+                $checkIn = optional($records->where('status', 'in')->first())->time;
+                $checkOut = optional($records->where('status', 'out')->first())->time;
+
+                $attendance[$date] = [
+                    'checkIn' => $checkIn ? Carbon::parse($checkIn)->format('H:i') : '-',
+                    'checkOut' => $checkOut ? Carbon::parse($checkOut)->format('H:i') : '-'
+                ];
             }
 
             $attendanceRecords[] = [
