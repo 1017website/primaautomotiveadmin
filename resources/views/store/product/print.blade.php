@@ -49,9 +49,9 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
         <div>
             <center>
                 <!--                <img src="data:image/png;base64,{{ base64_encode($generatorPNG->getBarcode($storeProduct->barcode , $generatorPNG::TYPE_UPC_A)) }}">-->
-                <img
+                <img style="width:80%"
                     src="https://barcode.tec-it.com/barcode.ashx?data={{$storeProduct->barcode}}&code=Code128&eclevel=L'/">
-                <p style="margin-top:0px!important;padding-top:0px!important;margin-bottom:1rem">{{ $storeProduct->name }}</p>
+                <p style="margin-top:0px!important;padding-top:0px!important;padding-bottom:1rem!important;margin-bottom:1rem!important;font-size:11pt">{{ $storeProduct->name }}</p>
             </center>
     </section>
 </body>
