@@ -50,7 +50,6 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
                         <strong>{{ __('Barcode') }}</strong>
                     </div>
                     <div class="col-sm-10">
-                        <!--                        {!! $generator->getBarcode($storeProduct->barcode, $generator::TYPE_UPC_A) !!}-->
                         <img src="https://barcode.tec-it.com/barcode.ashx?data={{$storeProduct->barcode}}&code=Code128&eclevel=L'/">
                     </div>
                 </div>
