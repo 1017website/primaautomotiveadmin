@@ -17,25 +17,37 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
         }
 
         @page {
-            size: 58mm 100mm
+            size: 58mm auto;
         }
 
         /* output size */
         body.receipt .sheet {
             width: 58mm;
-            height: 100mm;
+            height: auto;
         }
 
         /* sheet size */
         @media print {
             body.receipt {
                 width: 58mm;
-                height: 100mm;
+                height: auto;
             }
 
             .sheet {
                 box-shadow: none !important;
             }
+        }
+
+        img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+        }
+
+        p {
+            margin-top: 0px !important;
+            padding-top: 0px !important;
+            font-size: 10pt;
         }
 
         /* fix for Chrome */
@@ -44,14 +56,13 @@ $generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
 
 <body class="receipt">
     <section class="sheet padding-10mm">
-        <br>
-        <!--            &nbsp;&nbsp;&nbsp;-->
         <div>
             <center>
-                <img style="width:80%"
-                    src="https://barcode.tec-it.com/barcode.ashx?data={{$storeProduct->barcode}}&code=Code128&eclevel=L'/">
-                <p style="margin-top:0px!important;padding-top:0px!important;padding-bottom:1rem!important;margin-bottom:1rem!important;font-size:11pt">{{ $storeProduct->name }}</p>
+                <img
+                    src="https://barcode.tec-it.com/barcode.ashx?data={{$storeProduct->barcode}}&code=Code128&eclevel=L" />
+                <p>{{ $storeProduct->name }}</p>
             </center>
+        </div>
     </section>
 </body>
 
