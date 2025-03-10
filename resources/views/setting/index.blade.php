@@ -126,7 +126,7 @@
                         </div>
                     </div>
 
-                    <h5 class="card-title">{{ __('Setting Finger') }}</h5>
+                    <h5 class="card-title">{{ __('Setting Finger Prima Automotive') }}</h5>
                     <div class="border-top"></div>
 
                     <div class="form-group row">
@@ -140,6 +140,23 @@
                         <label for="bonus_panel" class="col-sm-2 text-left control-label col-form-label">{{ __('Restart Finger') }}</label>
                         <div class="col-sm-10">
                             <button type="button" class="btn btn-default add" id="restart_finger">Restart</button>
+                        </div>
+                    </div>
+
+                    <h5 class="card-title">{{ __('Setting Finger Shine Barrier') }}</h5>
+                    <div class="border-top"></div>
+
+                    <div class="form-group row">
+                        <label for="set_timezone_shine" class="col-sm-2 text-left control-label col-form-label">{{ __('Set Timezone') }}</label>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-default add" id="set_timezone_shine">Set Timezone</button>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <label for="restart_finger_shine" class="col-sm-2 text-left control-label col-form-label">{{ __('Restart Finger') }}</label>
+                        <div class="col-sm-10">
+                            <button type="button" class="btn btn-default add" id="restart_finger_shine">Restart</button>
                         </div>
                     </div>
 
@@ -229,6 +246,36 @@
         $('#restart_finger').on('click', function() {
             $.ajax({
                 url: "{{ route('restartFinger') }}",
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        popup('Restart finger success', 'success');
+                    } else {
+                        popup(res.message, 'error');
+                    }
+                }
+            });
+        });
+
+        $('#set_timezone_shine').on('click', function() {
+            $.ajax({
+                url: "{{ route('setTimezoneShine') }}",
+                type: 'POST',
+                dataType: 'json',
+                success: function(res) {
+                    if (res.success) {
+                        popup('Set timezone success', 'success');
+                    } else {
+                        popup(res.message, 'error');
+                    }
+                }
+            });
+        });
+
+        $('#restart_finger_shine').on('click', function() {
+            $.ajax({
+                url: "{{ route('restartFingerShine') }}",
                 type: 'POST',
                 dataType: 'json',
                 success: function(res) {

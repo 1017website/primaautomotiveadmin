@@ -14,7 +14,7 @@ class Attendance extends Model {
         Userstamps;
 
     protected $fillable = [
-        'employee_id', 'date', 'time', 'type', 'status'
+        'employee_id', 'date', 'time', 'type', 'status', 'location'
     ];
 
     public function employee() {

@@ -49,6 +49,7 @@
                     <table id="attendance" class="table table-striped table-bordered">
                         <thead>
                             <tr>
+                                <th>{{ __('Location') }}</th>
                                 <th>{{ __('Employee') }}</th>
                                 <th>{{ __('Date') }}</th>
                                 <th>{{ __('Time') }}</th>
@@ -60,6 +61,7 @@
                         <tbody>
                             @foreach ($attendance as $row)
                             <tr>
+                                <td>{{ ucfirst($row->location) }}</td>
                                 <td>{{ isset($row->employee) ? $row->employee->name : '-' }}</td>
                                 <td data-order="{{ $row->date }}">{{ date('d-m-Y', strtotime($row->date)) }}</td>
                                 <td>{{ $row->time }}</td>
@@ -97,6 +99,15 @@
                 <div class="modal-body">
 
                     <div class="form-group row">
+                        <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Locaion')
+                            }}</label>
+                        <div class="col-sm-9 input-group">
+                            <select class="form-control" id="location" name="location" required>
+                                <option value="primaautomotive">Prima Automotive</option>
+                                <option value="shinebarrier">Shine Barrier</option>
+                            </select>
+                        </div>
+
                         <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Date')
                             }}</label>
                         <div class="col-sm-9 input-group">
@@ -128,12 +139,17 @@
             }
         });
 
+        var route = "{{ route('importAttendance') }}";
+        if ($('location').val() == 'shinebarrier') {
+            route = "{{ route('importAttendanceShineBarrier') }}";
+        }
+
         $('#import_data').on('click', function() {
             if ($('#date').val() == '') {
                 popup('Date cannot empty', 'error');
             } else {
                 $.ajax({
-                    url: "{{ route('importAttendance') }}",
+                    url: route,
                     type: 'POST',
                     data: {
                         'date': $('#date').val(),
@@ -149,7 +165,6 @@
                 });
             }
         });
-
     </script>
 
 

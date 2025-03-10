@@ -83,6 +83,8 @@ Route::get('dashboard-guest', [DashboardController::class, 'dashboardGuest'])->n
 Route::controller(SettingController::class)->middleware(['auth', 'role:65'])->group(function () {
     Route::post('attendance/set-timezone', 'setTimezone')->name('setTimezone');
     Route::post('attendance/restart-finger', 'restartFinger')->name('restartFinger');
+    Route::post('attendance/set-timezone-shine', 'setTimezoneShine')->name('setTimezoneShine');
+    Route::post('attendance/restart-finger-shine', 'restartFingerShine')->name('restartFingerShine');
 });
 Route::resource('setting', SettingController::class)->middleware(['auth', 'role:65']);
 
@@ -288,6 +290,7 @@ Route::controller(ReportStoreController::class)->group(function () {
 // HRM
 // System (No need User Roles)
 Route::get('attendance/import-attendance-system', [AttendanceSystemController::class, 'importAttendanceSystem'])->withoutMiddleware(['auth'])->name('importAttendanceSystem');
+Route::get('attendance/import-attendance-system-shine', [AttendanceSystemController::class, 'importAttendanceSystemShine'])->withoutMiddleware(['auth'])->name('importAttendanceSystemShine');
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth', 'role:58']);
 // Attendance 
@@ -296,6 +299,7 @@ Route::controller(AttendanceController::class)->middleware(['auth', 'role:59'])-
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate');
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload');
     Route::post('attendance/import-attendance', 'importAttendance')->name('importAttendance');
+    Route::post('attendance/import-attendance-shine', 'importAttendanceShine')->name('importAttendanceShine');
 });
 Route::resource('attendance', AttendanceController::class)->middleware(['auth', 'role:59']);
 
