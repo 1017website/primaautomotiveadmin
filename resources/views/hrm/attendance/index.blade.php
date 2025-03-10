@@ -107,7 +107,9 @@
                                 <option value="shinebarrier">Shine Barrier</option>
                             </select>
                         </div>
+                    </div>
 
+                    <div class="form-group row">
                         <label for="date" class="col-sm-3 text-left control-label col-form-label">{{ __('Date')
                             }}</label>
                         <div class="col-sm-9 input-group">
