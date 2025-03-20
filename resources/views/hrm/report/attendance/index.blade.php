@@ -39,6 +39,18 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="location" class="col-sm-2 text-left control-label col-form-label">{{ __('Location')
+                            }}</label>
+                        <div class="col-sm-3 input-group">
+                            <select class="form-control" id="location" name="location" required>
+                                <option value="all">All</option>
+                                <option value="Prima Automotive">Prima Automotive</option>
+                                <option value="Shine Barrier">Shine Barrier</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <div class="col-sm-3 input-group">
                             <button type="button" class="btn btn-default" id="search">Show</button>
                             <button type="button" class="btn btn-default" id="print">Print</button>
@@ -64,6 +76,7 @@
                 dataType: 'json',
                 data: {
                     'date': $('#date').val(),
+                    'location': $('#location').val()
                 },
                 success: function (res) {
                     console.log(res);

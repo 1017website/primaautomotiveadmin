@@ -34,7 +34,8 @@ class ReportHRMController extends Controller
         $message = '';
         $request = array_merge($_POST, $_GET);
 
-        $date = $request['date'];
+        $date = $request['date'] ?? null;
+        $location = $request['location'] ?? 'all';
 
         if (empty($date)) {
             return redirect()->back()->with('error', 'Date is required.');
@@ -46,8 +47,13 @@ class ReportHRMController extends Controller
             return redirect()->back()->with('error', 'Invalid date format.');
         }
 
-        $attendanceData = Attendance::where('date', $formattedDate)
-            ->get(['employee_id', 'date', 'time', 'status', 'type'])
+        $attendanceQuery = Attendance::where('date', $formattedDate);
+
+        if ($location !== 'all') {
+            $attendanceQuery->where('location', $location);
+        }
+
+        $attendanceData = $attendanceQuery->get(['employee_id', 'date', 'time', 'status', 'type', 'location'])
             ->groupBy('employee_id');
 
         $attendanceRecords = [];
@@ -57,6 +63,7 @@ class ReportHRMController extends Controller
 
             $attendanceRecords[] = [
                 'employee' => $records->first()->employee,
+                'location' => $records->first()->location,
                 'check_in' => $checkIn,
                 'check_out' => $checkOut
             ];
@@ -72,12 +79,14 @@ class ReportHRMController extends Controller
         return json_encode($data);
     }
 
+
     public function attendanceViewMonth(Request $request)
     {
         $success = true;
         $message = '';
 
         $month = $request->input('month');
+        $location = $request->input('location', 'all');
 
         if (empty($month)) {
             return response()->json([
@@ -95,12 +104,20 @@ class ReportHRMController extends Controller
                 'message' => 'Invalid month format.'
             ]);
         }
-        $mechanics = Mechanic::all();
 
-        $attendanceData = Attendance::whereBetween('date', [$startDate, $endDate])
-            ->where('status', 'in')
-            ->get(['employee_id', 'date'])
+        $attendanceQuery = Attendance::whereBetween('date', [$startDate, $endDate])
+            ->where('status', 'in');
+
+        if ($location !== 'all') {
+            $attendanceQuery->where('location', $location);
+        }
+
+        $attendanceData = $attendanceQuery
+            ->get(['employee_id', 'date', 'location'])
             ->groupBy('employee_id');
+
+        $mechanicIds = $attendanceData->keys();
+        $mechanics = Mechanic::whereIn('id', $mechanicIds)->get();
 
         $attendanceRecords = [];
         $daysInMonth = Carbon::parse($startDate)->daysInMonth;
@@ -116,19 +133,21 @@ class ReportHRMController extends Controller
 
             $attendanceRecords[] = [
                 'employee' => $mechanic,
-                'attendance' => $attendance
+                'attendance' => $attendance,
+                'location' => $records->first()->location ?? '-'
             ];
         }
 
         $data = [
             'success' => $success,
             'message' => $message,
-            'filter' => $request,
+            'filter' => $request->all(),
             'html' => view('hrm.report.monthly-attendance.view', compact('attendanceRecords', 'daysInMonth', 'month', 'mechanics'))->render()
         ];
 
         return json_encode($data);
     }
+
 
     public function attendanceViewWeek(Request $request)
     {
@@ -136,6 +155,7 @@ class ReportHRMController extends Controller
         $message = '';
 
         $week = $request->input('week');
+        $location = $request->input('location', 'all');
 
         if (empty($week)) {
             return response()->json([
@@ -154,10 +174,18 @@ class ReportHRMController extends Controller
             ]);
         }
 
-        $mechanics = Mechanic::all();
-        $attendanceData = Attendance::whereBetween('date', [$startDate, $endDate])
-            ->get(['employee_id', 'date', 'time', 'status', 'type'])
+        $attendanceQuery = Attendance::whereBetween('date', [$startDate, $endDate]);
+
+        if ($location !== 'all') {
+            $attendanceQuery->where('location', $location);
+        }
+
+        $attendanceData = $attendanceQuery
+            ->get(['employee_id', 'date', 'time', 'status', 'type', 'location'])
             ->groupBy(['employee_id', 'date']);
+
+        $mechanicIds = $attendanceData->keys();
+        $mechanics = Mechanic::whereIn('id', $mechanicIds)->get();
 
         $datesInWeek = [];
         for ($day = 0; $day < 7; $day++) {
@@ -183,14 +211,15 @@ class ReportHRMController extends Controller
 
             $attendanceRecords[] = [
                 'employee' => $mechanic,
-                'attendance' => $attendance
+                'attendance' => $attendance,
+                'location' => $records->first()->location ?? '-'
             ];
         }
 
         $data = [
             'success' => $success,
             'message' => $message,
-            'filter' => $request,
+            'filter' => $request->all(),
             'html' => view('hrm.report.weekly-attendance.view', compact('attendanceRecords', 'datesInWeek', 'week', 'startDate', 'endDate'))->render()
         ];
 
