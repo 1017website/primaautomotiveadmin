@@ -58,15 +58,19 @@ class ReportHRMController extends Controller
 
         $attendanceRecords = [];
         foreach ($attendanceData as $employeeId => $records) {
-            $checkIn = $records->firstWhere('status', 'in')->time ?? '-';
-            $checkOut = $records->firstWhere('status', 'out')->time ?? '-';
+            $employee = $records->first()->employee;
 
-            $attendanceRecords[] = [
-                'employee' => $records->first()->employee,
-                'location' => $records->first()->location,
-                'check_in' => $checkIn,
-                'check_out' => $checkOut
-            ];
+            if ($employee->status == 1) {
+                $checkIn = $records->firstWhere('status', 'in')->time ?? '-';
+                $checkOut = $records->firstWhere('status', 'out')->time ?? '-';
+
+                $attendanceRecords[] = [
+                    'employee' => $records->first()->employee,
+                    'location' => $records->first()->location,
+                    'check_in' => $checkIn,
+                    'check_out' => $checkOut
+                ];
+            }
         }
 
         $data = [
@@ -117,7 +121,7 @@ class ReportHRMController extends Controller
             ->groupBy('employee_id');
 
         $mechanicIds = $attendanceData->keys();
-        $mechanics = Mechanic::whereIn('id', $mechanicIds)->get();
+        $mechanics = Mechanic::whereIn('id', $mechanicIds)->where('status', 1)->get();
 
         $attendanceRecords = [];
         $daysInMonth = Carbon::parse($startDate)->daysInMonth;
@@ -185,7 +189,7 @@ class ReportHRMController extends Controller
             ->groupBy(['employee_id', 'date']);
 
         $mechanicIds = $attendanceData->keys();
-        $mechanics = Mechanic::whereIn('id', $mechanicIds)->get();
+        $mechanics = Mechanic::whereIn('id', $mechanicIds)->where('status', 1)->get();
 
         $datesInWeek = [];
         for ($day = 0; $day < 7; $day++) {
@@ -200,12 +204,29 @@ class ReportHRMController extends Controller
             foreach ($datesInWeek as $date) {
                 $records = $attendanceData->get($mechanic->id, collect())->get($date, collect());
 
-                $checkIn = optional($records->where('status', 'in')->first())->time;
-                $checkOut = optional($records->where('status', 'out')->first())->time;
+                $checkInRecord = $records->where('status', 'in')->first();
+                $checkOutRecord = $records->where('status', 'out')->first();
+
+                $checkIn = $checkInRecord ? $checkInRecord->time : null;
+                $checkOut = $checkOutRecord ? $checkOutRecord->time : null;
+
+                $formattedCheckIn = $checkIn ? Carbon::parse($checkIn)->format('H:i') : '-';
+                $formattedCheckOut = $checkOut ? Carbon::parse($checkOut)->format('H:i') : '-';
+
+                $workHours = '-';
+                if ($checkIn && $checkOut) {
+
+                    $diffInMinutes = Carbon::parse($checkIn)->diffInMinutes(Carbon::parse($checkOut));
+
+                    $hours = floor($diffInMinutes / 60);
+                    $minutes = $diffInMinutes % 60;
+                    $workHours = sprintf('%02d:%02d', $hours, $minutes);
+                }
 
                 $attendance[$date] = [
-                    'checkIn' => $checkIn ? Carbon::parse($checkIn)->format('H:i') : '-',
-                    'checkOut' => $checkOut ? Carbon::parse($checkOut)->format('H:i') : '-'
+                    'checkIn' => $formattedCheckIn,
+                    'checkOut' => $formattedCheckOut,
+                    'workHours' => $workHours,
                 ];
             }
 

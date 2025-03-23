@@ -32,6 +32,9 @@
                         <div>
                             <strong>Out:</strong> {{ $record['attendance'][$date]['checkOut'] }}
                         </div>
+                        <div>
+                            <strong>Hours:</strong> {{ $record['attendance'][$date]['workHours'] }}
+                        </div>
                         @if($record['attendance'][$date]['checkIn'] != '-' && $record['attendance'][$date]['checkOut']
                         != '-')
                         @php $totalAttendance++; @endphp

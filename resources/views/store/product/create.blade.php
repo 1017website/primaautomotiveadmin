@@ -359,19 +359,16 @@
         return prefix == undefined ? rupiah : (rupiah ? prefix + rupiah : '');
         }
         function price(hpp, margin) {
-        total = hpp + (hpp * margin / 100);
-        var harga = document.getElementById('price');
-        harga.value = total;
-        var formated = formatRupiah($('#price').val(), 'Rp. ');
-        harga.value = formated;
+            var total = hpp + (hpp * margin / 100);
+            $('#price').val(formatRupiah(total.toFixed(0), 'Rp. '));
         }
 
 
         function margin(hpp, total) {
-        total_margin = (total - hpp) * 100 / hpp;
-        var margin = document.getElementById('margin_profit');
-        val = total_margin.toFixed(2);
-        margin.value = val.replace('.', ',');
+            total_margin = (total - hpp) * 100 / hpp;
+            var margin = document.getElementById('margin_profit');
+            val = total_margin.toFixed(2);
+            margin.value = val.replace('.', ',');
         }
 
         $(document).ready(function () {

@@ -183,4 +183,16 @@ class MechanicController extends Controller
 
         return redirect()->route('mechanic.index')->with('success', 'Mechanic <b>' . $mechanic->name . '</b> deleted successfully');
     }
+
+    public function toggleStatus(Request $request, $id)
+    {
+        $mechanic = Mechanic::findOrFail($id);
+        $mechanic->status = $request->status;
+        $mechanic->save();
+
+        session()->flash('success', 'Status updated successfully!');
+
+        return response()->json(['success' => true]);
+    }
+
 }

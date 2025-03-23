@@ -293,7 +293,9 @@ Route::get('attendance/import-attendance-system', [AttendanceSystemController::c
 Route::get('attendance/import-attendance-system-shine', [AttendanceSystemController::class, 'importAttendanceSystemShine'])->withoutMiddleware(['auth'])->name('importAttendanceSystemShine');
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth', 'role:58']);
-// Attendance 
+Route::post('mechanic/toggle-status/{id}', [MechanicController::class, 'toggleStatus'])->name('mechanic.toggle-status')->middleware(['auth', 'role:58']);
+
+// Attendance
 Route::controller(AttendanceController::class)->middleware(['auth', 'role:59'])->group(function () {
     Route::get('attendance/import', 'import')->name('attendance.import');
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate');

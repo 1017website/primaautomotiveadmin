@@ -168,7 +168,7 @@
                                     __('Price') }}</label>
                                 <div class="col-sm-10">
                                     <input type="text" class="form-control" id="price" name="price" placeholder=""
-                                        value="{{ $storeProduct->price }}" readonly>
+                                        value="{{ $storeProduct->price }}">
                                 </div>
                             </div>
 
@@ -265,24 +265,25 @@
         
         $("#calculate").click(function () {
             var hpp = $('#hpp').val();
-            var hpp = hpp.replace(/[^\d,-]/g, '');
-            var hpp = hpp.replace(',', '.');
+            hpp = hpp.replace(/[^\d,-]/g, ''); 
+            hpp = hpp.replace(',', '.');
 
             var margin = $('#margin_profit').val();
-            var margin = margin.replace(/[^\d,-]/g, '');
-            var margin = margin.replace(',', '.');
+            if (margin.indexOf(',') !== -1 && margin.indexOf('.') === -1) {
+                margin = margin.replace(',', '.');
+            }
 
-            if (parseFloat(hpp) > 0 && parseFloat(margin) > 0) {
-                price(parseFloat(hpp), parseFloat(margin));
+            var hppNumber = parseFloat(hpp);
+            var marginNumber = parseFloat(margin);
+
+            if (hppNumber > 0 && marginNumber > 0) {
+                price(hppNumber, marginNumber);
             }
         });
 
         function price(hpp, margin) {
-            total = hpp + (hpp * margin / 100);
-            var harga = document.getElementById('price');
-            harga.value = total;
-            var formated = formatRupiah($('#price').val(), 'Rp. ');
-            harga.value = formated;
+            var total = hpp + (hpp * margin / 100);
+            $('#price').val(formatRupiah(total.toFixed(0), 'Rp. '));
         }
 
     </script>
