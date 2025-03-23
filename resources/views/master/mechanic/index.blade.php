@@ -177,21 +177,21 @@
         $(document).ready(function() {
             var mechanicId, status, toggleElement, requestUrl, statusConfirmed = false;
 
-            $('.toggle-status').change(function(e) {
-                e.preventDefault();e 
-
+            $(document).on('change', '.toggle-status', function(e) {
+                e.preventDefault();
+                
                 mechanicId = $(this).data('id');
                 requestUrl = $(this).data('url');
                 status = $(this).prop('checked') ? 1 : 0;
-                toggleElement = $(this); 
-                statusConfirmed = false; 
+                toggleElement = $(this);
+                statusConfirmed = false;
                 
                 $('#confirmMessage').text(`Are you sure you want to ${status ? 'activate' : 'deactivate'} this employee?`);
                 
                 $('#Modal4').modal('show');
             });
 
-            $('.status').click(function() {
+            $(document).on('click', '.status', function() {
                 statusConfirmed = true; 
 
                 $.ajax({
@@ -203,12 +203,12 @@
                     },
                     success: function(response) {
                         if (response.success) {
-                            location.reload(); 
+                            location.reload();
                         }
                     },
                     error: function(xhr) {
                         alert('Failed to update status!');
-                        toggleElement.prop('checked', !status); 
+                        toggleElement.prop('checked', !status);
                     }
                 });
 
@@ -217,11 +217,9 @@
 
             $('#Modal4').on('hidden.bs.modal', function () {
                 if (!statusConfirmed) {
-                    toggleElement.prop('checked', !status); 
+                    toggleElement.prop('checked', !status);
                 }
             });
         });
     </script>
-
-
 </x-app-layout>
