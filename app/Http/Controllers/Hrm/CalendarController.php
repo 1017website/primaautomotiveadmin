@@ -28,7 +28,7 @@ class CalendarController extends Controller
                 Note::firstOrCreate(
                     [
                         'date' => $birthdayThisYear,
-                        'title' => "🎂 {$mechanic->name}'s Birthday",
+                        'title' => "{$mechanic->name}'s Birthday",
                     ],
                     [
                         'description' => "Wish {$mechanic->name} a happy birthday!",
