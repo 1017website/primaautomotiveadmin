@@ -19,7 +19,7 @@ class CalendarController extends Controller
 
         $currentYear = Carbon::now()->year;
 
-        Mechanic::chunk(100, function ($mechanics) use ($currentYear) {
+        Mechanic::where('status', 1)->chunk(100, function ($mechanics) use ($currentYear) {
             foreach ($mechanics as $mechanic) {
                 $birthdayThisYear = Carbon::parse($mechanic->birth_date)
                     ->setYear($currentYear)
