@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Hrm\CalendarController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Artisan;
 //general
@@ -289,6 +290,11 @@ Route::controller(ReportStoreController::class)->group(function () {
 
 // HRM
 // System (No need User Roles)
+Route::get('/calendar/events', [CalendarController::class, 'events'])->name('calendar.events')->middleware(['auth', 'role:72']);
+Route::put('/calendar/events/{note}', [CalendarController::class, 'updateEvents'])->name('calendar.update')->middleware(['auth', 'role:72']);
+Route::delete('/calendar/events', [CalendarController::class, 'deleteEvents'])->name('calendar.delete')->middleware(['auth', 'role:72']);
+Route::resource('/calendar', CalendarController::class)->middleware(['auth', 'role:72']);
+
 Route::get('attendance/import-attendance-system', [AttendanceSystemController::class, 'importAttendanceSystem'])->withoutMiddleware(['auth'])->name('importAttendanceSystem');
 Route::get('attendance/import-attendance-system-shine', [AttendanceSystemController::class, 'importAttendanceSystemShine'])->withoutMiddleware(['auth'])->name('importAttendanceSystemShine');
 
