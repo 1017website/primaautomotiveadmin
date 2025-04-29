@@ -103,7 +103,6 @@ class AttendanceController extends Controller
         try {
             $url = 'https://developer.fingerspot.io/api/get_attlog';
             $randKey = bin2hex(random_bytes(25));
-            ;
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "start_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '", "end_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
@@ -183,7 +182,6 @@ class AttendanceController extends Controller
         try {
             $url = 'https://developer.fingerspot.io/api/get_attlog';
             $randKey = bin2hex(random_bytes(25));
-            ;
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C262B895032B1C34", "start_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '", "end_date":"' . date('Y-m-d', strtotime($_POST['date'])) . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
@@ -203,18 +201,18 @@ class AttendanceController extends Controller
             $data = (array) json_decode($response);
             $listAttendance = $data['data'];
             if (!empty($listAttendance)) {
-                //delete old data
-                $whereArray = ['date' => date('Y-m-d', strtotime($_POST['date'])), 'type' => 'finger'];
-                $query = DB::table('attendances');
-                foreach ($whereArray as $field => $value) {
-                    $query->where($field, $value);
-                }
-                $query->delete();
-
                 foreach ($listAttendance as $r => $v) {
                     $v = (array) $v;
                     $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
                     if (isset($mechanic)) {
+                        //delete old data
+                        $whereArray = ['date' => date('Y-m-d', strtotime($_POST['date'])), 'type' => 'finger', 'employee_id' => $mechanic->id];
+                        $query = DB::table('attendances');
+                        foreach ($whereArray as $field => $value) {
+                            $query->where($field, $value);
+                        }
+                        $query->delete();
+
                         $model = new Attendance();
                         $date = strtotime($v['scan_date']);
                         $model->location = 'Shine Barrier';
