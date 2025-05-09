@@ -142,7 +142,7 @@
         });
 
         var route = "{{ route('importAttendance') }}";
-        if ($('location').val() == 'shinebarrier') {
+        if ($('#location').val() == 'shinebarrier') {
             route = "{{ route('importAttendanceShine') }}";
         }
 
