@@ -142,14 +142,13 @@
         });
 
         var route = "{{ route('importAttendance') }}";
-        if ($('#location').val() == 'shinebarrier') {
-            route = "{{ route('importAttendanceShine') }}";
-        }
-
         $('#import_data').on('click', function() {
             if ($('#date').val() == '') {
                 popup('Date cannot empty', 'error');
             } else {
+                if ($('#location').val() == 'shinebarrier') {
+                    route = "{{ route('importAttendanceShine') }}";
+                }
                 $.ajax({
                     url: route,
                     type: 'POST',
