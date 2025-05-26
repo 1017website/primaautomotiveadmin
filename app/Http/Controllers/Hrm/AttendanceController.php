@@ -141,7 +141,8 @@ class AttendanceController extends Controller
                         $model->finger_id = $v['pin'];
                         $model->date = date('Y-m-d', $date);
                         $model->time = date('H:i:s', $date);
-                        $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        //$model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        $model->status = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
                         $type = "";
                         if ($v['verify'] == 1) {
                             $type = 'finger';
@@ -220,7 +221,8 @@ class AttendanceController extends Controller
                         $model->finger_id = $v['pin'];
                         $model->date = date('Y-m-d', $date);
                         $model->time = date('H:i:s', $date);
-                        $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        //$model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        $model->status = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
                         $type = "";
                         if ($v['verify'] == 1) {
                             $type = 'finger';

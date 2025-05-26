@@ -17,7 +17,6 @@ class AttendanceSystemController extends Controller
         try {
             $url = 'https://developer.fingerspot.io/api/get_attlog';
             $randKey = bin2hex(random_bytes(25));
-            ;
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C2630451071B1E34", "start_date":"' . date('Y-m-d', strtotime(date('Y-m-d'))) . '", "end_date":"' . date('Y-m-d') . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
@@ -56,7 +55,8 @@ class AttendanceSystemController extends Controller
                         $model->finger_id = $v['pin'];
                         $model->date = date('Y-m-d', $date);
                         $model->time = date('H:i:s', $date);
-                        $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        //$model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        $model->status = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
                         $type = "";
                         if ($v['verify'] == 1) {
                             $type = 'finger';
@@ -97,7 +97,6 @@ class AttendanceSystemController extends Controller
         try {
             $url = 'https://developer.fingerspot.io/api/get_attlog';
             $randKey = bin2hex(random_bytes(25));
-            ;
             $request = '{"trans_id":"' . $randKey . '", "cloud_id":"C262B895032B1C34", "start_date":"' . date('Y-m-d', strtotime(date('Y-m-d'))) . '", "end_date":"' . date('Y-m-d') . '"}';
             $authorization = "Authorization: Bearer ASC98HR77NKSYS0O";
 
@@ -117,18 +116,18 @@ class AttendanceSystemController extends Controller
             $data = (array) json_decode($response);
             $listAttendance = $data['data'];
             if (!empty($listAttendance)) {
-                //delete old data
-                $whereArray = ['date' => date('Y-m-d', strtotime(date('Y-m-d'))), 'type' => 'finger'];
-                $query = DB::table('attendances');
-                foreach ($whereArray as $field => $value) {
-                    $query->where($field, $value);
-                }
-                $query->delete();
-
                 foreach ($listAttendance as $r => $v) {
                     $v = (array) $v;
                     $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
                     if (isset($mechanic)) {
+                        //delete old data
+                        $whereArray = ['date' => date('Y-m-d'), 'type' => 'finger', 'employee_id' => $mechanic->id];
+                        $query = DB::table('attendances');
+                        foreach ($whereArray as $field => $value) {
+                            $query->where($field, $value);
+                        }
+                        $query->delete();
+
                         $model = new Attendance();
                         $date = strtotime($v['scan_date']);
                         $model->location = 'Shine Barrier';
@@ -136,7 +135,8 @@ class AttendanceSystemController extends Controller
                         $model->finger_id = $v['pin'];
                         $model->date = date('Y-m-d', $date);
                         $model->time = date('H:i:s', $date);
-                        $model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        //$model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
+                        $model->status = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
                         $type = "";
                         if ($v['verify'] == 1) {
                             $type = 'finger';
@@ -169,5 +169,4 @@ class AttendanceSystemController extends Controller
 
         return json_encode(['success' => $success, 'message' => $message]);
     }
-
 }
