@@ -218,7 +218,6 @@ class AttendanceSystemController extends Controller
 
                     // Delay setiap 50 permintaan
                     if ($counter % 50 == 0) {
-                        echo "Menunggu 1 menit karena mencapai 50 request...\n";
                         sleep(60); // delay 60 detik
                     }
 
