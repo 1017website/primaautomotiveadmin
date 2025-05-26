@@ -225,52 +225,57 @@ class AttendanceSystemController extends Controller
 
                 //import to system
                 $data = (array) json_decode($response);
-                $listAttendance = $data['data'];
-                if (!empty($listAttendance)) {
-                    foreach ($listAttendance as $r => $v) {
-                        $v = (array) $v;
-                        $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
-                        if (isset($mechanic)) {
-                            $date = strtotime($v['scan_date']);
-                            $statusCheck = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
+                if ($data['success']) {
+                    $listAttendance = $data['data'];
+                    if (!empty($listAttendance)) {
+                        foreach ($listAttendance as $r => $v) {
+                            $v = (array) $v;
+                            $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
+                            if (isset($mechanic)) {
+                                $date = strtotime($v['scan_date']);
+                                $statusCheck = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
 
-                            //delete old data
-                            $whereArray = ['date' => date('Y-m-d'), 'type' => 'finger', 'employee_id' => $mechanic->id, 'status' => $statusCheck];
-                            $query = DB::table('attendances');
-                            foreach ($whereArray as $field => $value) {
-                                $query->where($field, $value);
-                            }
-                            $query->delete();
+                                //delete old data
+                                $whereArray = ['date' => date('Y-m-d'), 'type' => 'finger', 'employee_id' => $mechanic->id, 'status' => $statusCheck];
+                                $query = DB::table('attendances');
+                                foreach ($whereArray as $field => $value) {
+                                    $query->where($field, $value);
+                                }
+                                $query->delete();
 
-                            //add new data
-                            $model = new Attendance();
-                            $model->location = $location;
-                            $model->employee_id = $mechanic->id;
-                            $model->finger_id = $v['pin'];
-                            $model->date = date('Y-m-d', $date);
-                            $model->time = date('H:i:s', $date);
-                            $model->status = $statusCheck;
-                            $type = "";
-                            if ($v['verify'] == 1) {
-                                $type = 'finger';
-                            } elseif ($v['verify'] == 2) {
-                                $type = 'password';
-                            } elseif ($v['verify'] == 3) {
-                                $type = 'password';
-                            } elseif ($v['verify'] == 4) {
-                                $type = 'card';
-                            } elseif ($v['verify'] == 5) {
-                                $type = 'gps';
-                            } elseif ($v['verify'] == 6) {
-                                $type = 'vein';
-                            }
-                            $model->type = $type;
-                            if (!$model->save()) {
-                                $success = false;
-                                $message = "Save Failed";
+                                //add new data
+                                $model = new Attendance();
+                                $model->location = $location;
+                                $model->employee_id = $mechanic->id;
+                                $model->finger_id = $v['pin'];
+                                $model->date = date('Y-m-d', $date);
+                                $model->time = date('H:i:s', $date);
+                                $model->status = $statusCheck;
+                                $type = "";
+                                if ($v['verify'] == 1) {
+                                    $type = 'finger';
+                                } elseif ($v['verify'] == 2) {
+                                    $type = 'password';
+                                } elseif ($v['verify'] == 3) {
+                                    $type = 'password';
+                                } elseif ($v['verify'] == 4) {
+                                    $type = 'card';
+                                } elseif ($v['verify'] == 5) {
+                                    $type = 'gps';
+                                } elseif ($v['verify'] == 6) {
+                                    $type = 'vein';
+                                }
+                                $model->type = $type;
+                                if (!$model->save()) {
+                                    $success = false;
+                                    $message = "Save Failed";
+                                }
                             }
                         }
                     }
+                } else {
+                    $success = false;
+                    $message = "Attendance empty or API error: " . $data['message'];
                 }
             }
         } else {
