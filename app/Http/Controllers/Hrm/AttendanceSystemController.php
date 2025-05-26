@@ -212,7 +212,16 @@ class AttendanceSystemController extends Controller
                 $interval = new \DateInterval('P1D'); // P1D = 1 day
                 $period   = new \DatePeriod($start, $interval, $end);
 
+                $counter = 0;
                 foreach ($period as $date) {
+                    $counter++; // Tambah counter setiap loop
+
+                    // Delay setiap 50 permintaan
+                    if ($counter % 50 == 0) {
+                        echo "Menunggu 1 menit karena mencapai 50 request...\n";
+                        sleep(60); // delay 60 detik
+                    }
+
                     $url = 'https://developer.fingerspot.io/api/get_attlog';
                     $randKey = bin2hex(random_bytes(25));
                     $request = '{"trans_id":"' . $randKey . '", "cloud_id":"' . $cloudId . '", "start_date":"' . $date->format('Y-m-d') . '", "end_date":"' . $date->format('Y-m-d') . '"}';
@@ -240,11 +249,16 @@ class AttendanceSystemController extends Controller
                                 $v = (array) $v;
                                 $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
                                 if (isset($mechanic)) {
-                                    $date = strtotime($v['scan_date']);
-                                    $statusCheck = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
+                                    $scanTimestamp = strtotime($v['scan_date']);
+                                    $statusCheck = date('H:i:s', $scanTimestamp) < '12:00:00' ? 'in' : 'out';
 
                                     //delete old data
-                                    $whereArray = ['date' => date('Y-m-d'), 'type' => 'finger', 'employee_id' => $mechanic->id, 'status' => $statusCheck];
+                                    $whereArray = [
+                                        'date' => date('Y-m-d', $scanTimestamp),
+                                        'type' => 'finger',
+                                        'employee_id' => $mechanic->id,
+                                        'status' => $statusCheck
+                                    ];
                                     $query = DB::table('attendances');
                                     foreach ($whereArray as $field => $value) {
                                         $query->where($field, $value);
@@ -256,15 +270,14 @@ class AttendanceSystemController extends Controller
                                     $model->location = $location;
                                     $model->employee_id = $mechanic->id;
                                     $model->finger_id = $v['pin'];
-                                    $model->date = date('Y-m-d', $date);
-                                    $model->time = date('H:i:s', $date);
+                                    $model->date = date('Y-m-d', $scanTimestamp);
+                                    $model->time = date('H:i:s', $scanTimestamp);
                                     $model->status = $statusCheck;
+
                                     $type = "";
                                     if ($v['verify'] == 1) {
                                         $type = 'finger';
-                                    } elseif ($v['verify'] == 2) {
-                                        $type = 'password';
-                                    } elseif ($v['verify'] == 3) {
+                                    } elseif (in_array($v['verify'], [2, 3])) {
                                         $type = 'password';
                                     } elseif ($v['verify'] == 4) {
                                         $type = 'card';
@@ -274,6 +287,7 @@ class AttendanceSystemController extends Controller
                                         $type = 'vein';
                                     }
                                     $model->type = $type;
+
                                     if (!$model->save()) {
                                         $success = false;
                                         $message = "Save Failed";
