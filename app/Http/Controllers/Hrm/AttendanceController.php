@@ -206,23 +206,26 @@ class AttendanceController extends Controller
                     $v = (array) $v;
                     $mechanic = Mechanic::where(['id_finger' => $v['pin']])->first();
                     if (isset($mechanic)) {
+                        $date = strtotime($v['scan_date']);
+                        $statusCheck = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
+
                         //delete old data
-                        $whereArray = ['date' => date('Y-m-d', strtotime($_POST['date'])), 'type' => 'finger', 'employee_id' => $mechanic->id];
+                        $whereArray = ['date' => date('Y-m-d', strtotime($_POST['date'])), 'type' => 'finger', 'employee_id' => $mechanic->id, 'status' => $statusCheck];
                         $query = DB::table('attendances');
                         foreach ($whereArray as $field => $value) {
                             $query->where($field, $value);
                         }
                         $query->delete();
 
+                        //add new data
                         $model = new Attendance();
-                        $date = strtotime($v['scan_date']);
                         $model->location = 'Shine Barrier';
                         $model->employee_id = $mechanic->id;
                         $model->finger_id = $v['pin'];
                         $model->date = date('Y-m-d', $date);
                         $model->time = date('H:i:s', $date);
                         //$model->status = ($v['status_scan'] == 0 ? 'in' : 'out');
-                        $model->status = date('H:i:s', $date) < '12:00:00' ? 'in' : 'out';
+                        $model->status = $statusCheck;
                         $type = "";
                         if ($v['verify'] == 1) {
                             $type = 'finger';
