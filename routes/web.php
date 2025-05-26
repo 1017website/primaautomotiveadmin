@@ -297,6 +297,7 @@ Route::resource('/calendar', CalendarController::class)->middleware(['auth', 'ro
 
 Route::get('attendance/import-attendance-system', [AttendanceSystemController::class, 'importAttendanceSystem'])->withoutMiddleware(['auth'])->name('importAttendanceSystem');
 Route::get('attendance/import-attendance-system-shine', [AttendanceSystemController::class, 'importAttendanceSystemShine'])->withoutMiddleware(['auth'])->name('importAttendanceSystemShine');
+Route::get('attendance/import-attendance-system-range', [AttendanceSystemController::class, 'importAttendanceSystemRange'])->withoutMiddleware(['auth'])->name('importAttendanceSystemRange');
 
 Route::resource('mechanic', MechanicController::class)->middleware(['auth', 'role:58']);
 Route::post('mechanic/toggle-status/{id}', [MechanicController::class, 'toggleStatus'])->name('mechanic.toggle-status')->middleware(['auth', 'role:58']);
