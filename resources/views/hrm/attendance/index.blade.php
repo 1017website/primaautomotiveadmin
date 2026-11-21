@@ -58,28 +58,18 @@
                                 <th>{{ __('Action') }}</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            @foreach ($attendance as $row)
-                            <tr>
-                                <td>{{ ucfirst($row->location) }}</td>
-                                <td>{{ isset($row->employee) ? $row->employee->name : '-' }}</td>
-                                <td data-order="{{ $row->date }}">{{ date('d-m-Y', strtotime($row->date)) }}</td>
-                                <td>{{ $row->time }}</td>
-                                <td>{{ ucfirst($row->status) }}</td>
-                                <td>{{ ucfirst($row->type) }}</td>
-                                <td class="action-button">
-                                    <form action="{{ route('attendance.destroy',$row->id) }}" method="POST">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger"><i
-                                                class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                            @endforeach
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
+                <template id="attendance-delete-form">
+                    <form method="POST">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger" aria-label="{{ __('Delete attendance') }}">
+                            <i class="fas fa-trash" aria-hidden="true"></i>
+                        </button>
+                    </form>
+                </template>
 
             </div>
         </div>
@@ -133,7 +123,34 @@
     <!-- Modal -->
 
     <script>
-        $('#attendance').DataTable();
+        $('#attendance').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: @json(route('attendance.data')),
+            columnDefs: [
+                { targets: [0, 1, 2, 3, 4, 5], render: $.fn.dataTable.render.text() }
+            ],
+            columns: [
+                { data: 'location' },
+                { data: 'employee' },
+                { data: 'date' },
+                { data: 'time' },
+                { data: 'status' },
+                { data: 'type' },
+                {
+                    data: null,
+                    defaultContent: '',
+                    orderable: false,
+                    searchable: false,
+                    className: 'action-button',
+                    createdCell: function(cell, cellData, row) {
+                        var form = document.getElementById('attendance-delete-form').content.firstElementChild.cloneNode(true);
+                        form.action = row.delete_url;
+                        cell.appendChild(form);
+                    }
+                }
+            ]
+        });
 
         $.ajaxSetup({
             headers: {

@@ -304,6 +304,7 @@ Route::post('mechanic/toggle-status/{id}', [MechanicController::class, 'toggleSt
 
 // Attendance
 Route::controller(AttendanceController::class)->middleware(['auth', 'role:59'])->group(function () {
+    Route::get('attendance/data', 'data')->name('attendance.data');
     Route::get('attendance/import', 'import')->name('attendance.import');
     Route::get('attendance/download-template', 'downloadTemplate')->name('attendance.downloadTemplate');
     Route::post('attendance/import-upload', 'importUpload')->name('attendance.importUpload');

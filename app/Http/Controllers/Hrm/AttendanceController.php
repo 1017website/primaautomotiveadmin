@@ -16,8 +16,74 @@ class AttendanceController extends Controller
 
     public function index()
     {
-        $attendance = Attendance::orderBy('id', 'DESC')->get();
-        return view('hrm.attendance.index', compact('attendance'));
+        return view('hrm.attendance.index');
+    }
+
+    public function data(Request $request)
+    {
+        $columns = [
+            'attendances.location',
+            'employees.name',
+            'attendances.date',
+            'attendances.time',
+            'attendances.status',
+            'attendances.type',
+        ];
+
+        $query = Attendance::query();
+        $total = $query->count();
+        $query->leftJoinSub(Mechanic::select('id', 'name'), 'employees', 'employees.id', '=', 'attendances.employee_id');
+
+        $filtered = $total;
+        $search = $request->input('search.value');
+        if (is_string($search) && trim($search) !== '') {
+            $formattedDate = $query->getConnection()->getDriverName() === 'sqlite'
+                ? "strftime('%d-%m-%Y', attendances.date)"
+                : "DATE_FORMAT(attendances.date, '%d-%m-%Y')";
+            $searchColumns = [...$columns, $formattedDate, "COALESCE(employees.name, '-')"];
+
+            preg_match_all('/"[^"]+"|\S+/u', mb_substr($search, 0, 200), $terms);
+            foreach ($terms[0] as $term) {
+                $pattern = '%' . strtr(mb_strtolower(trim($term, '"')), ['!' => '!!', '%' => '!%', '_' => '!_']) . '%';
+                $query->where(function ($query) use ($searchColumns, $pattern) {
+                    foreach ($searchColumns as $column) {
+                        $query->orWhereRaw("LOWER($column) LIKE ? ESCAPE '!'", [$pattern]);
+                    }
+                });
+            }
+            $filtered = $query->count();
+        }
+
+        foreach (array_slice((array) $request->input('order', []), 0, count($columns)) as $order) {
+            $column = filter_var($order['column'] ?? null, FILTER_VALIDATE_INT);
+            if ($column !== false && isset($columns[$column])) {
+                $direction = ($order['dir'] ?? null) === 'desc' ? 'desc' : 'asc';
+                $query->orderBy($columns[$column], $direction);
+            }
+        }
+
+        $start = max(0, filter_var($request->input('start'), FILTER_VALIDATE_INT) ?: 0);
+        $length = min(100, max(1, filter_var($request->input('length'), FILTER_VALIDATE_INT) ?: 10));
+        $rows = $query->orderByDesc('attendances.id')
+            ->offset($start)
+            ->limit($length)
+            ->get(['attendances.id', ...$columns])
+            ->map(fn (Attendance $row) => [
+                'location' => ucfirst($row->location ?? ''),
+                'employee' => $row->name ?? '-',
+                'date' => $row->date ? date('d-m-Y', strtotime($row->date)) : '',
+                'time' => $row->time ?? '',
+                'status' => ucfirst($row->status ?? ''),
+                'type' => ucfirst($row->type ?? ''),
+                'delete_url' => route('attendance.destroy', $row->id),
+            ]);
+
+        return response()->json([
+            'draw' => filter_var($request->input('draw'), FILTER_VALIDATE_INT) ?: 0,
+            'recordsTotal' => $total,
+            'recordsFiltered' => $filtered,
+            'data' => $rows,
+        ]);
     }
 
     public function create()
